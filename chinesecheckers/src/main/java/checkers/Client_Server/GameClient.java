@@ -17,9 +17,9 @@ public class GameClient {
                 System.out.println(response);
 
                 if (response.startsWith("Witaj")) {
-                    System.out.println("Podaj ruch (startX startY endX endY):");
-                    String move = console.readLine();
-                    out.println(move);
+                    System.out.println("Podaj komende");
+                    String command = console.readLine();
+                    out.println(command);
                 }
             }
         } catch (IOException e) {
