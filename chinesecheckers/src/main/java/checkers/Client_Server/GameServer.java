@@ -1,16 +1,22 @@
 package checkers.Client_Server;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import checkers.Player.Player;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+
 import checkers.Board.Board;
 import checkers.Message.MessageHandler;
+import checkers.Player.Player;
 
 public class GameServer {
     private final int port;
     private final List<Player> players = new ArrayList<>();
-    private final Board board = new Board();
+    private final Board board = new Board(5);
 
     public GameServer(int port) {
         this.port = port;
@@ -46,7 +52,7 @@ public class GameServer {
                  PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
 
                 out.println("Witaj, " + player.getId() + "! Twój symbol to: " + player.getSymbol());
-                board.display();
+                board.printBoard();
 
                 String input;
                 while ((input = in.readLine()) != null) {
