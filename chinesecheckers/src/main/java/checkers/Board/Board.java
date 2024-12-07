@@ -1,40 +1,67 @@
 package checkers.Board;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+
+import checkers.Board.Cell.Cell;
 
 public class Board {
-    private final char[][] board;
+    private List<Cell> cells; // Lista pól
+    private int rows;         // Liczba wierszy
+    private int cols;         // Liczba kolumn
 
-    public Board() {
-        board = new char[17][25]; // Przybliżona reprezentacja planszy
-        initializeBoard();
+    // Konstruktor z określeniem rozmiaru planszy
+    public Board(int size) {
+        cells = new ArrayList<>();
+        initializeBoard(size); // Inicjalizacja planszy
     }
 
-    private void initializeBoard() {
-        for (char[] row : board) {
-            Arrays.fill(row, '.'); // Puste pola oznaczone kropkami
+    private void initializeBoard(int size) {
+        rows = size * 2 + 1;  // Liczba wierszy
+        cols = size * 3 + 2;  // Liczba kolumn
+        for (int i = 0; i < rows * cols; i++) {
+            cells.add(new Cell());
         }
-        // Dodaj konfigurację startową pionków (symbol 'A', 'B', itd. dla graczy)
-        for (int i = 0; i < 10; i++) {
-            board[0][i] = 'A'; // Przykład gracza A
-            board[16][24 - i] = 'B'; // Przykład gracza B
+
+        // Zaznaczenie aktywnych pól w kształcie gwiazdy
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (isInsideStar(i, j)) {
+                    getCell(i, j).setOccupied(false); // Puste pole
+                }
+            }
         }
     }
 
-    public void display() {
-        for (char[] row : board) {
-            System.out.println(new String(row));
+    // Sprawdzamy, czy dane pole znajduje się w obrębie gwiazdy
+    private boolean isInsideStar(int x, int y) {
+        // Placeholder, do zaimplementowania
+        return true;
+    }
+
+    // Zwrócenie komórki na podstawie indeksów
+    private Cell getCell(int x, int y) {
+        int index = x * cols + y; // Indeks komórki w tablicy 1D
+        return cells.get(index);
+    }
+
+    // Wyświetlanie planszy z przesunięciem w kolumnach nieparzystych
+    public void printBoard() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                // Dodanie przesunięcia o 1 spację przed kolumnami nieparzystymi
+                if (i % 2 == 0) {
+                    System.out.print(". "); // Zwykła komórka
+                } else {
+                    System.out.print(" ."); // Komórka przesunięta o spację
+                }
+            }
+            System.out.println();
         }
     }
 
-    public boolean isValidMove(int startX, int startY, int endX, int endY) {
-        // Prosta walidacja ruchu
-        return board[startX][startY] != '.' && board[endX][endY] == '.';
-    }
-
-    public void makeMove(int startX, int startY, int endX, int endY) {
-        char piece = board[startX][startY];
-        board[startX][startY] = '.';
-        board[endX][endY] = piece;
+    public static void main(String[] args) {
+        Board board = new Board(5);  // Tworzymy planszę z 5 pionami dla każdego gracza
+        board.printBoard();
     }
 }
