@@ -1,0 +1,59 @@
+@startuml General
+class Server {
+    +startServer(): void
+    +addPlayer(Socket): void
+    +broadcastMove(Move): void
+    -game: Game
+}
+
+class Client {
+    +connectToServer(): void
+    +sendMove(Move): void
+    +receiveUpdate(): void
+}
+
+class Game {
+    +initialize(int numPlayers, int numPawns): void
+    +processMove(Player, Move): boolean
+    +isGameOver(): boolean
+    +setRules(MoveRules): void
+    -players: List<Player>
+    -board: Board
+    -rules: MoveRules
+}
+
+class Board {
+    +initialize(int numPawns): void
+    +isValidMove(Move): boolean
+    +applyMove(Move): void
+    -state: List<List<Cell>>
+}
+
+class Move {
+    +startPosition: String
+    +endPosition: String
+    +type: String
+}
+
+class MoveRules {
+    +validateMove(Board, Move): boolean
+    +getPossibleMoves(Board, Player): List<Move>
+}
+
+class Player {
+    +id: int
+    +name: String
+    +pawns: List<String>
+    +isTurn: boolean
+}
+
+Server --> Game : manages
+Client --> Server : communicates
+Game --> Player : manages
+Game --> Board : updates
+Game --> MoveRules : defines
+Board --> Move : validates
+Player --> Move : creates
+MoveRules --> Board : checks
+
+@enduml
