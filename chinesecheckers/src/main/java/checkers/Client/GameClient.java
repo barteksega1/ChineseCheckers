@@ -1,4 +1,4 @@
-package checkers.Client_Server;
+package checkers.Client;
 
 import java.io.*;
 import java.net.*;

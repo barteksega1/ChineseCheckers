@@ -18,6 +18,31 @@
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
+  <profiles>
+        <!-- Profile for running the server application -->
+        <profile>
+            <id>server</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <main.class>checkers.Server.GameServer</main.class>
+            </properties>
+        </profile>
+
+        <!-- Profile for running the client application -->
+        <profile>
+            <id>client</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <main.class>checkers.Client.GameClient</main.class>
+            </properties>
+        </profile>
+    </profiles>
+
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -68,6 +93,14 @@
         <plugin>
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
+        </plugin>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.1.0</version>
+            <configuration>
+                <mainClass>${main.class}</mainClass>
+            </configuration>
         </plugin>
       </plugins>
     </pluginManagement>

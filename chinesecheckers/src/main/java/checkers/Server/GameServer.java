@@ -1,4 +1,4 @@
-package checkers.Client_Server;
+package checkers.Server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -81,5 +81,15 @@ public class GameServer {
                 System.err.println("Błąd obsługi klienta: " + e.getMessage());
             }
         }
+    }
+
+    public static void main(String[] args) {
+        GameServer server = new GameServer(12345);
+        try {
+            server.start();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        
     }
 }

@@ -1,13 +1,14 @@
 checkers/Message/MessageBuilder.class
 checkers/Commands/Command.class
 checkers/Player/Player.class
+checkers/Board/Cell/Cell.class
 checkers/Message/PassMessageBuilder.class
-checkers/Client_Server/GameServer.class
 checkers/Commands/MoveCommand.class
+checkers/Server/GameServer.class
 checkers/Message/MoveMessageBuilder.class
-checkers/Client_Server/GameClient.class
 checkers/Message/MessageHandler.class
 checkers/App.class
-checkers/Client_Server/GameServer$ClientHandler.class
+checkers/Server/GameServer$ClientHandler.class
 checkers/Commands/PassCommand.class
+checkers/Client/GameClient.class
 checkers/Board/Board.class

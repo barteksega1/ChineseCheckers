@@ -15,14 +15,17 @@ public class MessageHandler
             case "Move":
             case "m":
             builder = new MoveMessageBuilder(parts);
+            builder.executeMessage(parts);
             break;
 
             case "pass":
             case "p":
             builder = new PassMessageBuilder(parts);
+            builder.executeMessage(parts);
 
 
             default:
+            System.out.println("Unknown command \n");
             break;
         }
         
