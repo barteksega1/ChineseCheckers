@@ -1,7 +1,9 @@
 package checkers.Commands;
 
 public class MoveCommand extends Command {
-    private String[] moveInput;
+    
+    @SuppressWarnings("unused") // for now
+    private final String[] moveInput; // final for now
 
     public MoveCommand(String[] moveInput)
     {

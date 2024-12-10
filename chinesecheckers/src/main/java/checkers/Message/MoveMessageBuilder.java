@@ -1,11 +1,13 @@
 package checkers.Message;
 
-import java.util.*;
+import java.util.Arrays;
+
 import checkers.Commands.MoveCommand;
 
 public class MoveMessageBuilder extends MessageBuilder {
     
-    private String[] parts;
+    @SuppressWarnings("unused")    // for now
+    private final String[] parts; // final for now
 
     public MoveMessageBuilder(String[] parts)
     {

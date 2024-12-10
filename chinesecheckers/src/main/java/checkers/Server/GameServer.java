@@ -23,18 +23,23 @@ public class GameServer {
     }
 
     public void start() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(port);
-        System.out.println("Serwer uruchomiony na porcie " + port);
+        try (ServerSocket serverSocket = createServerSocket()) {
+            System.out.println("Serwer uruchomiony na porcie " + port);
 
-        while (players.size() < 6) { // Dla uproszczenia: max 6 graczy
-            Socket socket = serverSocket.accept();
-            System.out.println("Nowy gracz dołączył: " + socket.getInetAddress());
-            Player player = new Player("Player" + (players.size() + 1), (char) ('A' + players.size()));
-            players.add(player);
+            while (players.size() < 6) { // Dla uproszczenia: max 6 graczy
+                Socket socket = serverSocket.accept();
+                System.out.println("Nowy gracz dołączył: " + socket.getInetAddress());
+                Player player = new Player("Player" + (players.size() + 1), (char) ('A' + players.size()));
+                players.add(player);
 
-            new Thread(new ClientHandler(socket, player)).start();
-        }
+                new Thread(new ClientHandler(socket, player)).start();
+            }
+        } 
         System.out.println("Wszyscy gracze połączeni. Gra się rozpoczyna!");
+    }
+
+    protected ServerSocket createServerSocket() throws IOException {
+        return new ServerSocket(port);
     }
 
     private class ClientHandler implements Runnable {
@@ -88,7 +93,7 @@ public class GameServer {
         try {
             server.start();
         } catch(IOException e) {
-            e.printStackTrace();
+            System.err.println("Server error: " + e.getMessage());
         }
         
     }

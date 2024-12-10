@@ -3,7 +3,8 @@ import checkers.Commands.PassCommand;;
 
 public class PassMessageBuilder extends MessageBuilder {
 
-    private String[] parts;
+    @SuppressWarnings("unused")  // for now
+    private final String[] parts;  // final for now
 
     public PassMessageBuilder(String[] parts)
     {
