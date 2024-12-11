@@ -16,19 +16,22 @@ import checkers.Player.Player;
 public class GameServer {
     private final int port;
     private final List<Player> players = new ArrayList<>();
-    private final Board board = new Board(5);
+    private final Board board;
+    private final int playerCount;
 
-    public GameServer(int port) {
+    public GameServer(int port, int playerCount) {
         this.port = port;
+        this.playerCount = playerCount;
+        board = new Board(playerCount);
     }
 
     public void start() throws IOException {
         try (ServerSocket serverSocket = createServerSocket()) {
             System.out.println("Serwer uruchomiony na porcie " + port);
 
-            while (players.size() < 6) { // Dla uproszczenia: max 6 graczy
+            while (players.size() < playerCount) { 
                 Socket socket = serverSocket.accept();
-                System.out.println("Nowy gracz dołączył: " + socket.getInetAddress());
+                System.out.println("Nowy gracz dołączył: " + socket.getInetAddress() + "\n");
                 Player player = new Player("Player" + (players.size() + 1), (char) ('A' + players.size()));
                 players.add(player);
 
@@ -57,30 +60,11 @@ public class GameServer {
                  PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
 
                 out.println("Witaj, " + player.getId() + "! Twój symbol to: " + player.getSymbol());
-                board.printBoard();
+                //out.println(board.printBoard()); printBoard will eventually return string here
 
                 String input;
                 while ((input = in.readLine()) != null) {
-
-                    // String[] parts = input.split(" ");
-                    // int startX = Integer.parseInt(parts[0]);
-                    // int startY = Integer.parseInt(parts[1]);
-                    // int endX = Integer.parseInt(parts[2]);
-                    // int endY = Integer.parseInt(parts[3]);
-
-                    // synchronized (board) {
-                    //     if (board.isValidMove(startX, startY, endX, endY)) {
-                    //         board.makeMove(startX, startY, endX, endY);
-                    //         out.println("Ruch wykonany!");
-                    //         board.display();
-                    //     } else {
-                    //         out.println("Nieprawidłowy ruch!");
-                    //     }
-                    // } #left for the memes, to be removed
-
                     MessageHandler.handle(input);
-
-
                 }
             } catch (IOException e) {
                 System.err.println("Błąd obsługi klienta: " + e.getMessage());
@@ -89,12 +73,35 @@ public class GameServer {
     }
 
     public static void main(String[] args) {
-        GameServer server = new GameServer(12345);
-        try {
-            server.start();
-        } catch(IOException e) {
-            System.err.println("Server error: " + e.getMessage());
+
+        BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
+        int playerCountCheck = 0;
+        String playerCountInput = "";
+        while(playerCountCheck < 2) {
+            try {
+                System.out.println("Podaj liczbe graczy");
+                playerCountInput = consoleInput.readLine();
+                playerCountCheck = Integer.parseInt(playerCountInput);
+                if(playerCountCheck > 6 || playerCountCheck < 2 || playerCountCheck == 5) {
+                    throw new IllegalArgumentException("Niepoprawna liczba graczy");
+                }
+                GameServer server = new GameServer(12345, playerCountCheck);
+                try {
+                    server.start();
+                } catch(IOException e) {
+                    System.err.println("Server error: " + e.getMessage());
+                }
+            } catch (IllegalArgumentException e) {
+                System.err.print("Niepoprawna liczba graczy! \n" + 
+                "Input: " + Integer.parseInt(playerCountInput) + "; oczekiwano: 2, 3, 4 lub 6\n");
+                playerCountCheck = 0;
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
+      
+         
+        
         
     }
 }

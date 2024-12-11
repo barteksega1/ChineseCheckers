@@ -7,7 +7,6 @@ checkers/Commands/MoveCommand.class
 checkers/Server/GameServer.class
 checkers/Message/MoveMessageBuilder.class
 checkers/Message/MessageHandler.class
-checkers/App.class
 checkers/Server/GameServer$ClientHandler.class
 checkers/Commands/PassCommand.class
 checkers/Client/GameClient.class
