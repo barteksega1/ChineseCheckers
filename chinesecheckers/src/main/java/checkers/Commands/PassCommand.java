@@ -2,8 +2,9 @@ package checkers.Commands;
 
 public class PassCommand extends Command {
 
-    @Override public void command() {
+    @Override public String command() {
         //pass
+        return "\n passed \n";
     };
 
 }

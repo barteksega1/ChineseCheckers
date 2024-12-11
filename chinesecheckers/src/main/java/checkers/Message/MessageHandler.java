@@ -4,7 +4,7 @@ public class MessageHandler
 {
     
 
-    public static void handle(String messageString)
+    public static String handle(String messageString)
     {
         MessageBuilder builder;
         String[] parts = messageString.split("\\s+");
@@ -15,18 +15,16 @@ public class MessageHandler
             case "Move":
             case "m":
             builder = new MoveMessageBuilder(parts);
-            builder.executeMessage(parts);
-            break;
+            return builder.executeMessage(parts);
 
             case "pass":
             case "p":
             builder = new PassMessageBuilder(parts);
-            builder.executeMessage(parts);
+            return builder.executeMessage(parts);
 
 
             default:
-            System.out.println("Unknown command \n");
-            break;
+            return "Unknown command \n";
         }
         
   

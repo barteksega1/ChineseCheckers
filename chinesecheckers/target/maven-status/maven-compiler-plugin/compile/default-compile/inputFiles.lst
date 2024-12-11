@@ -1,12 +1,13 @@
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Board/Cell/Cell.java
-/home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Commands/PassCommand.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Message/MessageHandler.java
+/home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Commands/MoveCommand.java
+/home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Message/PassMessageBuilder.java
+/home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Player/Player.java
+/home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Commands/CommandOutputWriter.java
+/home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Commands/PassCommand.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Client/GameClient.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Board/Board.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Message/MessageBuilder.java
-/home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Commands/MoveCommand.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Message/MoveMessageBuilder.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Server/GameServer.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Commands/Command.java
-/home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Message/PassMessageBuilder.java
-/home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Player/Player.java

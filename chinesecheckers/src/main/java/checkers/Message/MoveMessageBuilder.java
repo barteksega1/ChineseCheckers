@@ -14,10 +14,10 @@ public class MoveMessageBuilder extends MessageBuilder {
         this.parts = parts;
     }
 
-    @Override public void executeMessage(String[] parts) {
+    @Override public String executeMessage(String[] parts) {
         String[] moveInput = Arrays.copyOfRange(parts, 1, parts.length);
         MoveCommand move = new MoveCommand(moveInput);
-        move.command();
+        return move.command();
     };
 
 }

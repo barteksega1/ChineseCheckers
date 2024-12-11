@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import checkers.Board.Board;
@@ -18,6 +19,7 @@ public class GameServer {
     private final List<Player> players = new ArrayList<>();
     private final Board board;
     private final int playerCount;
+    private final HashMap playersMap = new HashMap<>();
 
     public GameServer(int port, int playerCount) {
         this.port = port;
@@ -34,6 +36,7 @@ public class GameServer {
                 System.out.println("Nowy gracz dołączył: " + socket.getInetAddress() + "\n");
                 Player player = new Player("Player" + (players.size() + 1), (char) ('A' + players.size()));
                 players.add(player);
+                playersMap.put(player.getId(), socket);
 
                 new Thread(new ClientHandler(socket, player)).start();
             }
@@ -64,7 +67,11 @@ public class GameServer {
 
                 String input;
                 while ((input = in.readLine()) != null) {
-                    MessageHandler.handle(input);
+                    String outpuString = MessageHandler.handle(input);
+                    if(outpuString != null)
+                    {
+                        out.println(outpuString);
+                    }
                 }
             } catch (IOException e) {
                 System.err.println("Błąd obsługi klienta: " + e.getMessage());

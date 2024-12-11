@@ -2,6 +2,6 @@ package checkers.Commands;
 
 abstract class Command {
     
-    public abstract void command();
+    public abstract String command();
 
 }

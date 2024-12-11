@@ -11,9 +11,9 @@ public class MoveCommand extends Command {
     }
 
     //implementation of move command
-    @Override public void command()
+    @Override public String command()
     {
-        System.out.println("\n moved \n");
+        return "\n moved \n";
     }
     
 }

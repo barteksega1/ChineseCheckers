@@ -2,6 +2,7 @@ checkers/Message/MessageBuilder.class
 checkers/Commands/Command.class
 checkers/Player/Player.class
 checkers/Board/Cell/Cell.class
+checkers/Commands/CommandOutputWriter.class
 checkers/Message/PassMessageBuilder.class
 checkers/Commands/MoveCommand.class
 checkers/Server/GameServer.class
