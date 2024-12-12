@@ -1,11 +1,18 @@
 package checkers.TestClient;
 
-import checkers.Client.GameClient;
-import org.junit.jupiter.api.Test;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import checkers.Client.GameClient;
 
 public class TestGameClient {
 

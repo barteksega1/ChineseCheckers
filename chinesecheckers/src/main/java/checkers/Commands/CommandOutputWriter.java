@@ -1,5 +1,4 @@
 package checkers.Commands;
-import checkers.Commands.*;
 
 public class CommandOutputWriter {
     
