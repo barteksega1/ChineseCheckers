@@ -10,7 +10,7 @@ public class Game {
     private int playerCount;
     //private int botCount;
     private Board board;
-    private ArrayList <Player> players; 
+    private ArrayList <Player> players = new ArrayList<>(); 
 
     public Game(ArrayList <Player> players) {
         this.players = players;

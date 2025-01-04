@@ -1,5 +1,7 @@
 package checkers.Server;
 
+//mvn clean compile exec:java -Pserver
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,26 +13,30 @@ import java.util.HashMap;
 import java.util.List;
 
 import checkers.Board.Board;
+import checkers.Game.GameThread;
 import checkers.Message.MessageHandler;
 import checkers.Player.Player;
 
 public class GameServer {
     private final int port;
-    private final List<Player> players = new ArrayList<>();
-    private final Board board;
+    private final ArrayList<Player> players = new ArrayList<>();
+    //private final Board board;
     private final int playerCount;
     private final HashMap playersMap = new HashMap<>();
-    private Game game;
+    private GameThread game;
+    private ServerSocket hostSocket;
 
-    public GameServer(int port, int playerCount) {
-        this.port = port;
+    public GameServer(int port, int playerCount) //throws IOException {
+    {   
+    //super(port);
         this.playerCount = playerCount;
-        board = new Board(playerCount);
+        this.port = port;
     }
 
     public void start() throws IOException {
         try (ServerSocket serverSocket = createServerSocket()) {
             System.out.println("Serwer uruchomiony na porcie " + port);
+            this.hostSocket = serverSocket;
 
             while (players.size() < playerCount) { 
                 Socket socket = serverSocket.accept();
@@ -43,10 +49,12 @@ public class GameServer {
             }
         } 
         System.out.println("Wszyscy gracze połączeni. Gra się rozpoczyna!");
+        game = new GameThread(hostSocket, players, playerCount);
+
     }
 
     protected ServerSocket createServerSocket() throws IOException {
-        return new ServerSocket(port);
+        return new ServerSocket();
     }
 
     private class ClientHandler implements Runnable {
@@ -87,7 +95,7 @@ public class GameServer {
         String playerCountInput = "";
         while(playerCountCheck < 2) {
             try {
-                System.out.println("Podaj liczbe graczy");
+                System.out.println("jestes hostem - podaj liczbe graczy");
                 playerCountInput = consoleInput.readLine();
                 playerCountCheck = Integer.parseInt(playerCountInput);
                 if(playerCountCheck > 6 || playerCountCheck < 2 || playerCountCheck == 5) {

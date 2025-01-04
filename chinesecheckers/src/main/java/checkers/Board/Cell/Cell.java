@@ -1,11 +1,11 @@
 package checkers.Board.Cell;
 
 public abstract class Cell {
-    private int row;
-    private int column;
-    private CellStatus status;
-    private String player;
-    private CellColor color;
+    protected int row;
+    protected int column;
+    protected CellStatus status;
+    protected String player;
+    protected CellColor color;
 
     // public Cell() {
     //     this.occupied = false;
@@ -36,8 +36,8 @@ public abstract class Cell {
         this.player = player;
     }
 
-    @Override
-    public String toString() {
-        return occupied ? player.substring(0, 1) : ".";
-    }
+    // @Override
+    // public String toString() {
+    //     return occupied ? player.substring(0, 1) : ".";
+    // }
 }
