@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import checkers.Board.Board;
@@ -15,36 +16,31 @@ import checkers.Player.Player;
 
 public class GameServer {
     private final int port;
-    public final List<Player> players = new ArrayList<>();
-    private final Board board = new Board(5);
-    private final List<PrintWriter> clientWriters = new ArrayList<>();
-    private final int maxPlayers;
+    private final List<Player> players = new ArrayList<>();
+    private final Board board;
+    private final int playerCount;
+    private final HashMap playersMap = new HashMap<>();
 
-    public GameServer(int port) {
-        this(port, 6); // Default to 6 players
-    }
-
-    public GameServer(int port, int maxPlayers) {
+    public GameServer(int port, int playerCount) {
         this.port = port;
-        this.maxPlayers = maxPlayers;
+        this.playerCount = playerCount;
+        board = new Board(playerCount);
     }
 
     public void start() throws IOException {
         try (ServerSocket serverSocket = createServerSocket()) {
             System.out.println("Serwer uruchomiony na porcie " + port);
 
-            while (players.size() < maxPlayers) {
+            while (players.size() < playerCount) { 
                 Socket socket = serverSocket.accept();
-                System.out.println("Nowy gracz dołączył: " + socket.getInetAddress());
+                System.out.println("Nowy gracz dołączył: " + socket.getInetAddress() + "\n");
                 Player player = new Player("Player" + (players.size() + 1), (char) ('A' + players.size()));
                 players.add(player);
+                playersMap.put(player.getId(), socket);
 
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                clientWriters.add(out);
-
-                new Thread(new ClientHandler(socket, player, out)).start();
+                new Thread(new ClientHandler(socket, player)).start();
             }
-        }
+        } 
         System.out.println("Wszyscy gracze połączeni. Gra się rozpoczyna!");
     }
 
@@ -52,60 +48,67 @@ public class GameServer {
         return new ServerSocket(port);
     }
 
-    public List<PrintWriter> getClientWriters() {
-        return clientWriters;
-    }
-
-    public synchronized void broadcast(String message) {
-        for (PrintWriter writer : clientWriters) {
-            writer.println(message);
-        }
-    }
-
-
     private class ClientHandler implements Runnable {
         private final Socket socket;
         private final Player player;
-        private final PrintWriter out;
 
-        public ClientHandler(Socket socket, Player player, PrintWriter out) {
+        public ClientHandler(Socket socket, Player player) {
             this.socket = socket;
             this.player = player;
-            this.out = out;
         }
 
         @Override
         public void run() {
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+
                 out.println("Witaj, " + player.getId() + "! Twój symbol to: " + player.getSymbol());
-                board.printBoard();
+                //out.println(board.printBoard()); printBoard will eventually return string here
 
                 String input;
                 while ((input = in.readLine()) != null) {
-                    String response = MessageHandler.handle(input);
-                    broadcast(response);
+                    String outpuString = MessageHandler.handle(input);
+                    if(outpuString != null)
+                    {
+                        out.println(outpuString);
+                    }
                 }
             } catch (IOException e) {
                 System.err.println("Błąd obsługi klienta: " + e.getMessage());
             }
         }
-
-        private void broadcast(String message) {
-            synchronized (GameServer.this) {
-                for (PrintWriter writer : clientWriters) {
-                    writer.println(message);
-                }
-            }
-        }
     }
 
     public static void main(String[] args) {
-        GameServer server = new GameServer(12345);
-        try {
-            server.start();
-        } catch(IOException e) {
-            System.err.println("Server error: " + e.getMessage());
+
+        BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
+        int playerCountCheck = 0;
+        String playerCountInput = "";
+        while(playerCountCheck < 2) {
+            try {
+                System.out.println("Podaj liczbe graczy");
+                playerCountInput = consoleInput.readLine();
+                playerCountCheck = Integer.parseInt(playerCountInput);
+                if(playerCountCheck > 6 || playerCountCheck < 2 || playerCountCheck == 5) {
+                    throw new IllegalArgumentException("Niepoprawna liczba graczy");
+                }
+                GameServer server = new GameServer(12345, playerCountCheck);
+                try {
+                    server.start();
+                } catch(IOException e) {
+                    System.err.println("Server error: " + e.getMessage());
+                }
+            } catch (IllegalArgumentException e) {
+                System.err.print("Niepoprawna liczba graczy! \n" + 
+                "Input: " + Integer.parseInt(playerCountInput) + "; oczekiwano: 2, 3, 4 lub 6\n");
+                playerCountCheck = 0;
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
+      
+         
+        
         
     }
 }

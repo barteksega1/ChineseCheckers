@@ -1,20 +1,31 @@
 package checkers.Board.Cell;
 
-public class Cell {
-    private boolean occupied;
+public abstract class Cell {
+    private int row;
+    private int column;
+    private CellStatus status;
     private String player;
+    private CellColor color;
 
-    public Cell() {
-        this.occupied = false;
-        this.player = null;
+    // public Cell() {
+    //     this.occupied = false;
+    //     this.player = null;
+    // }
+
+    public CellColor getColor() {
+        return color;
     }
 
-    public boolean isOccupied() {
-        return occupied;
+    public void setColor(CellColor color) {
+        this.color = color;
     }
 
-    public void setOccupied(boolean occupied) {
-        this.occupied = occupied;
+    public CellStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CellStatus status) {
+        this.status = status;
     }
 
     public String getPlayer() {
