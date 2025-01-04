@@ -10,7 +10,7 @@ public class GameClient {
     private final BufferedReader in;
     private final PrintWriter out;
     private final BufferedReader console;
-
+    //klient ktory bedzie gui
     public GameClient(Socket socket, BufferedReader in, PrintWriter out, BufferedReader console) {
         this.in = in;
         this.out = out;

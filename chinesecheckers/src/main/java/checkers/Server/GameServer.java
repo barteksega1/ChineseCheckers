@@ -49,7 +49,7 @@ public class GameServer {
             }
         } 
         System.out.println("Wszyscy gracze połączeni. Gra się rozpoczyna!");
-        game = new GameThread(hostSocket, players, playerCount);
+        game = new GameThread(players, playerCount);
 
     }
 

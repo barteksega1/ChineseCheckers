@@ -11,12 +11,11 @@ public class GameThread extends Thread {
     private boolean started = false;
     private Game game;
     private ArrayList<Player> players = new ArrayList<>();
-    private ServerSocket host;
     private int numberOfPlayers = 0;
 
 
 
-    public GameThread(ServerSocket host, ArrayList<Player> joinedPlayers, int numberOfPlayers) {
+    public GameThread(ArrayList<Player> joinedPlayers, int numberOfPlayers) {
     this.host = host;
     this.players = joinedPlayers;
     this.numberOfPlayers = numberOfPlayers;
@@ -34,7 +33,7 @@ public class GameThread extends Thread {
         //     }
         //     catch (InterruptedException ex) {};
 
-        
+
         }
 
 
