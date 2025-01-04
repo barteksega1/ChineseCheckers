@@ -20,6 +20,7 @@ public class GameServer {
     private final Board board;
     private final int playerCount;
     private final HashMap playersMap = new HashMap<>();
+    private Game game;
 
     public GameServer(int port, int playerCount) {
         this.port = port;

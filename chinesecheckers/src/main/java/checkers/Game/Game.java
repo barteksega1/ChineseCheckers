@@ -41,5 +41,7 @@ public class Game {
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
     }
-    
+
+
+    //todo -- szukanie pól na boardzie po wspolrzednych
 }
