@@ -1,4 +1,4 @@
-package checkers.Board.Cell;
+package checkers.Cell;
 
 public abstract class Cell {
     protected int row;
