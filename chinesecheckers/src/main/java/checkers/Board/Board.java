@@ -2,6 +2,7 @@ package checkers.Board;
 
 import checkers.Cell.Cell;
 import checkers.Cell.CellStatus;
+import checkers.Cell.HomeCell;
 import checkers.Cell.PlayableCell;
 
 public class Board {
@@ -41,25 +42,25 @@ public class Board {
 
     public void printBoard() {
         final String RESET = "\u001B[0m";
-        final String RED = "\u001B[31m";
-        final String GREEN = "\u001B[32m";
+        final String DARK_GREY = "\u001B[90m";
+        final String WHITE = "\u001B[97m";
+        final String BLUE = "\u001B[34m";
+    
 
         for (Cell[] row : cells) {
             for (Cell cell : row) {
                 if (cell.getStatus() == CellStatus.ILLEGAL) {
-                    System.out.print(RED + "X " + RESET);
+                    System.out.print(DARK_GREY + "X " + RESET);
+                } else if (cell instanceof HomeCell) {
+                    System.out.print(BLUE + "H " + RESET);
+                } else if (cell.getStatus() == CellStatus.FREE) {
+                    System.out.print(WHITE + "O " + RESET);
                 } else {
-                    System.out.print(GREEN + "O " + RESET);
+                    System.out.print(BLUE + "O " + RESET);
                 }
             }
             System.out.println();
         }
-    }
-
-    public static void main(String[] args) {
-        Board board = new Board();
-        board.initializeSquare(5);
-        board.printBoard();
     }
 }
 
