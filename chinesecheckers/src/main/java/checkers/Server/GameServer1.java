@@ -74,8 +74,7 @@ public class GameServer {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                  PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
 
-                out.println("Witaj, " + player.getId() + "! Twój symbol to: " + player.getSymbol());
-                //out.println(board.printBoard()); printBoard will eventually return string here
+                out.println("Witaj, " + player.getId() + "! Twój kolor to: " + player.getSymbol()); //zmienic na getColor i przypisywanie koloru.
 
                 String input;
                 while ((input = in.readLine()) != null) {

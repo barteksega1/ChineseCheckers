@@ -1,4 +1,4 @@
-package checkers.Board.Cell;
+package checkers.Cell;
 
 public enum CellColor {
 
