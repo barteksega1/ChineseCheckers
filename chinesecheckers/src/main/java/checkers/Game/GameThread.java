@@ -31,6 +31,18 @@ public class GameThread extends Thread {
         //         }
         //     }
         //     catch (InterruptedException ex) {};
+        System.out.println("\n Game is running \n");
+        while(true)
+        {
+            try {
+                synchronized(this) {
+                wait(5000);
+                System.out.println("\n Game is still running \n");
+                }
+            } catch (InterruptedException ex) {};
+        }
+        
+      
 
 
         }

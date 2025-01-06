@@ -1,11 +1,14 @@
 package checkers.Client;
 
 import java.io.BufferedReader;
+
+import checkers.Game.GameThread;
 import checkers.Message.MessageHandler;
 
 public class ClientThread extends Thread {
     private GameClient client;
     private BufferedReader in;
+    private GameThread gameThread = null;
 
 
     public ClientThread(GameClient client, BufferedReader in) {
@@ -13,10 +16,18 @@ public class ClientThread extends Thread {
         this.in = in;
     }
 
+    public void setGame(GameThread gametThread) {
+        this.gameThread = gametThread;
+    }
+    
+    public void hello() {
+        System.out.println("Hello, waiting for the game to start");
+    }
+    
     @Override
     public void run() {
         MessageHandler mh = new MessageHandler();
-        System.out.println("Hello Player! \n Input your command:");
+        System.out.println("Welcome to the game, wait for further instructions");
         while(true) {
             try {
                 String currentString;

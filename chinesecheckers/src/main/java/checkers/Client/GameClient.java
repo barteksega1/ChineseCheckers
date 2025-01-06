@@ -7,37 +7,28 @@ import java.io.PrintWriter;
 import java.net.Socket;
 //import javafx.stage.Stage;
 
+import checkers.Game.GameThread;
+
 public class GameClient {
     private final BufferedReader in;
     private final PrintWriter out;
-    private final BufferedReader console;
+    private GameThread gameThread = null;
+    private ClientThread clientThread;
     //private Stage stage;
     //klient ktory bedzie gui
-    public GameClient(Socket socket, BufferedReader in, PrintWriter out, BufferedReader console) {
+    public GameClient(Socket socket, BufferedReader in, PrintWriter out) {
         this.in = in;
         this.out = out;
-        this.console = console; //potencjalnie useless??
-        ClientThread ct = new ClientThread(this, in);
+        this.clientThread = new ClientThread(this, in);
+        clientThread.hello();
     }
 
-    // public void start() {
-    //     try {
-    //         System.out.println("Połączono z serwerem!");
-    //         String response;
-
-    //         while ((response = in.readLine()) != null) {
-    //             System.out.println(response);
-
-    //             if (response.startsWith("Witaj")) {
-    //                 System.out.println("Podaj komende");
-    //                 String command = console.readLine();
-    //                 out.println(command);
-    //             }
-    //         }
-    //     } catch (IOException e) {
-    //         System.err.println("Błąd połączenia z serwerem: " + e.getMessage());
-    //     }
-    // }
+    public void initializeClientThread() {
+        if(this.gameThread != null) {
+            clientThread.run();
+        }
+    }    
+    
 
 
     //gui stuff
@@ -54,13 +45,27 @@ public class GameClient {
 	// 		stage.close();
 	// }
 
-    public static void main(String[] args) {
-        try (Socket socket = new Socket("localhost", 12345);
-             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-             BufferedReader console = new BufferedReader(new InputStreamReader(System.in))) {
+    public BufferedReader getInput() {
+        return in;
+    }
 
-            GameClient client = new GameClient(socket, in, out, console);
+    public PrintWriter getOutput() {
+        return out;
+    }
+
+    public GameThread getGameThread() {
+        return gameThread;
+    }
+
+    public void setGameThread(GameThread gameThread) {
+        this.gameThread = gameThread;
+    }
+
+    public static void main(String[] args) {
+        try (Socket socket = new Socket("localhost", 8080);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);) {
+             GameClient client = new GameClient(socket, in, out);
         } catch (IOException e) {
             System.err.println("Błąd połączenia z serwerem: " + e.getMessage());
         }
