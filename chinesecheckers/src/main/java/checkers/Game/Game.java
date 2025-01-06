@@ -15,7 +15,8 @@ public class Game {
     public Game(ArrayList <Player> players) {
         this.players = players;
         this.playerCount = players.size();
-        this.board = new Board(playerCount);
+        this.board = new Board();
+        board.initializeSquare(playerCount);
     }
     
     public Board getBoard() {

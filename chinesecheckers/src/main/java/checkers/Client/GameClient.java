@@ -61,7 +61,6 @@ public class GameClient {
              BufferedReader console = new BufferedReader(new InputStreamReader(System.in))) {
 
             GameClient client = new GameClient(socket, in, out, console);
-            client.start();
         } catch (IOException e) {
             System.err.println("Błąd połączenia z serwerem: " + e.getMessage());
         }

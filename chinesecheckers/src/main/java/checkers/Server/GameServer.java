@@ -24,7 +24,6 @@ public class GameServer {
     private final int playerCount;
     private final HashMap playersMap = new HashMap<>();
     private GameThread game;
-    private ServerSocket hostSocket;
     private boolean serverRunning = true;
     private boolean gamePresent = false;
 
@@ -38,9 +37,9 @@ public class GameServer {
     public void start() throws IOException {
         try (ServerSocket serverSocket = createServerSocket()) {
             System.out.println("Serwer uruchomiony na porcie " + port);
-            this.hostSocket = serverSocket;
 
             while (players.size() < playerCount) { 
+                System.out.println("shit\n");
                 Socket socket = serverSocket.accept();
                 System.out.println("Nowy gracz dołączył: " + socket.getInetAddress() + "\n");
                 Player player = new Player("Player" + (players.size() + 1), (char) ('A' + players.size()));
@@ -108,7 +107,7 @@ public class GameServer {
                 try {
                     server.start();
                 } catch(IOException e) {
-                    System.err.println("Server error: " + e.getMessage());
+                    System.err.println("Server error - " + e.getMessage());
                 }
             } catch (IllegalArgumentException e) {
                 System.err.print("Niepoprawna liczba graczy! \n" + 

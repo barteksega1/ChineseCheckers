@@ -16,7 +16,6 @@ public class GameThread extends Thread {
 
 
     public GameThread(ArrayList<Player> joinedPlayers, int numberOfPlayers) {
-    this.host = host;
     this.players = joinedPlayers;
     this.numberOfPlayers = numberOfPlayers;
     this.game = new Game(joinedPlayers);
@@ -39,4 +38,3 @@ public class GameThread extends Thread {
 
     }
 
-}

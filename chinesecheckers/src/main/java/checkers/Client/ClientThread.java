@@ -1,22 +1,21 @@
 package checkers.Client;
 
 import java.io.BufferedReader;
-
 import checkers.Message.MessageHandler;
 
 public class ClientThread extends Thread {
-    private Client client;
+    private GameClient client;
     private BufferedReader in;
 
 
-    public ClientThread(Client client, BufferedReader in) {
+    public ClientThread(GameClient client, BufferedReader in) {
         this.client = client;
         this.in = in;
     }
 
     @Override
     public void run() {
-        MessageHandler mh;
+        MessageHandler mh = new MessageHandler();
         System.out.println("Hello Player! \n Input your command:");
         while(true) {
             try {
@@ -25,6 +24,8 @@ public class ClientThread extends Thread {
                     currentString = in.readLine();
                     mh.handle(currentString);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
