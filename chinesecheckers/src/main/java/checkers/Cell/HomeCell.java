@@ -1,6 +1,10 @@
 package checkers.Cell;
 
 public class HomeCell extends Cell {
+    
+    public HomeCell(int row, int column) {
+        this(CellColor.NONE, row, column);
+    }
 
     public HomeCell(CellColor color, int row, int column) {
         this.color = color;
@@ -19,5 +23,4 @@ public class HomeCell extends Cell {
                 ", color=" + color +
                 '}';
     }
-
 }

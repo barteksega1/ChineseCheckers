@@ -42,17 +42,43 @@ public class Board {
 
     public void printBoard() {
         final String RESET = "\u001B[0m";
-        final String DARK_GREY = "\u001B[90m";
         final String WHITE = "\u001B[97m";
         final String BLUE = "\u001B[34m";
-    
+        final String RED = "\u001B[31m";
+        final String GREEN = "\u001B[32m";
+        final String YELLOW = "\u001B[33m";
+        final String PURPLE = "\u001B[35m";
+        final String ORANGE = "\u001B[38;5;214m"; // Corrected ANSI escape sequence for orange
+        final String BLACK = "\u001B[30m";
 
         for (Cell[] row : cells) {
             for (Cell cell : row) {
                 if (cell.getStatus() == CellStatus.ILLEGAL) {
-                    System.out.print(DARK_GREY + "X " + RESET);
+                    System.out.print(BLACK + "  "+ RESET); // Simulate transparency by printing spaces
                 } else if (cell instanceof HomeCell) {
-                    System.out.print(BLUE + "H " + RESET);
+                    switch (((HomeCell) cell).getColor()) {
+                        case RED:
+                            System.out.print(RED + "R " + RESET);
+                            break;
+                        case GREEN:
+                            System.out.print(GREEN + "G " + RESET);
+                            break;
+                        case BLUE:
+                            System.out.print(BLUE + "B " + RESET);
+                            break;
+                        case YELLOW:
+                            System.out.print(YELLOW + "Y " + RESET);
+                            break;
+                        case PURPLE:
+                            System.out.print(PURPLE + "P " + RESET);
+                            break;
+                        case ORANGE:
+                            System.out.print(ORANGE + "O " + RESET);
+                            break;
+                        default:
+                            System.out.print("H ");
+                            break;
+                    }
                 } else if (cell.getStatus() == CellStatus.FREE) {
                     System.out.print(WHITE + "O " + RESET);
                 } else {
