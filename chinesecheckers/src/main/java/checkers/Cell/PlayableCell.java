@@ -1,17 +1,17 @@
 package checkers.Cell;
 
-public class HomeCell extends Cell {
+public class PlayableCell extends Cell {
 
-    public HomeCell(CellColor color, int row, int column) {
-        this.color = color;
+    public PlayableCell(int row, int column) {
         this.row = row;
         this.column = column;
-        this.status = CellStatus.OCCUPIED;
+        this.status = CellStatus.ILLEGAL;
+        this.player = null;
     }
 
     @Override
     public String toString() {
-        return "HomeCell{" +
+        return "PlayableCell{" +
                 "row=" + row +
                 ", column=" + column +
                 ", status=" + status +
@@ -19,5 +19,4 @@ public class HomeCell extends Cell {
                 ", color=" + color +
                 '}';
     }
-
 }

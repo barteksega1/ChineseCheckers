@@ -7,10 +7,10 @@ public abstract class Cell {
     protected String player;
     protected CellColor color;
 
-    // public Cell() {
-    //     this.occupied = false;
-    //     this.player = null;
-    // }
+    public Cell() {
+        this.status = CellStatus.ILLEGAL;
+        this.player = null;
+    }
 
     public CellColor getColor() {
         return color;
@@ -35,9 +35,4 @@ public abstract class Cell {
     public void setPlayer(String player) {
         this.player = player;
     }
-
-    // @Override
-    // public String toString() {
-    //     return occupied ? player.substring(0, 1) : ".";
-    // }
 }
