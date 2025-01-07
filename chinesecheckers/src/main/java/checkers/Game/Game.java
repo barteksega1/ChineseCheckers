@@ -10,7 +10,8 @@ public class Game {
     private int playerCount;
     //private int botCount;
     private Board board;
-    private ArrayList <Player> players = new ArrayList<>(); 
+    private ArrayList <Player> players = new ArrayList<>();
+    private ArrayList <Player> winners = new ArrayList<>(); 
 
     public Game(ArrayList <Player> players) {
         this.players = players;
@@ -24,6 +25,7 @@ public class Game {
     }
 
     public int getPlayerCount() {
+        playerCount = players.size();
         return playerCount;
     }
 
@@ -41,6 +43,14 @@ public class Game {
 
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
+    }
+
+    public ArrayList<Player> getWinners() {
+        return winners;
+    }
+
+    public void setWinners(ArrayList<Player> winners) {
+        this.winners = winners;
     }
 
 

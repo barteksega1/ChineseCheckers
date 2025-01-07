@@ -43,12 +43,17 @@ public class GameServer {
             System.out.println("Serwer uruchomiony na porcie " + port);
 
             while (players.size() < playerCount) { 
+                    if(players.size() == 0) {
+                        Socket socket = serverSocket.accept();
+                        System.out.println("Nowy gracz dołączył: " + socket.getInetAddress() + "\n");
+                    }
                 Socket socket = serverSocket.accept();
                 System.out.println("Nowy gracz dołączył: " + socket.getInetAddress() + "\n");
                 Player player = new Player("Player" + (players.size() + 1), (char) ('A' + players.size()));
                 players.add(player);
                 playersMap.put(player.getId(), socket);
                 sockets.add(socket);
+
                 // GameClient client = new GameClient(
                 //     new BufferedReader(new InputStreamReader(socket.getInputStream())), 
                 //         new PrintWriter(socket.getOutputStream()));
