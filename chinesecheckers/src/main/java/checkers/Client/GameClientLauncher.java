@@ -7,11 +7,12 @@ import java.net.Socket;
 
 public class GameClientLauncher {
     public static void main(String[] args) {
-        try (Socket socket = new Socket("localhost", 8080);
-             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+        try {
+            Socket socket = new Socket("localhost", 8080);
+            //  BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            //  PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
              
-             GameClient client = new GameClient(in, out); // Tworzymy klienta
+             GameClient client = new GameClient(socket); // Tworzymy klienta
         } catch (Exception e) {
             System.err.println("Błąd klienta: " + e.getMessage());
         }

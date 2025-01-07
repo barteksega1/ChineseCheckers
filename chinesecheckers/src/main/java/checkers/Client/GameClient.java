@@ -10,7 +10,7 @@ import java.net.Socket;
 import checkers.Game.GameThread;
 
 public class GameClient {
-    private final BufferedReader in;
+    private final BufferedReader br;
     private final PrintWriter out;
     //private GameThread gameThread = null;
     private ClientThread clientThread;
@@ -18,11 +18,11 @@ public class GameClient {
     //private Stage stage;
     //klient ktory bedzie gui
     
-    public GameClient(BufferedReader in, PrintWriter out) throws InterruptedException {
-        this.in = in;
-        this.out = out;
-        this.clientThread = new ClientThread(this, in);
-        clientThread.run();
+    public GameClient(Socket socket) throws IOException {
+        this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.out = new PrintWriter(socket.getOutputStream(), true);
+        this.clientThread = new ClientThread(this, br);
+        clientThread.start();
     }
 
     
@@ -43,7 +43,7 @@ public class GameClient {
 	// }
 
     public BufferedReader getInput() {
-        return in;
+        return br;
     }
 
     public PrintWriter getOutput() {

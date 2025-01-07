@@ -52,7 +52,7 @@ public final class CommunicationDevice {
     }
     
     public void sendMessageToAllPlayers(String message) {
-    	for(PrintWriter pw: this.playerWriters) {
+    	for(PrintWriter pw : playerWriters) {
     		pw.println(message);
     	}
     }

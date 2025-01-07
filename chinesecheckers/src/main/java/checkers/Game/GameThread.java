@@ -32,15 +32,15 @@ public class GameThread extends Thread {
     @Override
     public void run() {
         while(numberOfJoinedPlayers < numberOfHumanPlayers) {
-            System.out.println("Waiting for " + (numberOfHumanPlayers - numberOfJoinedPlayers  + " more players"));
-            for(PrintWriter writer : communicationDevice.getPlayerWriters())
+            System.out.println("Waiting for " + (numberOfHumanPlayers - numberOfJoinedPlayers  + " more player(s)"));
+            for(int i = 0; i < communicationDevice.getPlayerWriters().size(); i++)
             {
-                writer.println("waiting for more players");
+                communicationDevice.getPrintWriterByNumber(i).println("waiting for more players, you are player " + i);
             }
             try {
                 synchronized(this) {
                     wait(5000);
-                    System.out.println("waittttt \n");
+                    //System.out.println("waittttt \n");
                 }
             }
             catch (InterruptedException ex) {};
@@ -77,6 +77,8 @@ public class GameThread extends Thread {
             return numberOfHumanPlayers;
         }
 
-
+        public CommunicationDevice getCommunicationDevice() {
+            return communicationDevice;
+        }
     }
 

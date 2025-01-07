@@ -5,6 +5,7 @@ package checkers.Server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -48,21 +49,22 @@ public class GameServer {
                 Socket socket = serverSocket.accept();
                 System.out.println("Nowy gracz dołączył: " + socket.getInetAddress() + "\n");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter writer = new PrintWriter(socket.getOutputStream());
+                PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
                 
-                if(numberOfJoinedPlayers == 0) {
+                if (numberOfJoinedPlayers > 0) {
+                    processJoiner(socket, reader, writer);
+                    System.out.println("processed more players");
+                    numberOfJoinedPlayers++;
+                    if(numberOfJoinedPlayers == playerCount) {
+                        game.getCommunicationDevice().sendMessageToAllPlayers("Wszyscy gracze połączeni. Gra się rozpoczyna!");
+                        gameRunning = true;
+                    }
+                }
+
+                else if(numberOfJoinedPlayers == 0) {
                     processFirstPlayer(socket, reader, writer, playerCount);
                     System.out.println("processed first player");
                     numberOfJoinedPlayers++;
-                }
-
-                else if (numberOfJoinedPlayers < playerCount) {
-                    processJoiner(socket, reader, writer);
-                    numberOfJoinedPlayers++;
-                    if(numberOfJoinedPlayers == playerCount) {
-                        System.out.println("Wszyscy gracze połączeni. Gra się rozpoczyna!");
-                        gameRunning = true;
-                    }
                 }
                 
                 else if (gameRunning) {
@@ -81,8 +83,7 @@ public class GameServer {
 
     public void processFirstPlayer(Socket socket, BufferedReader br, PrintWriter pw, int playerCount) throws IOException {
         this.game = new GameThread(socket, br, pw, playerCount);
-        game.addPlayer(socket, br, pw);
-        game.run();
+        game.start();
         this.gamePresent = true;
     }
 
