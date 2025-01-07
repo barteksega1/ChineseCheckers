@@ -37,7 +37,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <main.class>checkers.Client.GameClient</main.class>
+                <main.class>checkers.Client.GameClientLauncher</main.class>
             </properties>
         </profile>
     </profiles>

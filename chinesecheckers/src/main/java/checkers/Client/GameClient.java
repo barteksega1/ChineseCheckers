@@ -14,20 +14,16 @@ public class GameClient {
     private final PrintWriter out;
     private GameThread gameThread = null;
     private ClientThread clientThread;
+    //private final Object lock = new Object();
     //private Stage stage;
     //klient ktory bedzie gui
-    public GameClient(Socket socket, BufferedReader in, PrintWriter out) {
+    
+    public GameClient(BufferedReader in, PrintWriter out) throws InterruptedException {
         this.in = in;
         this.out = out;
         this.clientThread = new ClientThread(this, in);
-        clientThread.hello();
     }
 
-    public void initializeClientThread() {
-        if(this.gameThread != null) {
-            clientThread.run();
-        }
-    }    
     
 
 
@@ -53,25 +49,21 @@ public class GameClient {
         return out;
     }
 
+    public ClientThread getClientThread() {
+        return clientThread;
+    }
+
+    public void setClientThread(ClientThread clientThread) {
+        this.clientThread = clientThread;
+    }
+
     public GameThread getGameThread() {
         return gameThread;
     }
 
     public void setGameThread(GameThread gameThread) {
-        this.gameThread = gameThread;
-    }
-
-    public static void main(String[] args) {
-        try (Socket socket = new Socket("localhost", 8080);
-             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);) {
-             GameClient client = new GameClient(socket, in, out);
-        } catch (IOException e) {
-            System.err.println("Błąd połączenia z serwerem: " + e.getMessage());
+            this.gameThread = gameThread; // Przypisanie GameThread
+            clientThread.setGame(gameThread);
         }
-    }
-
-
 
 }
-

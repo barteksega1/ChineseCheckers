@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.sun.security.ntlm.Client;
 
 import checkers.Board.Board;
 import checkers.Client.GameClient;
@@ -24,7 +23,8 @@ public class GameServer {
     private final int port;
     private final ArrayList<Player> players = new ArrayList<>();
     //private final Board board;
-    private ArrayList<Client> clients = new ArrayList<>();
+    private ArrayList<GameClient> clients = new ArrayList<>();
+    private ArrayList<Socket> sockets = new ArrayList<>();
     private final int playerCount;
     private final HashMap playersMap = new HashMap<>();
     private GameThread game;
@@ -38,7 +38,7 @@ public class GameServer {
         this.port = port;
     }
 
-    public void start() throws IOException {
+    public void start() throws IOException, InterruptedException {
         try (ServerSocket serverSocket = createServerSocket()) {
             System.out.println("Serwer uruchomiony na porcie " + port);
 
@@ -48,20 +48,27 @@ public class GameServer {
                 Player player = new Player("Player" + (players.size() + 1), (char) ('A' + players.size()));
                 players.add(player);
                 playersMap.put(player.getId(), socket);
-                GameClient client = new GameClient(socket, 
-                new BufferedReader(new InputStreamReader(socket.getInputStream()), 
-                new PrintWriter(socket.getOutputStream());
-                clients.add(client);
+                sockets.add(socket);
+                // GameClient client = new GameClient(
+                //     new BufferedReader(new InputStreamReader(socket.getInputStream())), 
+                //         new PrintWriter(socket.getOutputStream()));
+                // clients.add(client);
             }
         } 
         System.out.println("Wszyscy gracze połączeni. Gra się rozpoczyna!");
         game = new GameThread(players, playerCount);
-        game.run();
+        gamePresent = true;
+        for(Socket socket : this.sockets) {
+            GameClient client = new GameClient(
+                    new BufferedReader(new InputStreamReader(socket.getInputStream())), 
+                        new PrintWriter(socket.getOutputStream()));
+                this.clients.add(client);
+        }
         for(GameClient client : this.clients) {
+            client.getClientThread().run();
             client.setGameThread(game);
         }
-        gamePresent = true;
-
+        game.run();
     }
 
     protected ServerSocket createServerSocket() throws IOException {
@@ -117,6 +124,8 @@ public class GameServer {
                     server.start();
                 } catch(IOException e) {
                     System.err.println("Server error - " + e.getMessage());
+                } catch (InterruptedException ex) {
+                    System.err.println("OHNO " + ex.getMessage());
                 }
             } catch (IllegalArgumentException e) {
                 System.err.print("Niepoprawna liczba graczy! \n" + 
