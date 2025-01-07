@@ -11,7 +11,7 @@ import checkers.Game.GameThread;
 
 public class GameClient {
     private final BufferedReader br;
-    private final PrintWriter out;
+    private final PrintWriter pw;
     //private GameThread gameThread = null;
     private ClientThread clientThread;
     //private final Object lock = new Object();
@@ -20,8 +20,8 @@ public class GameClient {
     
     public GameClient(Socket socket) throws IOException {
         this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        this.out = new PrintWriter(socket.getOutputStream(), true);
-        this.clientThread = new ClientThread(this, br);
+        this.pw = new PrintWriter(socket.getOutputStream(), true);
+        this.clientThread = new ClientThread(this, br, pw);
         clientThread.start();
     }
 
@@ -47,7 +47,7 @@ public class GameClient {
     }
 
     public PrintWriter getOutput() {
-        return out;
+        return pw;
     }
 
     public ClientThread getClientThread() {

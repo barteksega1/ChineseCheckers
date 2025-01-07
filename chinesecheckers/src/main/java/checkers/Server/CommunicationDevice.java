@@ -36,7 +36,7 @@ public final class CommunicationDevice {
             playerReaders.add(br);
             playerWriters.add(pw);
             playerConnected.add(true);
-        currentNumberOfPlayers++;
+            currentNumberOfPlayers++;
     }
     
     public BufferedReader getInputReaderByNumber(int number) {

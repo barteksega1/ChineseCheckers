@@ -6,19 +6,24 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Random;
 
+import checkers.Message.MessageHandler;
 import checkers.Player.Player;
 import checkers.Server.CommunicationDevice;
 
 public class GameThread extends Thread {
     
     private boolean started = false;
+    private boolean ended = false;
     private Game game;
     //private ArrayList<Player> players = new ArrayList<>();
     private int numberOfPlayers = 0;
     private int numberOfHumanPlayers = 0;
     private int numberOfJoinedPlayers = 0;
+    private int currentPlayer = 0;
     private CommunicationDevice communicationDevice = new CommunicationDevice();
+    private MessageHandler messageHandler = new MessageHandler();
 
 
 
@@ -46,14 +51,28 @@ public class GameThread extends Thread {
             catch (InterruptedException ex) {};
         }
         System.out.println("\n Game is running \n");
-        while(true)
+        Random random = new Random();
+        
+        currentPlayer = random.nextInt(numberOfJoinedPlayers);
+        while(!ended)
         {
             try {
-                synchronized(this) {
-                wait(5000);
-                System.out.println("Game is still running");
+                System.out.println("current Player: " + currentPlayer);
+                communicationDevice.getPrintWriterByNumber(currentPlayer).println("Your turn player " + currentPlayer);
+                String playerInput = communicationDevice.getInputReaderByNumber(currentPlayer).readLine();
+                System.out.println(playerInput);
+                if(playerInput.contains("slay")) {
+                    communicationDevice.getPrintWriterByNumber(currentPlayer).println("Thank you for you move");
+                    currentPlayer = (currentPlayer + 1)%(numberOfJoinedPlayers);
+                } else {
+                    communicationDevice.getPrintWriterByNumber(currentPlayer).println("Sorry, your move was incorrect");
+                    currentPlayer = (currentPlayer + 1)%(numberOfJoinedPlayers);
                 }
-            } catch (InterruptedException ex) {};
+            } catch (Exception e) {
+                e.getMessage();
+                e.printStackTrace();
+            }
+            
         }
 
     }

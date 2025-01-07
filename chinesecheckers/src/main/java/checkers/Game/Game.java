@@ -51,6 +51,9 @@ public class Game {
         this.winners = winners;
     }
 
+    // public Player getPlayerByNumber(int number) {
+    //     return players.get(number);
+    // }
 
     //todo -- szukanie pól na boardzie po wspolrzednych
 }
