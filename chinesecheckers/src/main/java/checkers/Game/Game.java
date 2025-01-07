@@ -13,11 +13,10 @@ public class Game {
     private ArrayList <Player> players = new ArrayList<>();
     private ArrayList <Player> winners = new ArrayList<>(); 
 
-    public Game(ArrayList <Player> players) {
-        this.players = players;
-        this.playerCount = players.size();
+    public Game(int playerCount) {
+        this.playerCount = playerCount;
         this.board = new Board();
-        board.initializeSquare(playerCount);
+        board.initializeSquare(6);
     }
     
     public Board getBoard() {
@@ -25,8 +24,11 @@ public class Game {
     }
 
     public int getPlayerCount() {
-        playerCount = players.size();
         return playerCount;
+    }
+
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -35,10 +37,6 @@ public class Game {
     
     public void setBoard(Board board) {
         this.board = board;
-    }
-
-    public void setPlayers(ArrayList<Player> players) {
-        this.players = players;
     }
 
     public void setPlayerCount(int playerCount) {

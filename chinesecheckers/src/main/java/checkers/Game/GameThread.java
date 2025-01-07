@@ -16,45 +16,52 @@ public class GameThread extends Thread {
     private Game game;
     //private ArrayList<Player> players = new ArrayList<>();
     private int numberOfPlayers = 0;
-    private int numberOfJoinedPlayers
+    private int numberOfHumanPlayers = 0;
+    private int numberOfJoinedPlayers = 0;
     private CommunicationDevice communicationDevice = new CommunicationDevice();
 
 
 
-    public GameThread(Socket firstPlayer, BufferedReader firstBufferedReader, PrintWriter firstPrintWriter, int numberOfPlayers) {
-    this.players = joinedPlayers;
-    this.numberOfPlayers = numberOfPlayers;
-    this.game = new Game(joinedPlayers);
-    CommunicationDevice.setUp();
+    public GameThread(Socket firstPlayer, BufferedReader firstBufferedReader, PrintWriter firstPrintWriter, int numberOfPlayers) throws IOException {
+    this.numberOfHumanPlayers = numberOfPlayers;
+    this.game = new Game(numberOfHumanPlayers);
+    this.communicationDevice.setUp(numberOfHumanPlayers);
     addPlayer(firstPlayer, firstBufferedReader, firstPrintWriter);
     }
 
     @Override
     public void run() {
-        while(game.getPlayerCount() < numberOfPlayers) {
-            System.out.println("Waiting for " + (numberOfPlayers - game.getPlayerCount())  + "more players");
+        while(numberOfJoinedPlayers < numberOfHumanPlayers) {
+            System.out.println("Waiting for " + (numberOfHumanPlayers - numberOfJoinedPlayers  + " more players"));
+            for(PrintWriter writer : communicationDevice.getPlayerWriters())
+            {
+                writer.println("waiting for more players");
+            }
             try {
                 synchronized(this) {
                     wait(5000);
+                    System.out.println("waittttt \n");
                 }
             }
             catch (InterruptedException ex) {};
+        }
         System.out.println("\n Game is running \n");
         while(true)
         {
             try {
                 synchronized(this) {
                 wait(5000);
-                System.out.println("\n Game is still running \n");
+                System.out.println("Game is still running");
                 }
             } catch (InterruptedException ex) {};
         }
 
-        }
+    }
+        
 
 
         public void addPlayer(Socket player, BufferedReader br, PrintWriter pw) throws IOException {
-            communicationData.addPlayer(player, br, pw);
+            communicationDevice.addPlayer(player, br, pw);
             numberOfJoinedPlayers++;
         }
 
@@ -64,6 +71,10 @@ public class GameThread extends Thread {
 
         public int getNumberOfPlayers() {
             return numberOfPlayers;
+        }
+
+        public int getNumberOfHumanPlayers() {
+            return numberOfHumanPlayers;
         }
 
 

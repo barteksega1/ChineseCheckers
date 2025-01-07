@@ -12,7 +12,7 @@ import checkers.Game.GameThread;
 public class GameClient {
     private final BufferedReader in;
     private final PrintWriter out;
-    private GameThread gameThread = null;
+    //private GameThread gameThread = null;
     private ClientThread clientThread;
     //private final Object lock = new Object();
     //private Stage stage;
@@ -22,6 +22,7 @@ public class GameClient {
         this.in = in;
         this.out = out;
         this.clientThread = new ClientThread(this, in);
+        clientThread.run();
     }
 
     
@@ -57,13 +58,13 @@ public class GameClient {
         this.clientThread = clientThread;
     }
 
-    public GameThread getGameThread() {
-        return gameThread;
-    }
+    // public GameThread getGameThread() {
+    //     return gameThread;
+    // }
 
-    public void setGameThread(GameThread gameThread) {
-            this.gameThread = gameThread; // Przypisanie GameThread
-            clientThread.setGame(gameThread);
-        }
+    // public void setGameThread(GameThread gameThread) {
+    //         this.gameThread = gameThread; // Przypisanie GameThread
+    //         clientThread.setGame(gameThread);
+    //     }
 
 }

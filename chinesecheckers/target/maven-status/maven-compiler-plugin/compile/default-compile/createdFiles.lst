@@ -13,6 +13,7 @@ checkers/Message/MessageBuilder.class
 checkers/Client/GameClientLauncher.class
 checkers/Commands/Command.class
 checkers/Player/Player.class
+checkers/Server/GameServerLauncher.class
 checkers/Message/PassMessageBuilder.class
 checkers/Server/GameServer.class
 checkers/Message/MessageHandler.class

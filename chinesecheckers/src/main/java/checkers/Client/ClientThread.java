@@ -7,14 +7,14 @@ import checkers.Message.MessageHandler;
 
 public class ClientThread extends Thread {
     private GameClient client;
-    private BufferedReader in;
+    private BufferedReader br;
     private GameThread gameThread = null;
    // private final Object lock = new Object();
 
 
-    public ClientThread(GameClient client, BufferedReader in) {
+    public ClientThread(GameClient client, BufferedReader br) {
         this.client = client;
-        this.in = in;
+        this.br = br;
         this.hello();
     }
 
@@ -31,26 +31,13 @@ public class ClientThread extends Thread {
     
     @Override
     public void run() {
-
-        // try {
-        //     synchronized (lock) {
-        //         while (gameThread == null) {
-        //             System.out.println("Czekam na przypisanie GameThread...");
-        //             lock.wait(); // Czekaj na przypisanie GameThread
-        //         }
-        //     }
-        // } catch (InterruptedException e) {
-        //     System.err.println("wut? " + e.getMessage());
-        // }
-
-        MessageHandler mh = new MessageHandler();
+        //MessageHandler mh = new MessageHandler();
         System.out.println("Welcome to the game, wait for further instructions");
         while(true) {
             try {
-                String currentString;
-                if(in.readLine() != null && in.ready()) {
-                    currentString = in.readLine();
-                    mh.handle(currentString);
+                String currentLine;
+                if (br.ready() && (currentLine = br.readLine()) != null) {
+                    System.out.println(currentLine);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

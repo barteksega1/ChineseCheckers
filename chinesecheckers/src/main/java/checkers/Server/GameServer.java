@@ -23,13 +23,15 @@ public class GameServer {
     private final int port;
     private final ArrayList<Player> players = new ArrayList<>();
     //private final Board board;
-    private ArrayList<GameClient> clients = new ArrayList<>();
-    private ArrayList<Socket> sockets = new ArrayList<>();
+    //private ArrayList<GameClient> clients = new ArrayList<>();
+    //private ArrayList<Socket> sockets = new ArrayList<>();
     private final int playerCount;
+    private int numberOfJoinedPlayers = 0;
     private final HashMap playersMap = new HashMap<>();
     private GameThread game;
-    private boolean serverRunning = true;
+    private boolean serverRunning = false;
     private boolean gamePresent = false;
+    private boolean gameRunning = false;
 
     public GameServer(int port, int playerCount) //throws IOException {
     {   
@@ -38,111 +40,53 @@ public class GameServer {
         this.port = port;
     }
 
-    public void start() throws IOException, InterruptedException {
+    public void start() throws IOException {
         try (ServerSocket serverSocket = createServerSocket()) {
             System.out.println("Serwer uruchomiony na porcie " + port);
-
-            while (players.size() < playerCount) { 
-                    if(players.size() == 0) {
-                        Socket socket = serverSocket.accept();
-                        System.out.println("Nowy gracz dołączył: " + socket.getInetAddress() + "\n");
-                    }
+            serverRunning = true;
+            while(serverRunning) {
                 Socket socket = serverSocket.accept();
                 System.out.println("Nowy gracz dołączył: " + socket.getInetAddress() + "\n");
-                Player player = new Player("Player" + (players.size() + 1), (char) ('A' + players.size()));
-                players.add(player);
-                playersMap.put(player.getId(), socket);
-                sockets.add(socket);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                PrintWriter writer = new PrintWriter(socket.getOutputStream());
+                
+                if(numberOfJoinedPlayers == 0) {
+                    processFirstPlayer(socket, reader, writer, playerCount);
+                    System.out.println("processed first player");
+                    numberOfJoinedPlayers++;
+                }
 
-                // GameClient client = new GameClient(
-                //     new BufferedReader(new InputStreamReader(socket.getInputStream())), 
-                //         new PrintWriter(socket.getOutputStream()));
-                // clients.add(client);
+                else if (numberOfJoinedPlayers < playerCount) {
+                    processJoiner(socket, reader, writer);
+                    numberOfJoinedPlayers++;
+                    if(numberOfJoinedPlayers == playerCount) {
+                        System.out.println("Wszyscy gracze połączeni. Gra się rozpoczyna!");
+                        gameRunning = true;
+                    }
+                }
+                
+                else if (gameRunning) {
+                    writer.write("Sorry, the game is already running");
+                }
+                
             }
-        } 
-        System.out.println("Wszyscy gracze połączeni. Gra się rozpoczyna!");
-        game = new GameThread(players, playerCount);
-        gamePresent = true;
-        for(Socket socket : this.sockets) {
-            GameClient client = new GameClient(
-                    new BufferedReader(new InputStreamReader(socket.getInputStream())), 
-                        new PrintWriter(socket.getOutputStream()));
-                this.clients.add(client);
         }
-        for(GameClient client : this.clients) {
-            client.getClientThread().run();
-            client.setGameThread(game);
-        }
-        game.run();
-    }
+          
+    } 
+    
 
     protected ServerSocket createServerSocket() throws IOException {
         return new ServerSocket(8080); //default port
     }
 
-    // private class ClientHandler implements Runnable {
-    //     private final Socket socket;
-    //     private final Player player;
+    public void processFirstPlayer(Socket socket, BufferedReader br, PrintWriter pw, int playerCount) throws IOException {
+        this.game = new GameThread(socket, br, pw, playerCount);
+        game.addPlayer(socket, br, pw);
+        game.run();
+        this.gamePresent = true;
+    }
 
-    //     public ClientHandler(Socket socket, Player player) {
-    //         this.socket = socket;
-    //         this.player = player;
-    //     }
-
-    //     @Override
-    //     public void run() {
-    //         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-    //              PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-
-    //             out.println("Witaj, " + player.getId() + "! Twój symbol to: " + player.getSymbol());
-    //             //out.println(board.printBoard()); printBoard will eventually return string here
-
-    //             String input;
-    //             while ((input = in.readLine()) != null) {
-    //                 String outpuString = MessageHandler.handle(input);
-    //                 if(outpuString != null)
-    //                 {
-    //                     out.println(outpuString);
-    //                 }
-    //             }
-    //         } catch (IOException e) {
-    //             System.err.println("Błąd obsługi klienta: " + e.getMessage());
-    //         }
-    //     }
-    // }
-
-    public static void main(String[] args) {
-
-        BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
-        int playerCountCheck = 0;
-        String playerCountInput = "";
-        while(playerCountCheck < 2) {
-            try {
-                System.out.println("jestes hostem - podaj liczbe graczy");
-                playerCountInput = consoleInput.readLine();
-                playerCountCheck = Integer.parseInt(playerCountInput);
-                if(playerCountCheck > 6 || playerCountCheck < 2 || playerCountCheck == 5) {
-                    throw new IllegalArgumentException("Niepoprawna liczba graczy");
-                }
-                GameServer server = new GameServer(8080, playerCountCheck);
-                try {
-                    server.start();
-                } catch(IOException e) {
-                    System.err.println("Server error - " + e.getMessage());
-                } catch (InterruptedException ex) {
-                    System.err.println("OHNO " + ex.getMessage());
-                }
-            } catch (IllegalArgumentException e) {
-                System.err.print("Niepoprawna liczba graczy! \n" + 
-                "Input: " + Integer.parseInt(playerCountInput) + "; oczekiwano: 2, 3, 4 lub 6\n");
-                playerCountCheck = 0;
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-      
-         
-        
-        
+    public void processJoiner(Socket socket, BufferedReader br, PrintWriter pw) throws IOException {
+        game.addPlayer(socket, br, pw);
     }
 }

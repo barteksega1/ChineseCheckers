@@ -2,6 +2,7 @@
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Board/BoardFiller.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Client/ClientThread.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Message/MessageHandler.java
+/home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Server/GameServerLauncher.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Message/PassMessageBuilder.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Player/Player.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Commands/CommandOutputWriter.java

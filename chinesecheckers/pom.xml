@@ -26,7 +26,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <main.class>checkers.Server.GameServer</main.class>
+                <main.class>checkers.Server.GameServerLauncher</main.class>
             </properties>
         </profile>
 
