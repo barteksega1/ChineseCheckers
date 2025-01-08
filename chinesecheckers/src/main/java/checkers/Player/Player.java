@@ -1,20 +1,28 @@
 package checkers.Player;
 
+import checkers.Cell.CellColor;
+
 public class Player {
-    private final String id;
-    private final char symbol;
+    private final int number;
+    private final CellColor color;
+    private final CellColor enemyColor;
 
-    public Player(String id, char symbol) {
-        this.id = id;
-        this.symbol = symbol;
+    public Player(int number, CellColor color) {
+        this.number = number;
+        this.color = color;
+        enemyColor = CellColor.getEnemy(color);
     }
 
-    public String getId() {
-        return id;
+    public int getNumber() {
+        return number;
     }
 
-    public char getSymbol() {
-        return symbol;
+    public CellColor getColor() {
+        return color;
+    }
+
+    public CellColor getEnemyColor() {
+        return enemyColor;
     }
 }
 

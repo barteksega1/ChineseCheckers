@@ -51,6 +51,7 @@ public class GameThread extends Thread {
             catch (InterruptedException ex) {};
         }
         System.out.println("\n Game is running \n");
+        communicationDevice.sendMessageToAllPlayers("Game is running");
         Random random = new Random();
         
         currentPlayer = random.nextInt(numberOfJoinedPlayers);

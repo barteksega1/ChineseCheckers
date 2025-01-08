@@ -7,6 +7,8 @@ public class HomeCell extends Cell {
         this.row = row;
         this.column = column;
         this.status = CellStatus.OCCUPIED;
+        this.isHomeCell = true;
+        this.isPlayable = true;
     }
 
     @Override
@@ -19,5 +21,6 @@ public class HomeCell extends Cell {
                 ", color=" + color +
                 '}';
     }
+
 
 }

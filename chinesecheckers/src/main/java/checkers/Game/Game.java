@@ -3,6 +3,7 @@ package checkers.Game;
 import java.util.ArrayList;
 
 import checkers.Board.Board;
+import checkers.Cell.CellColor;
 import checkers.Player.Player;
 
 public class Game {
@@ -17,8 +18,39 @@ public class Game {
         this.playerCount = playerCount;
         this.board = new Board();
         board.initializeSquare(6);
+        this.buildPlayers(playerCount);
     }
-    
+
+    private void buildPlayers(final int playerCount) {
+        for (int i = 0; i < playerCount; i++) {
+            CellColor newPlayerColor = null;
+            Player newPlayer = null;
+                    newPlayerColor = CellColor.fromNumber(i);
+                    newPlayer = new Player(i, newPlayerColor);
+                    players.add(newPlayer);
+                
+         }
+    }
+
+    // private void initializePlayer(PlayerType type, int playerNumber, int numberOfHumanPlayers, Player[] players) {
+    //     FieldColor newPlayerColor = null;
+    //     Player newPlayer = null;
+    //     switch (type) {
+    //         case HUMAN:
+    //         	newPlayerColor = FieldColor.fromNumber(playerNumber);
+    //             newPlayer = new HumanPlayer(newPlayerColor);
+    //             players[playerNumber] = newPlayer;
+    //             break;
+    //         case BOT:
+    //         	newPlayerColor = FieldColor.fromNumber(playerNumber + numberOfHumanPlayers);
+    //             newPlayer = new BotPlayer(newPlayerColor);
+    //             players[playerNumber + numberOfHumanPlayers] = newPlayer;
+    //             break;
+    //     }
+    //     Piece[] newPlayerPieces = game.getPlayerPieces(newPlayerColor);
+    //     newPlayer.setPieces(newPlayerPieces);
+    // }
+
     public Board getBoard() {
         return board;
     }
@@ -27,9 +59,9 @@ public class Game {
         return playerCount;
     }
 
-    public void setPlayers(ArrayList<Player> players) {
-        this.players = players;
-    }
+    // public void setPlayers(ArrayList<Player> players) {
+    //     this.players = players;
+    // }
 
     public ArrayList<Player> getPlayers() {
         return players;
@@ -51,9 +83,11 @@ public class Game {
         this.winners = winners;
     }
 
-    // public Player getPlayerByNumber(int number) {
-    //     return players.get(number);
-    // }
+    public Player getPlayerByNumber(int number) {
+        return players.get(number);
+    }
+
+
 
     //todo -- szukanie pól na boardzie po wspolrzednych
 }

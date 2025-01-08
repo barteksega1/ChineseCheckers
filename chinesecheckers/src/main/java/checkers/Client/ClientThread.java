@@ -5,13 +5,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import checkers.Game.Game;
 import checkers.Game.GameThread;
 import checkers.Message.MessageHandler;
+import javafx.application.Platform;
+import checkers.BoardGUI.BoardStage;
+import checkers.ClientGUI.WaitingStage;
 
 public class ClientThread extends Thread {
     private GameClient client;
     private BufferedReader br;
     private PrintWriter pw;
+    private Game game;
+    private int playerNumber;
+    private BoardStage boardStage;
 
 
     public ClientThread(GameClient client, BufferedReader br, PrintWriter pw) {
@@ -35,11 +42,18 @@ public class ClientThread extends Thread {
                 try {
                     String currentLine;
                     if (br.ready() && (currentLine = br.readLine()) != null) {
-                        System.out.println(currentLine);
-
-                        if(currentLine.contains("Your turn")) {
-                            answer = scanner.nextLine();
-                            pw.println(answer);
+                        System.out.println("currentline: " + currentLine);
+                        if(isNumber(currentLine)) {
+                            client.setPlayerNumber(Integer.parseInt(currentLine));
+                            client.showWaitingStage();
+                        }
+                            //dorobic czytanie liczby graczy i tworzenie gry dla kazdego klienta
+                        else if(currentLine.contains("Game is running")) {
+                            Platform.runLater(() -> {
+                            client.closePreviousStage();
+                            boardStage = new BoardStage(this.game, this.playerNumber, this.client);
+                            boardStage.show();
+                        });
                         }
                     }
                 } catch (IOException e) {
@@ -48,6 +62,18 @@ public class ClientThread extends Thread {
                 }
             }
         }
+    }
+
+
+
+      private boolean isNumber(String line) {
+        try {
+            Integer.parseInt(line);
+        }
+        catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
     
 }

@@ -5,6 +5,7 @@ checkers/Cell/CellStatus.class
 checkers/Message/MoveMessageBuilder.class
 checkers/Board/StarShapeChecker.class
 checkers/Board/BoardBuilder.class
+checkers/BoardGUI/BoardStage.class
 checkers/Client/ClientThread.class
 checkers/Commands/PassCommand.class
 checkers/Client/GameClient.class
@@ -12,9 +13,12 @@ checkers/Server/CommunicationDevice.class
 checkers/Message/MessageBuilder.class
 checkers/Client/GameClientLauncher.class
 checkers/Commands/Command.class
+checkers/BoardGUI/BoardElement.class
 checkers/Player/Player.class
 checkers/Server/GameServerLauncher.class
 checkers/Message/PassMessageBuilder.class
+checkers/ClientGUI/WaitingStage.class
+checkers/BoardGUI/BoardField.class
 checkers/Server/GameServer.class
 checkers/Message/MessageHandler.class
 checkers/Cell/PlayableCell.class

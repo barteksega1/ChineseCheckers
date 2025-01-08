@@ -5,17 +5,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-//import javafx.stage.Stage;
 
-import checkers.Game.GameThread;
+import checkers.ClientGUI.WaitingStage;
+import javafx.application.Platform;
+import javafx.stage.Stage;
 
 public class GameClient {
     private final BufferedReader br;
     private final PrintWriter pw;
-    //private GameThread gameThread = null;
     private ClientThread clientThread;
-    //private final Object lock = new Object();
-    //private Stage stage;
+    private Stage stage;
+    private int playerNumber = -1;
     //klient ktory bedzie gui
     
     public GameClient(Socket socket) throws IOException {
@@ -58,6 +58,14 @@ public class GameClient {
         this.clientThread = clientThread;
     }
 
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
+    }
+
     // public GameThread getGameThread() {
     //     return gameThread;
     // }
@@ -66,5 +74,22 @@ public class GameClient {
     //         this.gameThread = gameThread; // Przypisanie GameThread
     //         clientThread.setGame(gameThread);
     //     }
+
+    public void setStage(Stage stage) {
+		this.stage = stage;
+	}
+	
+	public void closePreviousStage() {
+		if(this.stage != null)
+			stage.close();
+	}
+
+    public void showWaitingStage() {
+        Platform.runLater(() -> {
+                    WaitingStage waitingStage = new WaitingStage(playerNumber);
+                    this.setStage(waitingStage);
+                    waitingStage.show();
+                });
+    }
 
 }
