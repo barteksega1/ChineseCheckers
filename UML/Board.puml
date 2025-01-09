@@ -1,0 +1,37 @@
+@startuml Board
+
+package "Board" {
+    class Board {
+        +initializeSquare(gameSize: int)
+        +cells: List<Cell>
+    }
+
+    class BoardBuilder {
+        +setGameSize(gameSize: int): BoardBuilder
+        +build(): Board
+    }
+
+    class BoardFiller {
+        +setInactiveCellsAsIllegal()
+        +checkStarShape(gameSize: int)
+    }
+
+    class StarShapeChecker {
+        +shapeStar(gameSize: int)
+    }
+
+    class Cell {
+        +row: int
+        +column: int
+        +status: CellStatus
+        +player: String
+        +color: CellColor
+    }
+
+    BoardBuilder --> Board : builds
+    Board --> BoardFiller : works with
+    Board "1" --> "*" Cell : contains
+    BoardFiller --> StarShapeChecker : uses
+}
+
+@enduml

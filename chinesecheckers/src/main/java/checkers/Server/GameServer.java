@@ -11,11 +11,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 
 import checkers.Board.Board;
 import checkers.Client.GameClient;
+
 import checkers.Game.GameThread;
 import checkers.Message.MessageHandler;
 import checkers.Player.Player;
