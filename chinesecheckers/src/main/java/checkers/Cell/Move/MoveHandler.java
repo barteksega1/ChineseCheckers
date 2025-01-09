@@ -6,21 +6,28 @@ import checkers.Cell.CellStatus;
 
 public class MoveHandler {
 
-    private BasicRules basicRules;
-    private JumpRules jumpRules;
+    private final BasicRules basicRules;
+    private final JumpRules jumpRules;
+    private boolean isFirstMove;
 
     public MoveHandler() {
         this.basicRules = new BasicRules();
         this.jumpRules = new JumpRules();
+        this.isFirstMove = true;
     }
 
     public boolean move(Board board, int startRow, int startColumn, int endRow, int endColumn) {
+        // Sprawdzenie, czy ruch jest legalny zgodnie z podstawowymi zasadami
         if (!basicRules.isMoveLegal(board, startRow, startColumn, endRow, endColumn)) {
             throw new IllegalArgumentException("Move is not legal");
         }
 
+        // Sprawdzenie, czy ruch jest ruchem skokowym
         boolean isJumpMove = jumpRules.isJumpMovePossible(board, startRow, startColumn, endRow, endColumn);
-        if (basicRules.isNormalMovePossible(startRow, startColumn, endRow, endColumn) || isJumpMove) {
+        
+        // Sprawdzenie, czy jest to pierwszy ruch lub ruch skokowy
+        if ((isFirstMove && basicRules.isNormalMovePossible(startRow, startColumn, endRow, endColumn)) || isJumpMove) {
+            // Aktualizacja komórek na planszy
             Cell startCell = board.getCell(startRow, startColumn);
             Cell endCell = board.getCell(endRow, endColumn);
 
@@ -35,14 +42,18 @@ public class MoveHandler {
             board.setCell(startCell, startRow, startColumn);
             board.setCell(endCell, endRow, endColumn);
 
+            // Jeśli jest to ruch skokowy, sprawdzenie dodatkowych możliwych ruchów skokowych
             if (isJumpMove) {
-                // Check for additional jump moves
+                isFirstMove = false;
                 return jumpRules.checkForAdditionalJumpMoves(board, endRow, endColumn);
             }
 
+            // Ustawienie flagi pierwszego ruchu na true
+            isFirstMove = true;
             return true;
         }
 
+        // Ruch nie był możliwy
         return false;
     }
 }
