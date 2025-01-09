@@ -6,6 +6,8 @@ public abstract class Cell {
     protected CellStatus status;
     protected String player;
     protected CellColor color;
+    protected boolean isHomeCell;
+    protected boolean isPlayable;
 
     public Cell() {
         this.status = CellStatus.ILLEGAL;
@@ -35,4 +37,13 @@ public abstract class Cell {
     public void setPlayer(String player) {
         this.player = player;
     }
+
+    public boolean isHomeCell() {
+        return isHomeCell;
+    }
+
+    public boolean isPlayable() {
+        return isPlayable;
+    }
+
 }

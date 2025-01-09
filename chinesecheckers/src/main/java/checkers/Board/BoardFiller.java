@@ -1,5 +1,4 @@
 package checkers.Board;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +6,7 @@ import checkers.Cell.Cell;
 import checkers.Cell.CellColor;
 import checkers.Cell.CellStatus;
 import checkers.Cell.HomeCell;
+
 
 public class BoardFiller {
 
@@ -78,3 +78,4 @@ public class BoardFiller {
     }
     
 }    
+

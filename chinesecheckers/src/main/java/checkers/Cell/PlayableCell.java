@@ -7,6 +7,8 @@ public class PlayableCell extends Cell {
         this.column = column;
         this.status = CellStatus.ILLEGAL;
         this.player = null;
+        this.isHomeCell = false;
+        this.isPlayable = true;
     }
 
     @Override

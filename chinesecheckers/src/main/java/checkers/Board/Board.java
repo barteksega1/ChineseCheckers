@@ -42,6 +42,7 @@ public class Board {
 
     public void printBoard() {
         final String RESET = "\u001B[0m";
+
         final String WHITE = "\u001B[97m";
         final String BLUE = "\u001B[34m";
         final String RED = "\u001B[31m";
@@ -50,6 +51,7 @@ public class Board {
         final String PURPLE = "\u001B[35m";
         final String ORANGE = "\u001B[38;5;214m"; // Corrected ANSI escape sequence for orange
         final String BLACK = "\u001B[30m";
+
 
         for (Cell[] row : cells) {
             for (Cell cell : row) {
@@ -79,6 +81,7 @@ public class Board {
                             System.out.print("H ");
                             break;
                     }
+
                 } else if (cell.getStatus() == CellStatus.FREE) {
                     System.out.print(WHITE + "O " + RESET);
                 } else {

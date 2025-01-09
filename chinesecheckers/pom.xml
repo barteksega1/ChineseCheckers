@@ -16,6 +16,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <java.version>21.0.5</java.version> <!-- Twoja wersja Javy -->
+    <javafx.version>21.0.5</javafx.version> <!-- Aktualna wersja JavaFX -->
   </properties>
 
   <profiles>
@@ -26,7 +28,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <main.class>checkers.Server.GameServer</main.class>
+                <main.class>checkers.Server.GameServerLauncher</main.class>
             </properties>
         </profile>
 
@@ -37,7 +39,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <main.class>checkers.Client.GameClient</main.class>
+                <main.class>checkers.Client.GameClientLauncher</main.class>
             </properties>
         </profile>
     </profiles>
@@ -67,6 +69,16 @@
       <artifactId>mockito-core</artifactId>
       <version>3.6.28</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>21.0.5</version> <!-- Użyj najnowszej wersji -->
+    </dependency>
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-fxml</artifactId>
+        <version>21.0.5</version>
     </dependency>
   </dependencies>
 

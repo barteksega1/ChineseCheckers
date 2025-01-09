@@ -6,47 +6,90 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import checkers.ClientGUI.WaitingStage;
+import javafx.application.Platform;
+import javafx.stage.Stage;
+
 public class GameClient {
-    private final BufferedReader in;
-    private final PrintWriter out;
-    private final BufferedReader console;
+    private final BufferedReader br;
+    private final PrintWriter pw;
+    private ClientThread clientThread;
+    private Stage stage;
+    private int playerNumber = -1;
     //klient ktory bedzie gui
-    public GameClient(Socket socket, BufferedReader in, PrintWriter out, BufferedReader console) {
-        this.in = in;
-        this.out = out;
-        this.console = console;
+    
+    public GameClient(Socket socket) throws IOException {
+        this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.pw = new PrintWriter(socket.getOutputStream(), true);
+        this.clientThread = new ClientThread(this, br, pw);
+        clientThread.start();
     }
 
-    public void start() {
-        try {
-            System.out.println("Połączono z serwerem!");
-            String response;
+    
 
-            while ((response = in.readLine()) != null) {
-                System.out.println(response);
 
-                if (response.startsWith("Witaj")) {
-                    System.out.println("Podaj komende");
-                    String command = console.readLine();
-                    out.println(command);
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Błąd połączenia z serwerem: " + e.getMessage());
-        }
+    //gui stuff
+    // public Stage getStage() {
+    //     return stage;
+    // }
+
+    // public void setStage(Stage stage) {
+    //     this.stage = stage;
+    // }
+
+    // public void closePreviousStage() {
+	// 	if(this.stage != null)
+	// 		stage.close();
+	// }
+
+    public BufferedReader getInput() {
+        return br;
     }
 
-    public static void main(String[] args) {
-        try (Socket socket = new Socket("localhost", 12345);
-             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-             BufferedReader console = new BufferedReader(new InputStreamReader(System.in))) {
-
-            GameClient client = new GameClient(socket, in, out, console);
-            client.start();
-        } catch (IOException e) {
-            System.err.println("Błąd połączenia z serwerem: " + e.getMessage());
-        }
+    public PrintWriter getOutput() {
+        return pw;
     }
+
+    public ClientThread getClientThread() {
+        return clientThread;
+    }
+
+    public void setClientThread(ClientThread clientThread) {
+        this.clientThread = clientThread;
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
+    }
+
+    // public GameThread getGameThread() {
+    //     return gameThread;
+    // }
+
+    // public void setGameThread(GameThread gameThread) {
+    //         this.gameThread = gameThread; // Przypisanie GameThread
+    //         clientThread.setGame(gameThread);
+    //     }
+
+    public void setStage(Stage stage) {
+		this.stage = stage;
+	}
+	
+	public void closePreviousStage() {
+		if(this.stage != null)
+			stage.close();
+	}
+
+    public void showWaitingStage() {
+        Platform.runLater(() -> {
+                    WaitingStage waitingStage = new WaitingStage(playerNumber);
+                    this.setStage(waitingStage);
+                    waitingStage.show();
+                });
+    }
+
 }
-

@@ -1,6 +1,9 @@
 package checkers.Board;
 
 import checkers.Cell.Cell;
+
+import checkers.Cell.CellColor;
+
 import checkers.Cell.CellStatus;
 import checkers.Cell.HomeCell;
 
@@ -21,7 +24,9 @@ public class BoardBuilder {
                     cell.setStatus(CellStatus.FREE);
                     board.setCell(cell, row, column);
                 } else if (inFirstTriangle || inSecondTriangle) {
+
                     Cell cell = new HomeCell(row, column);
+
                     board.setCell(cell, row, column);
                 } else {
                     Cell cell = board.getCell(row, column);
