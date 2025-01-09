@@ -2,7 +2,12 @@ package checkers.Cell;
 
 public class HomeCell extends Cell {    
     public HomeCell(int row, int column) {
-        this(CellColor.NONE, row, column);
+        this.color = CellColor.NONE;
+        this.row = row;
+        this.column = column;
+        this.status = CellStatus.FREE;
+        this.isHomeCell = true;
+        this.isPlayable = true;
     }
 
 
@@ -10,8 +15,7 @@ public class HomeCell extends Cell {
         this.color = color;
         this.row = row;
         this.column = column;
-        this.status = CellStatus.OCCUPIED;
-
+        this.status = CellStatus.FREE;
         this.isHomeCell = true;
         this.isPlayable = true;
 

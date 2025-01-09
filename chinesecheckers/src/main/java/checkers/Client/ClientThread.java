@@ -5,17 +5,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import checkers.Game.Game;
-import checkers.Game.GameThread;
-import checkers.Message.MessageHandler;
-import javafx.application.Platform;
 import checkers.BoardGUI.BoardStage;
-import checkers.ClientGUI.WaitingStage;
+import checkers.Game.Game;
+import javafx.application.Platform;
 
-public class ClientThread extends Thread {
-    private GameClient client;
-    private BufferedReader br;
-    private PrintWriter pw;
+public final class ClientThread extends Thread {
+    private final GameClient client;
+    private final BufferedReader br;
+    private final PrintWriter pw;
     private Game game;
     private int playerNumber;
     private BoardStage boardStage;
@@ -66,9 +63,9 @@ public class ClientThread extends Thread {
 
 
 
-      private boolean isNumber(String line) {
+    private boolean isNumber(String line) {
         try {
-            Integer.parseInt(line);
+            Integer.valueOf(line);
         }
         catch (NumberFormatException e) {
             return false;

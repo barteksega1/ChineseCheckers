@@ -3,20 +3,17 @@ package checkers.Game;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Random;
 
 import checkers.Message.MessageHandler;
-import checkers.Player.Player;
 import checkers.Server.CommunicationDevice;
 
 public class GameThread extends Thread {
     
-    private boolean started = false;
-    private boolean ended = false;
-    private Game game;
+    private final boolean started = false;
+    private final boolean ended = false;
+    private final Game game;
     //private ArrayList<Player> players = new ArrayList<>();
     private int numberOfPlayers = 0;
     private int numberOfHumanPlayers = 0;

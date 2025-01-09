@@ -1,9 +1,6 @@
 package checkers.Board;
 
 import checkers.Cell.Cell;
-
-import checkers.Cell.CellColor;
-
 import checkers.Cell.CellStatus;
 import checkers.Cell.HomeCell;
 
