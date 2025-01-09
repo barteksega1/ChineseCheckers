@@ -6,11 +6,18 @@ import checkers.Cell.CellStatus;
 
 public class MoveHandler {
 
-    public boolean move(Board board, int startRow, int startColumn, int endRow, int endColumn) {
-        Cell startCell = board.getCell(startRow, startColumn);
-        Cell endCell = board.getCell(endRow, endColumn);
+    private BasicRules basicRules;
 
-        if (startCell.getStatus() == CellStatus.OCCUPIED && endCell.getStatus() == CellStatus.FREE) {
+    public MoveHandler() {
+        this.basicRules = new BasicRules();
+    }
+
+    public boolean move(Board board, int startRow, int startColumn, int endRow, int endColumn) {
+        if (basicRules.isMoveLegal(board, startRow, startColumn, endRow, endColumn) &&
+            basicRules.isMovePossible(startRow, startColumn, endRow, endColumn)) {
+            Cell startCell = board.getCell(startRow, startColumn);
+            Cell endCell = board.getCell(endRow, endColumn);
+
             endCell.setStatus(startCell.getStatus());
             endCell.setColor(startCell.getColor());
             endCell.setPlayer(startCell.getPlayer());

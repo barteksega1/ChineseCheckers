@@ -17,7 +17,7 @@ public class Game {
     public Game(int playerCount) {
         this.playerCount = playerCount;
         this.board = new Board();
-        board.initializeSquare(6);
+        board.initializeSquare(7);
         this.buildPlayers(playerCount);
     }
 
