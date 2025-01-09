@@ -13,7 +13,7 @@ public class BasicRules {
         return startCell.getStatus() == CellStatus.OCCUPIED && endCell.getStatus() == CellStatus.FREE;
     }
 
-    public boolean isMovePossible(int startRow, int startColumn, int endRow, int endColumn) {
+    public boolean isNormalMovePossible(int startRow, int startColumn, int endRow, int endColumn) {
         int rowDiff = Math.abs(startRow - endRow);
         int colDiff = Math.abs(startColumn - endColumn);
         return (rowDiff == 1 && colDiff == 1);
