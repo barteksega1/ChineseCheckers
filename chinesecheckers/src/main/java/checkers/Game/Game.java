@@ -3,6 +3,7 @@ package checkers.Game;
 import java.util.ArrayList;
 
 import checkers.Board.Board;
+import checkers.Board.BoardBuilder;
 import checkers.Cell.CellColor;
 import checkers.Player.Player;
 
@@ -11,13 +12,15 @@ public class Game {
     private int playerCount;
     //private int botCount;
     private Board board;
+    private BoardBuilder boardBuilder;
     private ArrayList <Player> players = new ArrayList<>();
     private ArrayList <Player> winners = new ArrayList<>(); 
 
     public Game(int playerCount) {
         this.playerCount = playerCount;
+        this.boardBuilder = new BoardBuilder();
         this.board = new Board();
-        board.initializeSquare(7);
+        boardBuilder.setupBoard(board, 11); // Use BoardBuilder to initialize the board
         this.buildPlayers(playerCount);
     }
 

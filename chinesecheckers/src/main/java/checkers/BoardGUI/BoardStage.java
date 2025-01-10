@@ -21,6 +21,8 @@ public class BoardStage extends Stage {
     private final Label turnLabel;
     private final Label colorLabel;
 
+    
+
     public BoardStage(Game game, int numberOfPlayer, GameClient client) {
         this.game = game;
         this.setResizable(false);
@@ -46,6 +48,7 @@ public class BoardStage extends Stage {
                 Cell cell = board.getCell(row, column);
                 if (cell.getStatus() != CellStatus.ILLEGAL) {
                     BoardField boardField = new BoardField(this, cell);
+                    boardField.setRadius(10); // Ustawienie odpowiedniego rozmiaru pola
                     gridPane.add(boardField, column, row);
                 }
             }
@@ -62,7 +65,7 @@ public class BoardStage extends Stage {
         mainPane.add(turnLabel, 1, 0);
         mainPane.add(group, 0, 1, 2, 1);
 
-        Scene scene = new Scene(mainPane, mainPane.prefWidth(0) * 2, mainPane.prefHeight(0));
+        Scene scene = new Scene(mainPane, 800, 600); // Ustawienie odpowiedniego rozmiaru sceny
         this.setScene(scene);
     }
 }
