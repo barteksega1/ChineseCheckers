@@ -11,9 +11,9 @@ import checkers.Server.CommunicationDevice;
 
 public class GameThread extends Thread {
     
-    private final boolean started = false;
-    private final boolean ended = false;
-    private final Game game;
+    private boolean started = false;
+    private boolean ended = false;
+    private Game game;
     //private ArrayList<Player> players = new ArrayList<>();
     private int numberOfPlayers = 0;
     private int numberOfHumanPlayers = 0;
@@ -38,6 +38,7 @@ public class GameThread extends Thread {
             for(int i = 0; i < communicationDevice.getPlayerWriters().size(); i++)
             {
                 communicationDevice.getPrintWriterByNumber(i).println("waiting for more players, you are player " + i);
+                communicationDevice.getPrintWriterByNumber(i).println("Game Size is: " + numberOfHumanPlayers);
             }
             try {
                 synchronized(this) {
@@ -75,27 +76,24 @@ public class GameThread extends Thread {
 
     }
         
-
-
-        public void addPlayer(Socket player, BufferedReader br, PrintWriter pw) throws IOException {
-            communicationDevice.addPlayer(player, br, pw);
-            numberOfJoinedPlayers++;
-        }
-
-        public int getNumberOfJoinedPlayers() {
-            return numberOfJoinedPlayers;
-        }
-
-        public int getNumberOfPlayers() {
-            return numberOfPlayers;
-        }
-
-        public int getNumberOfHumanPlayers() {
-            return numberOfHumanPlayers;
-        }
-
-        public CommunicationDevice getCommunicationDevice() {
-            return communicationDevice;
-        }
+    public void addPlayer(Socket player, BufferedReader br, PrintWriter pw) throws IOException {
+        communicationDevice.addPlayer(player, br, pw);
+        numberOfJoinedPlayers++;
     }
 
+    public int getNumberOfJoinedPlayers() {
+        return numberOfJoinedPlayers;
+    }
+
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public int getNumberOfHumanPlayers() {
+        return numberOfHumanPlayers;
+    }
+
+    public CommunicationDevice getCommunicationDevice() {
+        return communicationDevice;
+    }
+}

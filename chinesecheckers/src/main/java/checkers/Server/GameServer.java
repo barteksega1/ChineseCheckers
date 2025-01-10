@@ -57,6 +57,7 @@ public class GameServer {
                     numberOfJoinedPlayers++;
                     if(numberOfJoinedPlayers == playerCount) {
                         game.getCommunicationDevice().sendMessageToAllPlayers("Wszyscy gracze połączeni. Gra się rozpoczyna!");
+                        game.getCommunicationDevice().sendMessageToAllPlayers("Game Size is: " + playerCount);
                         gameRunning = true;
                     }
                 }

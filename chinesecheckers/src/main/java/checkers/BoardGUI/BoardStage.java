@@ -11,8 +11,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class BoardStage extends Stage {
@@ -47,10 +45,8 @@ public class BoardStage extends Stage {
             for (int column = 0; column < columns; column++) {
                 Cell cell = board.getCell(row, column);
                 if (cell.getStatus() != CellStatus.ILLEGAL) {
-                    Circle circle = new Circle(10);
-                    circle.setFill(Color.TRANSPARENT);
-                    circle.setStroke(Color.BLACK);
-                    gridPane.add(circle, column, row);
+                    BoardField boardField = new BoardField(this, cell);
+                    gridPane.add(boardField, column, row);
                 }
             }
         }
