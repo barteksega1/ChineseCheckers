@@ -23,6 +23,7 @@ checkers/Server/GameServer.class
 checkers/Message/MessageHandler.class
 checkers/Cell/PlayableCell.class
 checkers/Game/Game.class
+checkers/Board/Board$1.class
 checkers/Game/GameThread.class
 checkers/Cell/CellColor.class
 checkers/Cell/Cell.class

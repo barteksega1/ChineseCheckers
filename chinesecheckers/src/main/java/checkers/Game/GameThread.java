@@ -41,6 +41,7 @@ public class GameThread extends Thread {
             for(int i = 0; i < communicationDevice.getPlayerWriters().size(); i++)
             {
                 communicationDevice.getPrintWriterByNumber(i).println("waiting for more players, you are player " + i);
+                communicationDevice.getPrintWriterByNumber(i).println("Game Size is: " + numberOfHumanPlayers);
             }
             try {
                 synchronized(this) {

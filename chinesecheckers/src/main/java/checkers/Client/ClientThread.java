@@ -19,6 +19,7 @@ public class ClientThread extends Thread {
     private Game game;
     private int playerNumber;
     private BoardStage boardStage;
+    private int playerCount;
 
 
     public ClientThread(GameClient client, BufferedReader br, PrintWriter pw) {
@@ -47,6 +48,13 @@ public class ClientThread extends Thread {
                             client.setPlayerNumber(Integer.parseInt(currentLine));
                             client.showWaitingStage();
                         }
+                        if(currentLine.contains("Game Size")) {
+                            String[] splitLine = currentLine.split("\\s+");
+                            System.out.println("i got this playercount : " + splitLine[splitLine.length-1]);
+                            setPlayerCount(Integer.parseInt(splitLine[splitLine.length-1]));
+                            System.out.println("PLAYERCOUNT: " + playerCount);
+                            this.game = new Game(playerCount);
+                        }
                             //dorobic czytanie liczby graczy i tworzenie gry dla kazdego klienta
                         else if(currentLine.contains("Game is running")) {
                             Platform.runLater(() -> {
@@ -74,6 +82,10 @@ public class ClientThread extends Thread {
             return false;
         }
         return true;
+    }
+
+    public void setPlayerCount(int playerCount) {
+        this.playerCount = playerCount;
     }
     
 }
