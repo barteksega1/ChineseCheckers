@@ -3,6 +3,7 @@ package checkers.BoardGUI;
 import checkers.Board.Board;
 import checkers.Cell.Cell;
 import checkers.Cell.CellStatus;
+import checkers.Client.ClientThread;
 import checkers.Client.GameClient;
 import checkers.Game.Game;
 import checkers.Player.Player;
@@ -28,11 +29,13 @@ public class BoardStage extends Stage {
     private GridPane mainPane;
     private Button sendButton;
     private String input;
+    private ClientThread clientThread;
 
     
 
-    public BoardStage(Game game, int numberOfPlayer, GameClient client) {
+    public BoardStage(Game game, int numberOfPlayer, GameClient client, ClientThread clientThread) {
         this.game = game;
+        this.clientThread = clientThread;
         this.setResizable(false);
         this.player = game.getPlayerByNumber(numberOfPlayer);
         this.colorLabel = new Label("You are " + player.getColor().toString() + "." );
@@ -44,6 +47,12 @@ public class BoardStage extends Stage {
         this.outputLabel = new Label("");
         this.sendButton = new Button("Send");
         drawBoard(game.getBoard(), game.getBoard().getGameSize());
+        sendButton.setOnAction( e -> {
+            input = inputTextField.getText();
+            inputTextField.clear();
+            System.out.println("button clicked: " + input);
+            this.clientThread.getPrintWriter().println(input);
+        });
     }
 
     private void drawBoard(Board board, int gameSize) {
@@ -75,14 +84,11 @@ public class BoardStage extends Stage {
         mainPane.setVgap(10);
         mainPane.add(colorLabel, 0, 0);
         mainPane.add(turnLabel, 1, 0);
-        //mainPane.add(moveLabel, 3, 0);
-        //mainPane.add(inputTextField, 4, 0);
-        //mainPane.add(outputLabel, 4, 0);
-        //mainPane.add(sendButton, 6, 0);
+        mainPane.add(moveLabel, 3, 0);
+        mainPane.add(this.outputLabel, 4, 0);
+        mainPane.add(this.inputTextField, 5, 0);
+        mainPane.add(this.sendButton, 6, 0);
         mainPane.add(group, 0, 1, 2, 1);
-        sendButton.setOnAction( e -> {
-            input = inputTextField.getText();
-        });
 
         Scene scene = new Scene(mainPane, 800, 600); // Ustawienie odpowiedniego rozmiaru sceny
         this.setScene(scene);
@@ -90,8 +96,12 @@ public class BoardStage extends Stage {
 
 
 
-    public void setTurnLabel(String messageString) {
-        this.turnLabel.setText(messageString);
+    public void setLabelForTurn(String turnString) {
+        this.turnLabel.setText(turnString);
+    }
+
+    public void setLabelForWait() {
+        this.turnLabel.setText("Wait for your turn...");
     }
 
     public void setOutputLabel(String messageString) {
@@ -111,10 +121,19 @@ public class BoardStage extends Stage {
     }
 
     public void showInputTools() {
-        mainPane.add(moveLabel, 3, 0);
-        mainPane.add(this.outputLabel, 4, 0);
-        mainPane.add(this.inputTextField, 5, 0);
-        mainPane.add(this.sendButton, 6, 0);
+       moveLabel.setVisible(true);
+       inputTextField.setVisible(true);
+       outputLabel.setVisible(true);
+       sendButton.setVisible(true);
     }
+
+    public void hideInputTools() {
+       moveLabel.setVisible(false);
+       inputTextField.setVisible(false);
+       outputLabel.setVisible(false);
+       sendButton.setVisible(false);
+    }
+    
+
 
 }

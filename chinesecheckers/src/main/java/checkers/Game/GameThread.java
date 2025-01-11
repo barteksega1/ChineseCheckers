@@ -68,7 +68,7 @@ public class GameThread extends Thread {
                 String playerInput = communicationDevice.getInputReaderByNumber(currentPlayer).readLine();
                 System.out.println(playerInput);
                 if(playerInput.contains("slay")) {
-                    communicationDevice.getPrintWriterByNumber(currentPlayer).println("Thank you for you move");
+                    communicationDevice.getPrintWriterByNumber(currentPlayer).println("Thank you for your move");
                     currentPlayer = (currentPlayer + 1)%(numberOfJoinedPlayers);
                 } else {
                     communicationDevice.getPrintWriterByNumber(currentPlayer).println("Sorry, your move was incorrect");

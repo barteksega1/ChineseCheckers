@@ -53,7 +53,7 @@ public class ClientThread extends Thread {
                             System.out.println("PLAYERCOUNT: " + playerCount);
                             this.game = new Game(playerCount);
                             Platform.runLater(() -> {
-                                this.boardStage = new BoardStage(this.game, this.playerNumber, this.client);
+                                this.boardStage = new BoardStage(this.game, this.playerNumber, this.client, this);
                             });
                             game.getPlayers();
                         }
@@ -66,15 +66,15 @@ public class ClientThread extends Thread {
                         }
                         else if(!(game == null) && boardStage != null && currentLine.contains("Your turn")) {
                             Platform.runLater(() -> {
-                                this.boardStage.setTurnLabel(currentLine);
+                                this.boardStage.setLabelForTurn(currentLine);
                                 this.boardStage.showInputTools();
                             });
-                            String input;
-                            if((input = boardStage.getInput()) != null)
-                            pw.write(input);
-                            pw.flush();
+                            
+                        }
+                        else if(currentLine.contains("Thank you for your move")) {
                             Platform.runLater(() -> {
-                                this.boardStage = new BoardStage(this.game, this.playerNumber, this.client);
+                                this.boardStage.hideInputTools();
+                                this.boardStage.setLabelForWait();
                             });
                         }
                     }
@@ -104,5 +104,9 @@ public class ClientThread extends Thread {
     
     public void setPlayerNumber(int playerNumber) {
         this.playerNumber = playerNumber;
+    }
+
+    public PrintWriter getPrintWriter() {
+        return pw;
     }
 }

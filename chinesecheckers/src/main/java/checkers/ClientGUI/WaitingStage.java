@@ -2,9 +2,12 @@ package checkers.ClientGUI;
 
 public class WaitingStage extends InfoStage {
 
+    private int playerNumber;
+
     public WaitingStage(int playerNumber) {
-        super(playerNumber);
-        this.setLabel("Hello Player " + playerNumber + ". Waiting for more players to join...");
+        this.playerNumber = playerNumber;
+        //super(playerNumber);
+        this.setLabel("Hello Player " + this.playerNumber + ". Waiting for more players to join...");
     }
     
 }

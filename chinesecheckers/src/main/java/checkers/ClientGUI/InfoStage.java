@@ -8,10 +8,9 @@ import javafx.stage.Stage;
     
 
 public abstract class InfoStage extends Stage {
-	private int playerNumber;
 	private Label label;
-	public InfoStage(int playerNumber) {
-		this.playerNumber = playerNumber;
+	public InfoStage() {
+		//this.playerNumber = playerNumber;
 	 	label = new Label("");
 		this.setTitle("Chinese checkers");
 		label.setFont(new Font(15));
