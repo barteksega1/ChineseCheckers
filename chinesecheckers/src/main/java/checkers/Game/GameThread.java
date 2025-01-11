@@ -57,6 +57,13 @@ public class GameThread extends Thread {
         {
             try {
                 System.out.println("current Player: " + currentPlayer);
+                // try {
+                //     synchronized(this) {
+                //         wait(3000);
+                //         //System.out.println("waittttt \n");
+                //     }
+                // }
+                // catch (InterruptedException ex) {};
                 communicationDevice.getPrintWriterByNumber(currentPlayer).println("Your turn player " + currentPlayer);
                 String playerInput = communicationDevice.getInputReaderByNumber(currentPlayer).readLine();
                 System.out.println(playerInput);

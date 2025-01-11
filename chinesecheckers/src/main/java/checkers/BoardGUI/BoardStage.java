@@ -9,7 +9,9 @@ import checkers.Player.Player;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -18,8 +20,14 @@ public class BoardStage extends Stage {
     private boolean active;
     private final Player player;
     private GameClient client;
-    private final Label turnLabel;
+    private TextField inputTextField;
+    private Label outputLabel;
+    private Label turnLabel;
+    private Label moveLabel;
     private final Label colorLabel;
+    private GridPane mainPane;
+    private Button sendButton;
+    private String input;
 
     
 
@@ -27,10 +35,14 @@ public class BoardStage extends Stage {
         this.game = game;
         this.setResizable(false);
         this.player = game.getPlayerByNumber(numberOfPlayer);
-        this.colorLabel = new Label("You are " + player.getColor().toString() + ".");
+        this.colorLabel = new Label("You are " + player.getColor().toString() + "." );
         this.client = client;
         this.active = false;
         this.turnLabel = new Label("Wait for your turn...");
+        this.moveLabel = new Label("Write here: ");
+        this.inputTextField = new TextField();
+        this.outputLabel = new Label("");
+        this.sendButton = new Button("Send");
         drawBoard(game.getBoard(), game.getBoard().getGameSize());
     }
 
@@ -57,15 +69,52 @@ public class BoardStage extends Stage {
         Group group = new Group();
         group.getChildren().add(gridPane);
 
-        GridPane mainPane = new GridPane();
+        this.mainPane = new GridPane();
         mainPane.setAlignment(Pos.CENTER);
         mainPane.setHgap(10);
         mainPane.setVgap(10);
         mainPane.add(colorLabel, 0, 0);
         mainPane.add(turnLabel, 1, 0);
+        //mainPane.add(moveLabel, 3, 0);
+        //mainPane.add(inputTextField, 4, 0);
+        //mainPane.add(outputLabel, 4, 0);
+        //mainPane.add(sendButton, 6, 0);
         mainPane.add(group, 0, 1, 2, 1);
+        sendButton.setOnAction( e -> {
+            input = inputTextField.getText();
+        });
 
         Scene scene = new Scene(mainPane, 800, 600); // Ustawienie odpowiedniego rozmiaru sceny
         this.setScene(scene);
     }
+
+
+
+    public void setTurnLabel(String messageString) {
+        this.turnLabel.setText(messageString);
+    }
+
+    public void setOutputLabel(String messageString) {
+        this.outputLabel.setText(messageString);
+    }
+
+    public void clearInput() {
+        this.inputTextField.clear();
+    }
+
+    public String getInput() {
+        return this.inputTextField.getText();
+    }
+
+    public TextField getInputTextField() {
+        return inputTextField;
+    }
+
+    public void showInputTools() {
+        mainPane.add(moveLabel, 3, 0);
+        mainPane.add(this.outputLabel, 4, 0);
+        mainPane.add(this.inputTextField, 5, 0);
+        mainPane.add(this.sendButton, 6, 0);
+    }
+
 }

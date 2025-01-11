@@ -34,15 +34,16 @@ public class ClientThread extends Thread {
     public void run() {
         try (Scanner scanner = new Scanner(System.in)) {
             //MessageHandler mh = new MessageHandler();
-            String answer = new String();
             System.out.println("Welcome to the game, wait for further instructions");
             while(true) {
                 try {
                     String currentLine;
                     if (br.ready() && (currentLine = br.readLine()) != null) {
                         System.out.println("currentline: " + currentLine);
+                        
                         if(isNumber(currentLine)) {
                             client.setPlayerNumber(Integer.parseInt(currentLine));
+                            setPlayerNumber(client.getPlayerNumber());
                             client.showWaitingStage();
                         }
                         if(currentLine.contains("Game Size")) {
@@ -51,14 +52,30 @@ public class ClientThread extends Thread {
                             setPlayerCount(Integer.parseInt(splitLine[splitLine.length-1]));
                             System.out.println("PLAYERCOUNT: " + playerCount);
                             this.game = new Game(playerCount);
+                            Platform.runLater(() -> {
+                                this.boardStage = new BoardStage(this.game, this.playerNumber, this.client);
+                            });
+                            game.getPlayers();
                         }
-                            //dorobic czytanie liczby graczy i tworzenie gry dla kazdego klienta
                         else if(currentLine.contains("Game is running")) {
                             Platform.runLater(() -> {
                             client.closePreviousStage();
-                            boardStage = new BoardStage(this.game, this.playerNumber, this.client);
+                            //this.boardStage = new BoardStage(this.game, this.playerNumber, this.client);
                             boardStage.show();
                         });
+                        }
+                        else if(!(game == null) && boardStage != null && currentLine.contains("Your turn")) {
+                            Platform.runLater(() -> {
+                                this.boardStage.setTurnLabel(currentLine);
+                                this.boardStage.showInputTools();
+                            });
+                            String input;
+                            if((input = boardStage.getInput()) != null)
+                            pw.write(input);
+                            pw.flush();
+                            Platform.runLater(() -> {
+                                this.boardStage = new BoardStage(this.game, this.playerNumber, this.client);
+                            });
                         }
                     }
                 } catch (IOException e) {
@@ -85,4 +102,7 @@ public class ClientThread extends Thread {
         this.playerCount = playerCount;
     }
     
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
+    }
 }

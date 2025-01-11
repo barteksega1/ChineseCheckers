@@ -31,28 +31,8 @@ public class Game {
                     newPlayerColor = CellColor.fromNumber(i);
                     newPlayer = new Player(i, newPlayerColor);
                     players.add(newPlayer);
-                
          }
     }
-
-    // private void initializePlayer(PlayerType type, int playerNumber, int numberOfHumanPlayers, Player[] players) {
-    //     FieldColor newPlayerColor = null;
-    //     Player newPlayer = null;
-    //     switch (type) {
-    //         case HUMAN:
-    //         	newPlayerColor = FieldColor.fromNumber(playerNumber);
-    //             newPlayer = new HumanPlayer(newPlayerColor);
-    //             players[playerNumber] = newPlayer;
-    //             break;
-    //         case BOT:
-    //         	newPlayerColor = FieldColor.fromNumber(playerNumber + numberOfHumanPlayers);
-    //             newPlayer = new BotPlayer(newPlayerColor);
-    //             players[playerNumber + numberOfHumanPlayers] = newPlayer;
-    //             break;
-    //     }
-    //     Piece[] newPlayerPieces = game.getPlayerPieces(newPlayerColor);
-    //     newPlayer.setPieces(newPlayerPieces);
-    // }
 
     public Board getBoard() {
         return board;
@@ -62,11 +42,11 @@ public class Game {
         return playerCount;
     }
 
-    // public void setPlayers(ArrayList<Player> players) {
-    //     this.players = players;
-    // }
-
     public ArrayList<Player> getPlayers() {
+        for(Player player : players) {
+            System.out.println(player.getNumber() + " " + player.getColor().toString());
+        }
+        
         return players;
     }
     
