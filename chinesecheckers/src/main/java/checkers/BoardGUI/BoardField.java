@@ -13,7 +13,7 @@ public class BoardField extends Circle implements BoardElement {
     public BoardField(BoardStage boardStage, Cell field) {
         this.field = field;
         this.setColor();
-        this.setRadius(15);
+        this.setRadius(15); // Ustawienie odpowiedniego rozmiaru pola
     }
 
     //
@@ -45,23 +45,35 @@ public class BoardField extends Circle implements BoardElement {
     }
 
     private void setColor() {
-		CellColor color = this.field.getColor();
-		
-		if(color == CellColor.BLUE)
-			this.setFill(Color.LIGHTBLUE);
-		else if(color == CellColor.GREEN)
-			this.setFill(Color.LIGHTGREEN);
-		else if(color == CellColor.ORANGE)
-			this.setFill(Color.rgb(253, 221, 148));
-		else if(color == CellColor.PURPLE)
-			this.setFill(Color.PLUM);
-		else if(color == CellColor.RED)
-			this.setFill(Color.rgb(234,60,83));
-		else if(color == CellColor.YELLOW)
-			this.setFill(Color.rgb(255, 253, 124));
-		else if(color == CellColor.NONE)
-			this.setFill(Color.LIGHTGRAY);
-	}
+        if (field.isHomeCell()) {
+            CellColor color = this.field.getColor();
+            switch (color) {
+                case BLUE:
+                    this.setFill(Color.LIGHTBLUE);
+                    break;
+                case GREEN:
+                    this.setFill(Color.LIGHTGREEN);
+                    break;
+                case ORANGE:
+                    this.setFill(Color.rgb(253, 221, 148));
+                    break;
+                case PURPLE:
+                    this.setFill(Color.PLUM);
+                    break;
+                case RED:
+                    this.setFill(Color.rgb(234,60,83));
+                    break;
+                case YELLOW:
+                    this.setFill(Color.rgb(255, 253, 124));
+                    break;
+                default:
+                    this.setFill(Color.LIGHTGRAY);
+                    break;
+            }
+        } else if (field.getStatus()!=CellStatus.ILLEGAL) {
+            this.setFill(Color.LIGHTGRAY); // Domyślny kolor dla pól bez przypisanego koloru
+        }
+    }
 
     public Cell getField() {
         return field;

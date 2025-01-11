@@ -3,13 +3,10 @@ package checkers.Game;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Random;
 
 import checkers.Message.MessageHandler;
-import checkers.Player.Player;
 import checkers.Server.CommunicationDevice;
 
 public class GameThread extends Thread {
@@ -79,27 +76,24 @@ public class GameThread extends Thread {
 
     }
         
-
-
-        public void addPlayer(Socket player, BufferedReader br, PrintWriter pw) throws IOException {
-            communicationDevice.addPlayer(player, br, pw);
-            numberOfJoinedPlayers++;
-        }
-
-        public int getNumberOfJoinedPlayers() {
-            return numberOfJoinedPlayers;
-        }
-
-        public int getNumberOfPlayers() {
-            return numberOfPlayers;
-        }
-
-        public int getNumberOfHumanPlayers() {
-            return numberOfHumanPlayers;
-        }
-
-        public CommunicationDevice getCommunicationDevice() {
-            return communicationDevice;
-        }
+    public void addPlayer(Socket player, BufferedReader br, PrintWriter pw) throws IOException {
+        communicationDevice.addPlayer(player, br, pw);
+        numberOfJoinedPlayers++;
     }
 
+    public int getNumberOfJoinedPlayers() {
+        return numberOfJoinedPlayers;
+    }
+
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public int getNumberOfHumanPlayers() {
+        return numberOfHumanPlayers;
+    }
+
+    public CommunicationDevice getCommunicationDevice() {
+        return communicationDevice;
+    }
+}

@@ -5,12 +5,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import checkers.Game.Game;
-import checkers.Game.GameThread;
-import checkers.Message.MessageHandler;
-import javafx.application.Platform;
 import checkers.BoardGUI.BoardStage;
-import checkers.ClientGUI.WaitingStage;
+import checkers.Game.Game;
+import javafx.application.Platform;
 
 public class ClientThread extends Thread {
     private GameClient client;

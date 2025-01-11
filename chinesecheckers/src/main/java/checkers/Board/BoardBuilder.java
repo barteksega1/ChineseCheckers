@@ -1,9 +1,6 @@
 package checkers.Board;
 
 import checkers.Cell.Cell;
-
-import checkers.Cell.CellColor;
-
 import checkers.Cell.CellStatus;
 import checkers.Cell.HomeCell;
 
@@ -46,10 +43,10 @@ public class BoardBuilder {
         board.printBoard();
     }
 
-    public static void main(String[] args) {
-        Board board = new Board();
-        BoardBuilder builder = new BoardBuilder();
-        builder.setupBoard(board, 7);
-    }
+    // public static void main(String[] args) {
+    //     Board board = new Board();
+    //     BoardBuilder builder = new BoardBuilder();
+    //     builder.setupBoard(board, 7);
+    // }
 }
 

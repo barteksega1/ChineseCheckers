@@ -7,12 +7,14 @@ import checkers.Cell.PlayableCell;
 
 public class Board {
     private Cell[][] cells;
+    private int gameSize; // Added gameSize field
 
     public void initializeSquare(int gameSize) {
         if (gameSize < 5) {
             throw new IllegalArgumentException("Game size must be at least 5");
         }
 
+        this.gameSize = gameSize; // Initialize gameSize
         int columns = gameSize * 3 + 4;
         int rows = gameSize * 2 + 3;
         cells = new Cell[rows][columns];
@@ -23,7 +25,11 @@ public class Board {
             }
         }
     }
-
+    
+    public int getGameSize() {
+        return this.gameSize;
+    }
+    
     public Cell getCell(int row, int column) {
         return cells[row][column];
     }
