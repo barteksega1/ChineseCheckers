@@ -17,30 +17,24 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class BoardStage extends Stage {
-    private Game game;
-    private boolean active;
     private final Player player;
-    private GameClient client;
     private TextField inputTextField;
-    private Label outputLabel;
-    private Label turnLabel;
-    private Label moveLabel;
+    private final Label outputLabel;
+    private final Label turnLabel;
+    private final Label moveLabel;
     private final Label colorLabel;
     private GridPane mainPane;
-    private Button sendButton;
+    private final Button sendButton;
     private String input;
     private ClientThread clientThread;
 
     
 
     public BoardStage(Game game, int numberOfPlayer, GameClient client, ClientThread clientThread) {
-        this.game = game;
         this.clientThread = clientThread;
         this.setResizable(false);
         this.player = game.getPlayerByNumber(numberOfPlayer);
         this.colorLabel = new Label("You are " + player.getColor().toString() + "." );
-        this.client = client;
-        this.active = false;
         this.turnLabel = new Label("Wait for your turn...");
         this.moveLabel = new Label("Write here: ");
         this.inputTextField = new TextField();

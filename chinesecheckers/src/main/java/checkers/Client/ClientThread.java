@@ -88,9 +88,9 @@ public class ClientThread extends Thread {
 
 
 
-      private boolean isNumber(String line) {
+    private boolean isNumber(String line) {
         try {
-            Integer.parseInt(line);
+            Integer.valueOf(line);
         }
         catch (NumberFormatException e) {
             return false;
