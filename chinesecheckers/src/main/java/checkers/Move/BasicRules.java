@@ -1,4 +1,4 @@
-package checkers.Cell.Move;
+package checkers.Move;
 
 import checkers.Board.Board;
 import checkers.Cell.Cell;

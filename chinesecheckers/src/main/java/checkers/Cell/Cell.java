@@ -46,4 +46,8 @@ public abstract class Cell {
         return isPlayable;
     }
 
+    public boolean isOccupiedByPlayer(String playerName) {
+        return playerName != null && playerName.equals(this.player);
+    }
+
 }

@@ -1,8 +1,11 @@
-package checkers.Cell.Move;
+package checkers.Move;
+
+import java.util.List;
 
 import checkers.Board.Board;
 import checkers.Cell.Cell;
 import checkers.Cell.CellStatus;
+import checkers.Player.PlayerCells;
 
 public class MoveHandler {
 
@@ -16,7 +19,7 @@ public class MoveHandler {
         this.isFirstMove = true;
     }
 
-    public boolean move(Board board, int startRow, int startColumn, int endRow, int endColumn) {
+    public boolean move(Board board, int startRow, int startColumn, int endRow, int endColumn, PlayerCells playerCells) {
         // Sprawdzenie, czy ruch jest legalny zgodnie z podstawowymi zasadami
         if (!basicRules.isMoveLegal(board, startRow, startColumn, endRow, endColumn)) {
             throw new IllegalArgumentException("Move is not legal");
@@ -41,6 +44,12 @@ public class MoveHandler {
 
             board.setCell(startCell, startRow, startColumn);
             board.setCell(endCell, endRow, endColumn);
+
+            // Aktualizacja listy currentCells
+            List<Cell> currentCells = playerCells.getCurrentCells();
+            currentCells.remove(startCell);
+            currentCells.add(endCell);
+            playerCells.updateCurrentCells(currentCells);
 
             // Jeśli jest to ruch skokowy, sprawdzenie dodatkowych możliwych ruchów skokowych
             if (isJumpMove) {
