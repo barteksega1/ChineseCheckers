@@ -8,7 +8,7 @@ import javafx.scene.shape.Circle;
 
 public class BoardField extends Circle implements BoardElement {
     
-    private Cell field;
+    private final Cell field;
 
     public BoardField(BoardStage boardStage, Cell field) {
         this.field = field;
@@ -16,11 +16,6 @@ public class BoardField extends Circle implements BoardElement {
         this.setRadius(15); // Ustawienie odpowiedniego rozmiaru pola
     }
 
-    //
-    //
-    //TODO SET X, SET Y !!!
-    // 
-    //
 
     @Override
     public boolean isField() {

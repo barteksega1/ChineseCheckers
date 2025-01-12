@@ -28,10 +28,10 @@ public class Game {
         for (int i = 0; i < playerCount; i++) {
             CellColor newPlayerColor = null;
             Player newPlayer = null;
-                    newPlayerColor = CellColor.fromNumber(i);
-                    newPlayer = new Player(i, newPlayerColor);
-                    players.add(newPlayer);
-         }
+            newPlayerColor = CellColor.fromNumber(i);
+            newPlayer = new Player(i, newPlayerColor);
+            players.add(newPlayer);
+        }
     }
 
     public Board getBoard() {
