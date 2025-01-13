@@ -4,14 +4,14 @@ public abstract class Cell {
     protected int row;
     protected int column;
     protected CellStatus status;
-    protected String player;
+    protected int playerNumber;
     protected CellColor color;
     protected boolean isHomeCell;
     protected boolean isPlayable;
 
     public Cell() {
         this.status = CellStatus.ILLEGAL;
-        this.player = null;
+        this.playerNumber = -1; // Use -1 to indicate no player
     }
 
     public CellColor getColor() {
@@ -30,12 +30,12 @@ public abstract class Cell {
         this.status = status;
     }
 
-    public String getPlayer() {
-        return player;
+    public int getPlayerNumber() {
+        return playerNumber;
     }
 
-    public void setPlayer(String player) {
-        this.player = player;
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
     }
 
     public boolean isHomeCell() {
@@ -46,8 +46,12 @@ public abstract class Cell {
         return isPlayable;
     }
 
-    public boolean isOccupiedByPlayer(String playerName) {
-        return playerName != null && playerName.equals(this.player);
+    public void setPlayable(boolean isPlayable) {
+        this.isPlayable = isPlayable;
+    }
+
+    public boolean isOccupiedByPlayer(int playerNumber) {
+        return this.playerNumber == playerNumber;
     }
 
 }

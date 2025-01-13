@@ -6,7 +6,7 @@ public class PlayableCell extends Cell {
         this.row = row;
         this.column = column;
         this.status = CellStatus.ILLEGAL;
-        this.player = null;
+        this.playerNumber = -1; // Use -1 to indicate no player
         this.isHomeCell = false;
         this.isPlayable = true;
     }
@@ -17,7 +17,7 @@ public class PlayableCell extends Cell {
                 "row=" + row +
                 ", column=" + column +
                 ", status=" + status +
-                ", player='" + player + '\'' +
+                ", playerNumber=" + playerNumber +
                 ", color=" + color +
                 '}';
     }

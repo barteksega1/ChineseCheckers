@@ -11,6 +11,7 @@ public class HomeCell extends Cell {
         this.isHomeCell = true;
         this.isPlayable = true;
         this.homeColor = CellColor.NONE;
+        this.playerNumber = -1; // Use -1 to indicate no player
     }
 
     public HomeCell(CellColor color, int row, int column) {
@@ -21,6 +22,7 @@ public class HomeCell extends Cell {
         this.isHomeCell = true;
         this.isPlayable = true;
         this.homeColor = color;
+        this.playerNumber = -1; // Use -1 to indicate no player
     }
 
     public CellColor getHomeColor() {
@@ -37,7 +39,7 @@ public class HomeCell extends Cell {
                 "row=" + row +
                 ", column=" + column +
                 ", status=" + status +
-                ", player='" + player + '\'' +
+                ", playerNumber=" + playerNumber +
                 ", color=" + color +
                 ", homeColor=" + homeColor +
                 '}';

@@ -6,23 +6,27 @@ import java.util.List;
 import checkers.Cell.Cell;
 import checkers.Cell.CellStatus;
 import checkers.Cell.HomeCell;
+import checkers.Player.Player;
 import checkers.Player.PlayerCells;
 
 public class FillPlayers {
-    public PlayerCells fillPlayer(Board board, char colour, String playerName) {
+    public PlayerCells FillPlayerCells(Board board, Player player) {
         List<Cell> homeCells = new ArrayList<>();
         List<Cell> currentCells = new ArrayList<>();
 
         for (int row = 0; row < board.getRows(); row++) {
             for (int column = 0; column < board.getColumns(); column++) {
                 Cell cell = board.getCell(row, column);
-                if (cell instanceof HomeCell && ((HomeCell) cell).getHomeColor().toString().charAt(0) == colour) {
+                if (cell.getStatus() == CellStatus.ILLEGAL) {
+                    continue; // Skip illegal cells
+                }
+                if (cell instanceof HomeCell && ((HomeCell) cell).getHomeColor() == player.getColor()) {
                     cell.setStatus(CellStatus.OCCUPIED);
-                    cell.setPlayer(playerName);
+                    cell.setPlayerNumber(player.getNumber());
                     homeCells.add(cell);
                     cell.setColor(((HomeCell) cell).getHomeColor());
                 }
-                if (cell.isOccupiedByPlayer(playerName)) {
+                if (cell.isOccupiedByPlayer(player.getNumber())) {
                     currentCells.add(cell);
                 }
             }

@@ -10,11 +10,10 @@ import checkers.Player.Player;
 public class Game {
     
     private int playerCount;
-    //private int botCount;
     private Board board;
     private BoardBuilder boardBuilder;
-    private ArrayList <Player> players = new ArrayList<>();
-    private ArrayList <Player> winners = new ArrayList<>(); 
+    private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Player> winners = new ArrayList<>(); 
 
     public Game(int playerCount) {
         this.playerCount = playerCount;
@@ -22,14 +21,16 @@ public class Game {
         this.board = new Board();
         boardBuilder.setupBoard(board, 11); // Use BoardBuilder to initialize the board
         this.buildPlayers(playerCount);
+        for (Player player : players) {
+            board.initializePlayerCells(player);
+        }
+        board.validateIllegalCells(); // Validate illegal cells after initializing the board
     }
 
     private void buildPlayers(final int playerCount) {
         for (int i = 0; i < playerCount; i++) {
-            CellColor newPlayerColor = null;
-            Player newPlayer = null;
-            newPlayerColor = CellColor.fromNumber(i);
-            newPlayer = new Player(i, newPlayerColor);
+            CellColor newPlayerColor = CellColor.fromNumber(i);
+            Player newPlayer = new Player(i, newPlayerColor);
             players.add(newPlayer);
         }
     }
@@ -46,7 +47,6 @@ public class Game {
         for(Player player : players) {
             System.out.println(player.getNumber() + " " + player.getColor().toString());
         }
-        
         return players;
     }
     
@@ -69,8 +69,6 @@ public class Game {
     public Player getPlayerByNumber(int number) {
         return players.get(number);
     }
-
-
 
     //todo -- szukanie pól na boardzie po wspolrzednych
 }

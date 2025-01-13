@@ -6,6 +6,7 @@ public class Player {
     private final int number;
     private final CellColor color;
     private final CellColor enemyColor;
+    private PlayerCells playerCells;
 
     public Player(int number, CellColor color) {
         this.number = number;
@@ -23,6 +24,14 @@ public class Player {
 
     public CellColor getEnemyColor() {
         return enemyColor;
+    }
+
+    public PlayerCells getPlayerCells() {
+        return playerCells;
+    }
+
+    public void setPlayerCells(PlayerCells playerCells) {
+        this.playerCells = playerCells;
     }
 }
 

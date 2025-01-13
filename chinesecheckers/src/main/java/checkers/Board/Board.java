@@ -1,9 +1,12 @@
 package checkers.Board;
 
 import checkers.Cell.Cell;
+import checkers.Cell.CellColor;
 import checkers.Cell.CellStatus;
 import checkers.Cell.HomeCell;
 import checkers.Cell.PlayableCell;
+import checkers.Player.Player;
+import checkers.Player.PlayerCells;
 
 public class Board {
     private Cell[][] cells;
@@ -44,6 +47,25 @@ public class Board {
 
     public int getRows() {
         return cells.length;
+    }
+
+    public void initializePlayerCells(Player player) {
+        FillPlayers fillPlayers = new FillPlayers();
+        PlayerCells playerCells = fillPlayers.FillPlayerCells(this, player);
+        player.setPlayerCells(playerCells);
+    }
+
+    public void validateIllegalCells() {
+        for (int row = 0; row < getRows(); row++) {
+            for (int column = 0; column < getColumns(); column++) {
+                Cell cell = getCell(row, column);
+                if (cell.getStatus() == CellStatus.ILLEGAL) {
+                    cell.setColor(CellColor.NONE);
+                    cell.setPlayerNumber(-1);
+                    cell.setPlayable(false); // Use setter method for isPlayable
+                }
+            }
+        }
     }
 
     public void printBoard() {
