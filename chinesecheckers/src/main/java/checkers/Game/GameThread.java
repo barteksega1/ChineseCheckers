@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import checkers.Cell.CellStatus;
 import checkers.Message.MessageHandler;
 import checkers.Move.MoveParser;
 import checkers.Server.CommunicationDevice;
@@ -83,6 +84,8 @@ public class GameThread extends Thread {
                         
                         //validation here: (set moved to true if move is correct)
                         moved = false; //manually set to true or false - for testing
+
+                        
                         
                         if(moved) {
                             communicationDevice.getPrintWriterByNumber(currentPlayer).println("Thank you for your move");
