@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import checkers.Message.MessageHandler;
@@ -42,7 +44,7 @@ public class GameThread extends Thread {
             }
             try {
                 synchronized(this) {
-                    wait(5000);
+                    wait(1000);
                     //System.out.println("waittttt \n");
                 }
             }
@@ -51,28 +53,34 @@ public class GameThread extends Thread {
         System.out.println("\n Game is running \n");
         communicationDevice.sendMessageToAllPlayers("Game is running");
         Random random = new Random();
-        
         currentPlayer = random.nextInt(numberOfJoinedPlayers);
         while(!ended)
         {
             try {
                 System.out.println("current Player: " + currentPlayer);
-                // try {
-                //     synchronized(this) {
-                //         wait(3000);
-                //         //System.out.println("waittttt \n");
-                //     }
-                // }
-                // catch (InterruptedException ex) {};
                 communicationDevice.getPrintWriterByNumber(currentPlayer).println("Your turn player " + currentPlayer);
                 String playerInput = communicationDevice.getInputReaderByNumber(currentPlayer).readLine();
                 System.out.println(playerInput);
-                if(playerInput.contains("slay")) {
+                if(playerInput.contains("move")) {
+                    String[] moveInput = MessageHandler.handle(playerInput);
+                    if(moveInput[0].equals("error")) {
+                    communicationDevice.getPrintWriterByNumber(currentPlayer).println("Sorry, your move was incorrect");
+                    System.out.println("Sorry, your move was incorrect " + currentPlayer);
+                    }
+                    List<Integer> moveCooridnates = new ArrayList<>();
+                    moveCooridnates = parseMove(moveInput);
+                    //validation here:
                     communicationDevice.getPrintWriterByNumber(currentPlayer).println("Thank you for your move");
+                    System.out.println("Thank you for your move player " + currentPlayer);
+                    currentPlayer = (currentPlayer + 1)%(numberOfJoinedPlayers);
+                } else if(playerInput.contains("pass")) {
+                    communicationDevice.getPrintWriterByNumber(currentPlayer).println("Thank you for your pass");
+                    System.out.println("Thank you for your pass" + currentPlayer);
                     currentPlayer = (currentPlayer + 1)%(numberOfJoinedPlayers);
                 } else {
                     communicationDevice.getPrintWriterByNumber(currentPlayer).println("Sorry, your move was incorrect");
-                    currentPlayer = (currentPlayer + 1)%(numberOfJoinedPlayers);
+                    System.out.println("Sorry, your move was incorrect " + currentPlayer);
+                    //currentPlayer = (currentPlayer + 1)%(numberOfJoinedPlayers);
                 }
             } catch (Exception e) {
                 e.getMessage();
@@ -102,5 +110,16 @@ public class GameThread extends Thread {
 
     public CommunicationDevice getCommunicationDevice() {
         return communicationDevice;
+    }
+
+    public List<Integer> parseMove (String[] moveString) {
+        List<Integer> parMove = new ArrayList<>();
+        for(int i = 1; i < moveString.length; i++) {
+            try {
+                parMove.add(Integer.parseInt(moveString[i]));
+            } 
+            catch (Exception e) {};
+        }
+        return parMove;
     }
 }

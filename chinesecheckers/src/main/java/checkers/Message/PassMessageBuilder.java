@@ -11,9 +11,8 @@ public class PassMessageBuilder extends MessageBuilder {
         this.parts = parts; //ignoring the parts but they are here for better times 😭
     }
 
-    @Override public String executeMessage(String[] parts) {
-        PassCommand pass = new PassCommand();
-        return pass.command();
+    @Override public String[] executeMessage(String[] parts) {
+        return parts;
     };
     
 }

@@ -1,17 +1,18 @@
-checkers/Cell/Move/BasicRules.class
+checkers/Move/MoveHandler.class
 checkers/Commands/CommandOutputWriter.class
 checkers/Cell/HomeCell.class
 checkers/Commands/MoveCommand.class
-checkers/Cell/Move/JumpRules.class
+checkers/Game/GameWon.class
 checkers/Cell/CellStatus.class
 checkers/Message/MoveMessageBuilder.class
 checkers/Board/StarShapeChecker.class
 checkers/Board/BoardBuilder.class
 checkers/ClientGUI/InfoStage.class
+checkers/Move/BasicRules.class
 checkers/BoardGUI/BoardStage.class
 checkers/Client/ClientThread.class
 checkers/Commands/PassCommand.class
-checkers/Cell/Move/MoveHandler.class
+checkers/Move/JumpRules.class
 checkers/Client/GameClient.class
 checkers/Server/CommunicationDevice.class
 checkers/Board/FillPlayers.class
@@ -26,6 +27,7 @@ checkers/Message/PassMessageBuilder.class
 checkers/ClientGUI/WaitingStage.class
 checkers/BoardGUI/BoardField.class
 checkers/Server/GameServer.class
+checkers/Message/ErrorMessageBuilder.class
 checkers/Message/MessageHandler.class
 checkers/Cell/PlayableCell.class
 checkers/Game/Game.class
@@ -35,3 +37,4 @@ checkers/Cell/CellColor.class
 checkers/Cell/Cell.class
 checkers/Board/Board.class
 checkers/Board/BoardFiller.class
+checkers/Player/PlayerCells.class

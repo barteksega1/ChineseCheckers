@@ -4,12 +4,16 @@ public class MessageHandler
 {
     
 
-    public static String handle(String messageString)
+    public static String[] handle(String messageString)
     {
         MessageBuilder builder;
         String[] parts = messageString.split("\\s+");
+        if(parts.length != 5) {
+            builder = new ErrorMessageBuilder(parts);
+            return builder.executeMessage(parts);
+        }
 
-        switch(parts[0]) { //with gui this part can be replaced using button handlers making it more friendly for future modifications
+        switch(parts[0]) { 
 
             case "move":
             case "Move":
@@ -17,14 +21,15 @@ public class MessageHandler
             builder = new MoveMessageBuilder(parts);
             return builder.executeMessage(parts);
 
-            case "pass":
-            case "p":
-            builder = new PassMessageBuilder(parts);
-            return builder.executeMessage(parts);
+            // case "pass":
+            // case "p":
+            // builder = new PassMessageBuilder(parts);
+            // return builder.executeMessage(parts);
 
 
             default:
-            return "Unknown command \n";
+            builder = new ErrorMessageBuilder(parts);
+            return builder.executeMessage(parts);
         }
         
   
