@@ -66,8 +66,7 @@ public class BoardStage extends Stage {
             for (int column = 0; column < columns; column++) {
                 Cell cell = board.getCell(row, column);
                 if (cell.getStatus() != CellStatus.ILLEGAL) {
-                    BoardField boardField = new BoardField(this, cell);
-                    boardField.setRadius(10); // Ustawienie odpowiedniego rozmiaru pola
+                    BoardField boardField = new BoardField(this, cell, row, column);
                     gridPane.add(boardField, column, row);
                 }
             }

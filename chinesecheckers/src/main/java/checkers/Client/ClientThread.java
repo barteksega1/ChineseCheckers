@@ -70,23 +70,7 @@ public class ClientThread extends Thread {
                         });
                         }
                         else if(!(game == null) && boardStage != null && currentLine.contains("Your turn")) {
-                            playerInput = null;
-                            Platform.runLater(() -> {
-                                this.boardStage.setLabelForTurn(currentLine);
-                                this.boardStage.showInputTools();
-                                this.boardStage.clearLabel(this.boardStage.getOutputLabel());
-                            });
-                            while(playerInput == null) {
-                                try {
-                                    synchronized(this) {
-                                        wait(1);
-                                        //System.out.println("waittttt \n");
-                                    }
-                                }
-                                catch (InterruptedException ex) {};
-                            } 
-                            pw.println(playerInput);
-                                
+                            handlePlayerTurn();
                         }
                         else if(currentLine.contains("Thank you for your")) {
                             System.out.println(currentLine);
@@ -100,18 +84,9 @@ public class ClientThread extends Thread {
                         else if(currentLine.contains("Sorry")) {
                             System.out.println(currentLine);
                             Platform.runLater(() -> {
-                                this.boardStage.setOutputLabel("Input was incorrect, try again");
+                                this.boardStage.setOutputLabel(currentLine);
                             });
-                            while(playerInput == null) {
-                                try {
-                                    synchronized(this) {
-                                        wait(1);
-                                        //System.out.println("waittttt \n");
-                                    }
-                                }
-                                catch (InterruptedException ex) {};
-                            } 
-                            pw.println(playerInput);
+                            handlePlayerTurn();
                         }
                             
                     }
@@ -125,7 +100,52 @@ public class ClientThread extends Thread {
         }
     }
 
+    private void handlePlayerTurn() {
+        playerInput = null;
+        Platform.runLater(() -> {
+            this.boardStage.setLabelForTurn(currentLine);
+            this.boardStage.showInputTools();
+            this.boardStage.clearLabel(this.boardStage.getOutputLabel());
+        });
+        while (playerInput == null) {
+            try {
+                synchronized (this) {
+                    wait(1);
+                }
+            } catch (InterruptedException ex) {}
+        }
+        pw.println(playerInput);
 
+        // Handle additional jump moves
+        while (true) {
+            try {
+                currentLine = br.readLine();
+                if (currentLine.contains("You have an additional jump move")) {
+                    System.out.println(currentLine);
+                    Platform.runLater(() -> {
+                        this.boardStage.setLabelForTurn(currentLine);
+                        this.boardStage.showInputTools();
+                        this.boardStage.clearLabel(this.boardStage.getOutputLabel());
+                    });
+                    playerInput = null;
+                    while (playerInput == null) {
+                        try {
+                            synchronized (this) {
+                                wait(1);
+                            }
+                        } catch (InterruptedException ex) {}
+                    }
+                    pw.println(playerInput);
+                } else {
+                    break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                e.getMessage();
+                break;
+            }
+        }
+    }
 
     private boolean isNumber(String line) {
         try {
