@@ -45,7 +45,11 @@ public class BoardStage extends Stage {
             input = inputTextField.getText();
             inputTextField.clear();
             System.out.println("button clicked: " + input);
-            this.clientThread.getPrintWriter().println(input);
+            if(input != null) {
+                clientThread.setPlayerInput(input);
+                clearLabel(outputLabel);
+                this.input = null;
+            }
         });
     }
 
@@ -85,6 +89,7 @@ public class BoardStage extends Stage {
         mainPane.add(group, 0, 1, 2, 1);
 
         Scene scene = new Scene(mainPane, 1000, 800); // Enlarge the scene size
+        this.hideInputTools();
         this.setScene(scene);
     }
 
@@ -98,6 +103,10 @@ public class BoardStage extends Stage {
         this.turnLabel.setText("Wait for your turn...");
     }
 
+    public Label getOutputLabel() {
+        return outputLabel;
+    }
+
     public void setOutputLabel(String messageString) {
         this.outputLabel.setText(messageString);
     }
@@ -107,7 +116,7 @@ public class BoardStage extends Stage {
     }
 
     public String getInput() {
-        return this.inputTextField.getText();
+        return input;
     }
 
     public TextField getInputTextField() {
@@ -127,6 +136,12 @@ public class BoardStage extends Stage {
        outputLabel.setVisible(false);
        sendButton.setVisible(false);
     }
+
+    public void clearLabel(Label label) {
+        label.setText("");
+    }
+
+  
     
 
 

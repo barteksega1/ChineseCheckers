@@ -17,6 +17,11 @@ public class ClientThread extends Thread {
     private int playerNumber;
     private BoardStage boardStage;
     private int playerCount;
+    private boolean wasInputSent;
+    private boolean turnEnded = false;
+    private String playerInput;
+    private boolean moved;
+    private String currentLine;
 
 
     public ClientThread(GameClient client, BufferedReader br, PrintWriter pw) {
@@ -32,12 +37,13 @@ public class ClientThread extends Thread {
     
     @Override
     public void run() {
+        
         try (Scanner scanner = new Scanner(System.in)) {
             //MessageHandler mh = new MessageHandler();
             System.out.println("Welcome to the game, wait for further instructions");
             while(true) {
                 try {
-                    String currentLine;
+                    
                     if (br.ready() && (currentLine = br.readLine()) != null) {
                         System.out.println("currentline: " + currentLine);
                         
@@ -60,25 +66,58 @@ public class ClientThread extends Thread {
                         else if(currentLine.contains("Game is running")) {
                             Platform.runLater(() -> {
                             client.closePreviousStage();
-                            //this.boardStage = new BoardStage(this.game, this.playerNumber, this.client);
                             boardStage.show();
                         });
                         }
                         else if(!(game == null) && boardStage != null && currentLine.contains("Your turn")) {
+                            playerInput = null;
                             Platform.runLater(() -> {
                                 this.boardStage.setLabelForTurn(currentLine);
                                 this.boardStage.showInputTools();
+                                this.boardStage.clearLabel(this.boardStage.getOutputLabel());
                             });
-                            
+                            while(playerInput == null) {
+                                try {
+                                    synchronized(this) {
+                                        wait(1);
+                                        //System.out.println("waittttt \n");
+                                    }
+                                }
+                                catch (InterruptedException ex) {};
+                            } 
+                            pw.println(playerInput);
+                                
                         }
-                        else if(currentLine.contains("Thank you for your move")) {
+                        else if(currentLine.contains("Thank you for your")) {
+                            System.out.println(currentLine);
                             Platform.runLater(() -> {
-                                this.boardStage.hideInputTools();
                                 this.boardStage.setLabelForWait();
+                                this.boardStage.hideInputTools();
+                                this.boardStage.clearLabel(this.boardStage.getOutputLabel());
                             });
+
                         }
+                        else if(currentLine.contains("Sorry")) {
+                            System.out.println(currentLine);
+                            Platform.runLater(() -> {
+                                this.boardStage.setOutputLabel("Input was incorrect, try again");
+                            });
+                            while(playerInput == null) {
+                                try {
+                                    synchronized(this) {
+                                        wait(1);
+                                        //System.out.println("waittttt \n");
+                                    }
+                                }
+                                catch (InterruptedException ex) {};
+                            } 
+                            pw.println(playerInput);
+                        }
+                            
                     }
-                } catch (IOException e) {
+                }   
+                
+                 catch (IOException e) {
                     e.printStackTrace();
                     e.getMessage();
                 }
@@ -108,5 +147,29 @@ public class ClientThread extends Thread {
 
     public PrintWriter getPrintWriter() {
         return pw;
+    }
+
+    public Boolean getWasInputSent() {
+        return wasInputSent;
+    }
+
+    public void setWasInputSent(boolean wasInputSent) {
+        this.wasInputSent = wasInputSent;
+    }
+
+    public void setTurnEnded(boolean turnEnded) {
+        this.turnEnded = turnEnded;
+    }
+    
+    public boolean getTurnEnded() {
+        return this.turnEnded;
+    }
+
+    public void setPlayerInput(String playerInput) {
+        this.playerInput = playerInput;
+    }
+
+    public String getPlayerInput() {
+        return playerInput;
     }
 }
