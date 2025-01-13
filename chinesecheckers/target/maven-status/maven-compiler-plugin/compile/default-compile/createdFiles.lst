@@ -14,6 +14,7 @@ checkers/Client/ClientThread.class
 checkers/Commands/PassCommand.class
 checkers/Move/JumpRules.class
 checkers/Client/GameClient.class
+checkers/Move/MoveParser.class
 checkers/Server/CommunicationDevice.class
 checkers/Board/FillPlayers.class
 checkers/Message/MessageBuilder.class

@@ -24,6 +24,7 @@ public class GameThread extends Thread {
     private int currentPlayer = 0;
     private CommunicationDevice communicationDevice = new CommunicationDevice();
     private MessageHandler messageHandler = new MessageHandler();
+    private boolean moved;
 
 
 
@@ -59,28 +60,65 @@ public class GameThread extends Thread {
         {
             try {
                 System.out.println("current Player: " + currentPlayer);
+                moved = false;
                 communicationDevice.getPrintWriterByNumber(currentPlayer).println("Your turn player " + currentPlayer);
-                String playerInput = communicationDevice.getInputReaderByNumber(currentPlayer).readLine();
+                String playerInput = "";
+                playerInput = communicationDevice.getInputReaderByNumber(currentPlayer).readLine();
                 System.out.println(playerInput);
                 if(playerInput.contains("move")) {
                     String[] moveInput = MessageHandler.handle(playerInput);
                     if(moveInput[0].equals("error")) {
+                    try {
+                        synchronized(this) {
+                            wait(1000);
+                            //System.out.println("waittttt \n");
+                        }
+                    }
+                    catch (InterruptedException ex) {};
                     communicationDevice.getPrintWriterByNumber(currentPlayer).println("Sorry, your move was incorrect");
                     System.out.println("Sorry, your move was incorrect " + currentPlayer);
+                    } else {
+                        List<Integer> moveCooridnates = new ArrayList<>();
+                        moveCooridnates = MoveParser.parseMove(moveInput, 1);
+                        
+                        //validation here: (set moved to true if move is correct)
+                        moved = false; //manually set to true or false - for testing
+                        
+                        if(moved) {
+                            communicationDevice.getPrintWriterByNumber(currentPlayer).println("Thank you for your move");
+                            System.out.println("Thank you for your move player " + currentPlayer);
+                            communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + moveInput[0] +
+                            " " + moveInput[1] + " " + moveInput[2] + " " + moveInput[3]);
+                            currentPlayer = (currentPlayer + 1)%(numberOfJoinedPlayers);
+                        } 
+                        else if(!moved) {
+                            try {
+                                    synchronized(this) {
+                                    wait(1000);
+                                    //System.out.println("waittttt \n");
+                                }
+                            }
+                            catch (InterruptedException ex) {};
+                            communicationDevice.getPrintWriterByNumber(currentPlayer).println("Sorry, your move was incorrect");
+                            System.out.println("Sorry, your move was incorrect " + currentPlayer);
+                        }
+                        
                     }
-                    List<Integer> moveCooridnates = new ArrayList<>();
-                    moveCooridnates = MoveParser.parseMove(moveInput);
-                    //validation here:
-                    communicationDevice.getPrintWriterByNumber(currentPlayer).println("Thank you for your move");
-                    System.out.println("Thank you for your move player " + currentPlayer);
-                    currentPlayer = (currentPlayer + 1)%(numberOfJoinedPlayers);
                 } else if(playerInput.contains("pass")) {
                     communicationDevice.getPrintWriterByNumber(currentPlayer).println("Thank you for your pass");
-                    System.out.println("Thank you for your pass" + currentPlayer);
+                    System.out.println("Thank you for your pass player " + currentPlayer);
                     currentPlayer = (currentPlayer + 1)%(numberOfJoinedPlayers);
                 } else {
+                    try {
+                        synchronized(this) {
+                        wait(1000);
+                        //System.out.println("waittttt \n");
+                        }
+                    }
+                    catch (InterruptedException ex) {};
                     communicationDevice.getPrintWriterByNumber(currentPlayer).println("Sorry, your move was incorrect");
                     System.out.println("Sorry, your move was incorrect " + currentPlayer);
+                    
                     //currentPlayer = (currentPlayer + 1)%(numberOfJoinedPlayers);
                 }
             } catch (Exception e) {

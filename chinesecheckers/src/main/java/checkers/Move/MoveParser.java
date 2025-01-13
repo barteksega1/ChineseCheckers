@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class MoveParser {
-    public static List<Integer> parseMove (String[] moveString) {
+    public static List<Integer> parseMove (String[] moveString, Integer n) {
         List<Integer> parMove = new ArrayList<>();
-        for(int i = 1; i < moveString.length; i++) {
+        for(int i = n; i < moveString.length; i++) {
             try {
                 parMove.add(Integer.parseInt(moveString[i]));
             } 

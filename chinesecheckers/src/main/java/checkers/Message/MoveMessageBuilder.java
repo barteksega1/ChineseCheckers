@@ -16,7 +16,7 @@ public class MoveMessageBuilder extends MessageBuilder {
 
     @Override public String[] executeMessage(String[] parts) {
         String[] moveInput = Arrays.copyOfRange(parts, 1, parts.length);
-        MoveCommand move = new MoveCommand(moveInput);
+        // MoveCommand move = new MoveCommand(moveInput);
         return moveInput;
     };
 

@@ -99,8 +99,8 @@ public class BoardStage extends Stage {
         this.turnLabel.setText(turnString);
     }
 
-    public void setLabelForWait() {
-        this.turnLabel.setText("Wait for your turn...");
+    public void setLabelForWait(String message) {
+        this.turnLabel.setText(message + " -- Wait for your turn...");
     }
 
     public Label getOutputLabel() {

@@ -18,6 +18,7 @@ public class MessageHandler
             case "move":
             case "Move":
             case "m":
+            case "moved":
             builder = new MoveMessageBuilder(parts);
             return builder.executeMessage(parts);
 

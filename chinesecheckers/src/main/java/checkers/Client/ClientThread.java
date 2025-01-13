@@ -78,50 +78,71 @@ public class ClientThread extends Thread {
                             Platform.runLater(() -> {
                                 this.boardStage.setLabelForTurn(currentLine);
                                 this.boardStage.showInputTools();
-                                this.boardStage.clearLabel(this.boardStage.getOutputLabel());
+                                //this.boardStage.clearLabel(this.boardStage.getOutputLabel());
                             });
                             while(playerInput == null) {
                                 try {
                                     synchronized(this) {
-                                        wait(1);
+                                        wait(10);
                                         //System.out.println("waittttt \n");
                                     }
                                 }
                                 catch (InterruptedException ex) {};
                             } 
+                            // if(playerInput != null) {
+                            //     pw.println(playerInput);
+                            // }
                             pw.println(playerInput);
-                                
-                        }
-                        else if(currentLine.contains("Thank you for your")) {
+                            playerInput = null;
+                        } 
+                        else if(currentLine.contains("pass")) {
                             System.out.println(currentLine);
                             Platform.runLater(() -> {
-                                this.boardStage.setLabelForWait();
+                                this.boardStage.setLabelForWait(currentLine);
                                 this.boardStage.hideInputTools();
                                 this.boardStage.clearLabel(this.boardStage.getOutputLabel());
                             });
-                            String[] moveInput = MessageHandler.handle(playerInput);
+                        } 
+                        else if(currentLine.contains("moved")) {
+                            String[] splitLine = currentLine.split("\\s+");
+                            Integer movingPlayer = Integer.parseInt(splitLine[1]);
+                            String moveInputLine = "";
+                            for(int i = 2; i < splitLine.length; i++) {
+                                moveInputLine += splitLine[i];
+                                moveInputLine += " ";
+                            }
+                            String[] moveInput = MessageHandler.handle(moveInputLine);
                             if(moveInput[0].equals("error")) {
                             System.out.println("messagehan error");
                             }
                             List<Integer> moveCooridnates = new ArrayList<>();
-                            moveCooridnates = MoveParser.parseMove(moveInput);
+                            moveCooridnates = MoveParser.parseMove(moveInput, 3);
 
+                            //just move, validation was done by the server ->>>>> move(movingPlayer, moveCoordinates);
+                        }
+                        else if(currentLine.contains("Thank you for your move")) {
+                            System.out.println(currentLine);
+                            Platform.runLater(() -> {
+                                this.boardStage.setLabelForWait(currentLine);
+                                this.boardStage.hideInputTools();
+                                this.boardStage.clearLabel(this.boardStage.getOutputLabel());
+                            });
                         }
                         else if(currentLine.contains("Sorry")) {
                             System.out.println(currentLine);
                             Platform.runLater(() -> {
                                 this.boardStage.setOutputLabel("Input was incorrect, try again");
                             });
-                            while(playerInput == null) {
-                                try {
-                                    synchronized(this) {
-                                        wait(1);
-                                        //System.out.println("waittttt \n");
-                                    }
-                                }
-                                catch (InterruptedException ex) {};
-                            } 
-                            pw.println(playerInput);
+                            // while(playerInput == null) {
+                            //     try {
+                            //         synchronized(this) {
+                            //             wait(1);
+                            //             //System.out.println("waittttt \n");
+                            //         }
+                            //     }
+                            //     catch (InterruptedException ex) {};
+                            // } 
+                            // pw.println(playerInput);
                         }
                             
                     }
