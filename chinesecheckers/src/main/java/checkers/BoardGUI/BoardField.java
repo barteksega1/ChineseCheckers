@@ -4,18 +4,34 @@ import checkers.Cell.Cell;
 import checkers.Cell.CellColor;
 import checkers.Cell.CellStatus;
 import checkers.Cell.HomeCell;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class BoardField extends Circle implements BoardElement {
+public class BoardField extends StackPane implements BoardElement {
     
     private final Cell field;
 
     public BoardField(BoardStage boardStage, Cell field) {
         this.field = field;
-        this.setColor();
-        this.setRadius(15); // Ustawienie odpowiedniego rozmiaru pola
-        this.setStrokeWidth(3); // Set stroke width to make it thicker
+        Circle circle = new Circle(15); // Set the radius of the circle
+        circle.setStrokeWidth(3); // Set stroke width to make it thicker
+        setColor(circle);
+
+        this.getChildren().add(circle);
+    }
+
+    public BoardField(BoardStage boardStage, Cell field, int row, int column) {
+        this.field = field;
+        Circle circle = new Circle(12); // Set the radius of the circle
+        circle.setStrokeWidth(3); // Set stroke width to make it thicker
+        setColor(circle);
+
+        Label coordinates = new Label(row + "," + column);
+        coordinates.setStyle("-fx-font-size: 8; -fx-text-fill: black;");
+
+        this.getChildren().addAll(circle, coordinates);
     }
 
     @Override
@@ -40,63 +56,63 @@ public class BoardField extends Circle implements BoardElement {
         return field.isPlayable();
     }
 
-    private void setColor() {
+    private void setColor(Circle circle) {
         if (field.isHomeCell()) {
             CellColor homeColor = ((HomeCell) field).getHomeColor();
             switch (homeColor) {
                 case BLUE:
-                    this.setStroke(Color.DARKBLUE);
+                    circle.setStroke(Color.DARKBLUE);
                     break;
                 case GREEN:
-                    this.setStroke(Color.DARKGREEN);
+                    circle.setStroke(Color.DARKGREEN);
                     break;
                 case ORANGE:
-                    this.setStroke(Color.rgb(204, 153, 102)); // Darker orange
+                    circle.setStroke(Color.rgb(204, 153, 102)); // Darker orange
                     break;
                 case PURPLE:
-                    this.setStroke(Color.DARKMAGENTA);
+                    circle.setStroke(Color.DARKMAGENTA);
                     break;
                 case RED:
-                    this.setStroke(Color.DARKRED);
+                    circle.setStroke(Color.DARKRED);
                     break;
                 case YELLOW:
-                    this.setStroke(Color.GOLDENROD);
+                    circle.setStroke(Color.GOLDENROD);
                     break;
                 default:
-                    this.setStroke(Color.DARKGRAY);
+                    circle.setStroke(Color.DARKGRAY);
                     break;
             }
         } else if (field.getStatus() != CellStatus.ILLEGAL) {
-            this.setStroke(Color.BLACK); // Overlay with black for normal cells
+            circle.setStroke(Color.BLACK); // Overlay with black for normal cells
         }
 
         if (field.getStatus() == CellStatus.OCCUPIED) {
             CellColor pieceColor = field.getColor();
             switch (pieceColor) {
                 case BLUE:
-                    this.setFill(Color.LIGHTBLUE);
+                    circle.setFill(Color.LIGHTBLUE);
                     break;
                 case GREEN:
-                    this.setFill(Color.LIGHTGREEN);
+                    circle.setFill(Color.LIGHTGREEN);
                     break;
                 case ORANGE:
-                    this.setFill(Color.rgb(253, 221, 148));
+                    circle.setFill(Color.rgb(253, 221, 148));
                     break;
                 case PURPLE:
-                    this.setFill(Color.PLUM);
+                    circle.setFill(Color.PLUM);
                     break;
                 case RED:
-                    this.setFill(Color.rgb(234, 60, 83));
+                    circle.setFill(Color.rgb(234, 60, 83));
                     break;
                 case YELLOW:
-                    this.setFill(Color.rgb(255, 253, 124));
+                    circle.setFill(Color.rgb(255, 253, 124));
                     break;
                 default:
-                    this.setFill(Color.LIGHTGRAY);
+                    circle.setFill(Color.LIGHTGRAY);
                     break;
             }
         } else {
-            this.setFill(Color.TRANSPARENT); // Transparent fill for non-occupied cells
+            circle.setFill(Color.TRANSPARENT); // Transparent fill for non-occupied cells
         }
     }
 

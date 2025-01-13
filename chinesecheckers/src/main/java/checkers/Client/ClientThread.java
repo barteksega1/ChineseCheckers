@@ -115,8 +115,8 @@ public class ClientThread extends Thread {
                             if(moveInput[0].equals("error")) {
                             System.out.println("messagehan error");
                             }
-                            List<Integer> moveCooridnates = new ArrayList<>();
-                            moveCooridnates = MoveParser.parseMove(moveInput, 3);
+                            int[] moveCooridnates = new int[moveInput.length - 1];
+                            moveCooridnates = MoveParser.parseMove(moveInput);
 
                             //just move, validation was done by the server ->>>>> move(movingPlayer, moveCoordinates);
                         }
@@ -127,6 +127,7 @@ public class ClientThread extends Thread {
                                 this.boardStage.hideInputTools();
                                 this.boardStage.clearLabel(this.boardStage.getOutputLabel());
                             });
+
                         }
                         else if(currentLine.contains("Sorry")) {
                             System.out.println(currentLine);
@@ -156,7 +157,52 @@ public class ClientThread extends Thread {
         }
     }
 
+    private void handlePlayerTurn() {
+        playerInput = null;
+        Platform.runLater(() -> {
+            this.boardStage.setLabelForTurn(currentLine);
+            this.boardStage.showInputTools();
+            this.boardStage.clearLabel(this.boardStage.getOutputLabel());
+        });
+        while (playerInput == null) {
+            try {
+                synchronized (this) {
+                    wait(1);
+                }
+            } catch (InterruptedException ex) {}
+        }
+        pw.println(playerInput);
 
+        // Handle additional jump moves
+        while (true) {
+            try {
+                currentLine = br.readLine();
+                if (currentLine.contains("You have an additional jump move")) {
+                    System.out.println(currentLine);
+                    Platform.runLater(() -> {
+                        this.boardStage.setLabelForTurn(currentLine);
+                        this.boardStage.showInputTools();
+                        this.boardStage.clearLabel(this.boardStage.getOutputLabel());
+                    });
+                    playerInput = null;
+                    while (playerInput == null) {
+                        try {
+                            synchronized (this) {
+                                wait(1);
+                            }
+                        } catch (InterruptedException ex) {}
+                    }
+                    pw.println(playerInput);
+                } else {
+                    break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                e.getMessage();
+                break;
+            }
+        }
+    }
 
     private boolean isNumber(String line) {
         try {

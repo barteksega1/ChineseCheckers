@@ -1,5 +1,8 @@
 package checkers.Player;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import checkers.Cell.CellColor;
 
 public class Player {
@@ -8,10 +11,13 @@ public class Player {
     private final CellColor enemyColor;
     private PlayerCells playerCells;
 
+    private static final Map<Integer, Player> players = new HashMap<>();
+
     public Player(int number, CellColor color) {
         this.number = number;
         this.color = color;
-        enemyColor = CellColor.getEnemy(color);
+        this.enemyColor = CellColor.getEnemy(color);
+        players.put(number, this);
     }
 
     public int getNumber() {
@@ -32,6 +38,10 @@ public class Player {
 
     public void setPlayerCells(PlayerCells playerCells) {
         this.playerCells = playerCells;
+    }
+
+    public static Player getPlayerByNumber(int number) {
+        return players.get(number);
     }
 }
 

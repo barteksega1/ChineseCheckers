@@ -1,16 +1,14 @@
 package checkers.Move;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 public abstract class MoveParser {
-    public static List<Integer> parseMove (String[] moveString, Integer n) {
-        List<Integer> parMove = new ArrayList<>();
-        for(int i = n; i < moveString.length; i++) {
+    public static int[] parseMove(String[] moveString) {
+        int[] parMove = new int[moveString.length];
+        for (int i = 0; i < moveString.length; i++) {
             try {
-                parMove.add(Integer.parseInt(moveString[i]));
-            } 
-            catch (Exception e) {};
+                parMove[i] = Integer.parseInt(moveString[i]);
+            } catch (NumberFormatException e) {}
         }
         return parMove;
     }
