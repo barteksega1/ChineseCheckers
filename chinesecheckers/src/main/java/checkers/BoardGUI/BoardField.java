@@ -3,6 +3,7 @@ package checkers.BoardGUI;
 import checkers.Cell.Cell;
 import checkers.Cell.CellColor;
 import checkers.Cell.CellStatus;
+import checkers.Cell.HomeCell;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -14,12 +15,12 @@ public class BoardField extends Circle implements BoardElement {
         this.field = field;
         this.setColor();
         this.setRadius(15); // Ustawienie odpowiedniego rozmiaru pola
+        this.setStrokeWidth(3); // Set stroke width to make it thicker
     }
-
 
     @Override
     public boolean isField() {
-            return true;
+        return true;
     }
 
     @Override
@@ -41,8 +42,37 @@ public class BoardField extends Circle implements BoardElement {
 
     private void setColor() {
         if (field.isHomeCell()) {
-            CellColor color = this.field.getColor();
-            switch (color) {
+            CellColor homeColor = ((HomeCell) field).getHomeColor();
+            switch (homeColor) {
+                case BLUE:
+                    this.setStroke(Color.DARKBLUE);
+                    break;
+                case GREEN:
+                    this.setStroke(Color.DARKGREEN);
+                    break;
+                case ORANGE:
+                    this.setStroke(Color.rgb(204, 153, 102)); // Darker orange
+                    break;
+                case PURPLE:
+                    this.setStroke(Color.DARKMAGENTA);
+                    break;
+                case RED:
+                    this.setStroke(Color.DARKRED);
+                    break;
+                case YELLOW:
+                    this.setStroke(Color.GOLDENROD);
+                    break;
+                default:
+                    this.setStroke(Color.DARKGRAY);
+                    break;
+            }
+        } else if (field.getStatus() != CellStatus.ILLEGAL) {
+            this.setStroke(Color.BLACK); // Overlay with black for normal cells
+        }
+
+        if (field.getStatus() == CellStatus.OCCUPIED) {
+            CellColor pieceColor = field.getColor();
+            switch (pieceColor) {
                 case BLUE:
                     this.setFill(Color.LIGHTBLUE);
                     break;
@@ -56,7 +86,7 @@ public class BoardField extends Circle implements BoardElement {
                     this.setFill(Color.PLUM);
                     break;
                 case RED:
-                    this.setFill(Color.rgb(234,60,83));
+                    this.setFill(Color.rgb(234, 60, 83));
                     break;
                 case YELLOW:
                     this.setFill(Color.rgb(255, 253, 124));
@@ -65,8 +95,8 @@ public class BoardField extends Circle implements BoardElement {
                     this.setFill(Color.LIGHTGRAY);
                     break;
             }
-        } else if (field.getStatus()!=CellStatus.ILLEGAL) {
-            this.setFill(Color.LIGHTGRAY); // Domyślny kolor dla pól bez przypisanego koloru
+        } else {
+            this.setFill(Color.TRANSPARENT); // Transparent fill for non-occupied cells
         }
     }
 

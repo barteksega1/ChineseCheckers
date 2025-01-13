@@ -64,7 +64,7 @@ public class Board {
                 if (cell.getStatus() == CellStatus.ILLEGAL) {
                     System.out.print(BLACK + "  "+ RESET); // Simulate transparency by printing spaces
                 } else if (cell instanceof HomeCell) {
-                    switch (((HomeCell) cell).getColor()) {
+                    switch (((HomeCell) cell).getHomeColor()) {
                         case RED:
                             System.out.print(RED + "R " + RESET);
                             break;

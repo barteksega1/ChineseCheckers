@@ -16,10 +16,11 @@ public class FillPlayers {
         for (int row = 0; row < board.getRows(); row++) {
             for (int column = 0; column < board.getColumns(); column++) {
                 Cell cell = board.getCell(row, column);
-                if (cell instanceof HomeCell && cell.getColor().toString().charAt(0) == colour) {
+                if (cell instanceof HomeCell && ((HomeCell) cell).getHomeColor().toString().charAt(0) == colour) {
                     cell.setStatus(CellStatus.OCCUPIED);
                     cell.setPlayer(playerName);
                     homeCells.add(cell);
+                    cell.setColor(((HomeCell) cell).getHomeColor());
                 }
                 if (cell.isOccupiedByPlayer(playerName)) {
                     currentCells.add(cell);

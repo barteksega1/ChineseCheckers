@@ -3,19 +3,15 @@ package checkers.Game;
 import java.util.List;
 
 import checkers.Cell.Cell;
+import checkers.Cell.CellColor;
 import checkers.Player.PlayerCells;
 
 public class GameWon {
 
-    public boolean isGameWon(PlayerCells playerCells, PlayerCells enemyCells) {
+    public boolean isGameWon(PlayerCells playerCells, CellColor playerColor) {
         List<Cell> playerCurrentCells = playerCells.getCurrentCells();
-        List<Cell> enemyHomeCells = enemyCells.getHomeCells();
+        List<Cell> cellsOnEnemyHomeFields = playerCells.getCellsOnEnemyHomeFields(playerColor);
 
-        for (Cell cell : playerCurrentCells) {
-            if (!enemyHomeCells.contains(cell)) {
-                return false;
-            }
-        }
-        return true;
+        return cellsOnEnemyHomeFields.size() == playerCurrentCells.size();
     }
 }

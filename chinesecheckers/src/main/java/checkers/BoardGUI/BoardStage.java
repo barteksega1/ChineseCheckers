@@ -74,8 +74,8 @@ public class BoardStage extends Stage {
 
         this.mainPane = new GridPane();
         mainPane.setAlignment(Pos.CENTER);
-        mainPane.setHgap(10);
-        mainPane.setVgap(10);
+        mainPane.setHgap(5);
+        mainPane.setVgap(5);
         mainPane.add(colorLabel, 0, 0);
         mainPane.add(turnLabel, 1, 0);
         mainPane.add(moveLabel, 3, 0);
@@ -84,7 +84,7 @@ public class BoardStage extends Stage {
         mainPane.add(this.sendButton, 6, 0);
         mainPane.add(group, 0, 1, 2, 1);
 
-        Scene scene = new Scene(mainPane, 800, 600); // Ustawienie odpowiedniego rozmiaru sceny
+        Scene scene = new Scene(mainPane, 1000, 800); // Enlarge the scene size
         this.setScene(scene);
     }
 

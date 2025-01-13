@@ -70,7 +70,7 @@ public class BoardFiller {
     
         for (int i = 0; i < groups.size(); i++) {
             for (HomeCell cell : groups.get(i)) {
-                cell.setColor(colors[i]);
+                cell.setHomeColor(colors[i]);
             }
         }
     
