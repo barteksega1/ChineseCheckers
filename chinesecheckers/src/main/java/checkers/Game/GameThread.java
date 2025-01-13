@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 import checkers.Message.MessageHandler;
+import checkers.Move.MoveParser;
 import checkers.Server.CommunicationDevice;
 
 public class GameThread extends Thread {
@@ -68,7 +69,7 @@ public class GameThread extends Thread {
                     System.out.println("Sorry, your move was incorrect " + currentPlayer);
                     }
                     List<Integer> moveCooridnates = new ArrayList<>();
-                    moveCooridnates = parseMove(moveInput);
+                    moveCooridnates = MoveParser.parseMove(moveInput);
                     //validation here:
                     communicationDevice.getPrintWriterByNumber(currentPlayer).println("Thank you for your move");
                     System.out.println("Thank you for your move player " + currentPlayer);
@@ -112,14 +113,4 @@ public class GameThread extends Thread {
         return communicationDevice;
     }
 
-    public List<Integer> parseMove (String[] moveString) {
-        List<Integer> parMove = new ArrayList<>();
-        for(int i = 1; i < moveString.length; i++) {
-            try {
-                parMove.add(Integer.parseInt(moveString[i]));
-            } 
-            catch (Exception e) {};
-        }
-        return parMove;
-    }
 }

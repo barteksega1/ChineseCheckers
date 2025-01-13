@@ -3,10 +3,14 @@ package checkers.Client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import checkers.BoardGUI.BoardStage;
 import checkers.Game.Game;
+import checkers.Message.MessageHandler;
+import checkers.Move.MoveParser;
 import javafx.application.Platform;
 
 public class ClientThread extends Thread {
@@ -37,7 +41,7 @@ public class ClientThread extends Thread {
     
     @Override
     public void run() {
-        
+        List<Integer> moveCoordinates = new ArrayList<>();
         try (Scanner scanner = new Scanner(System.in)) {
             //MessageHandler mh = new MessageHandler();
             System.out.println("Welcome to the game, wait for further instructions");
@@ -95,6 +99,12 @@ public class ClientThread extends Thread {
                                 this.boardStage.hideInputTools();
                                 this.boardStage.clearLabel(this.boardStage.getOutputLabel());
                             });
+                            String[] moveInput = MessageHandler.handle(playerInput);
+                            if(moveInput[0].equals("error")) {
+                            System.out.println("messagehan error");
+                            }
+                            List<Integer> moveCooridnates = new ArrayList<>();
+                            moveCooridnates = MoveParser.parseMove(moveInput);
 
                         }
                         else if(currentLine.contains("Sorry")) {
