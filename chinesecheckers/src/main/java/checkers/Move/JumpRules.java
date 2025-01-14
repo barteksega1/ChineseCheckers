@@ -12,7 +12,7 @@ public class JumpRules {
 
         if (rowDiff == 2 && colDiff == 2) {
             int midRow = (startRow + endRow) / 2;
-            int midColumn = (startRow + endColumn) / 2;
+            int midColumn = (startColumn + endColumn) / 2;
             Cell midCell = board.getCell(midRow, midColumn);
             return midCell.getStatus() == CellStatus.OCCUPIED;
         }
