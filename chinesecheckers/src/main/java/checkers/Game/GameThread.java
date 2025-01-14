@@ -79,6 +79,13 @@ public final class GameThread extends Thread {
                                 endX = moveCoordinates[2];
                                 endY = moveCoordinates[3];
 
+                                game.getBoard().getCell(beginX, beginY).setColor(CellColor.NONE);
+                                game.getBoard().getCell(beginX, beginY).setStatus(CellStatus.FREE);
+                                game.getBoard().getCell(endX, endY).setColor(game.getPlayerByNumber(currentPlayer).getColor());
+                                game.getBoard().getCell(endX, endY).setStatus(CellStatus.OCCUPIED);
+
+                                communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
+                                
                                 // Check for additional jump moves only if the move was a jump move
                                 while (isJumpMove && moveHandler.hasAdditionalJumpMoves(game.getBoard(), moveCoordinates)) {
                                     communicationDevice.getPrintWriterByNumber(currentPlayer).println("You have an additional jump move");
@@ -93,10 +100,25 @@ public final class GameThread extends Thread {
                                         validationMessage = moveHandler.validateMove(game.getBoard(), moveCoordinates, game.getPlayerByNumber(currentPlayer));
                                         if (validationMessage.equals("valid")) {
                                             isJumpMove = moveHandler.makeMove(game.getBoard(), moveCoordinates, game.getPlayerByNumber(currentPlayer));
+                                            if (!isJumpMove) {
+                                                communicationDevice.getPrintWriterByNumber(currentPlayer).println("You have to make another jump move");
+                                                System.out.println("Only jump moves are allowed after a jump move " + currentPlayer);
+                                                isJumpMove = true;
+                                                continue;
+                                            }
                                             communicationDevice.getPrintWriterByNumber(currentPlayer).println("Thank you for your move");
                                             System.out.println("Thank you for your move player " + currentPlayer);
                                             endX = moveCoordinates[2];
                                             endY = moveCoordinates[3];
+                                            beginX = moveCoordinates[0];
+                                            beginY = moveCoordinates[1];
+                                            
+                                            game.getBoard().getCell(beginX, beginY).setColor(CellColor.NONE);
+                                            game.getBoard().getCell(beginX, beginY).setStatus(CellStatus.FREE);
+                                            game.getBoard().getCell(endX, endY).setColor(game.getPlayerByNumber(currentPlayer).getColor());
+                                            game.getBoard().getCell(endX, endY).setStatus(CellStatus.OCCUPIED);
+
+                                            communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
                                         } else {
                                             communicationDevice.getPrintWriterByNumber(currentPlayer).println("Sorry, your move was incorrect: " + validationMessage);
                                             System.out.println("Sorry, your move was incorrect: " + validationMessage + " " + currentPlayer);
@@ -105,11 +127,6 @@ public final class GameThread extends Thread {
                                     }
                                 }
 
-                                game.getBoard().getCell(beginX, beginY).setColor(CellColor.NONE);
-                                game.getBoard().getCell(beginX, beginY).setStatus(CellStatus.FREE);
-
-                                game.getBoard().getCell(endX, endY).setColor(game.getPlayerByNumber(currentPlayer).getColor());
-                                game.getBoard().getCell(endX, endY).setStatus(CellStatus.OCCUPIED);
 
                                 if(GameWon.isGameWon(game.getPlayerByNumber(currentPlayer).getPlayerCells(), game.getPlayerByNumber(currentPlayer).getColor())) {
                                     communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);

@@ -69,6 +69,10 @@ public class MoveHandler {
         // Check if the move is a jump move
         boolean isJumpMove = jumpRules.isJumpMovePossible(board, startRow, startColumn, endRow, endColumn);
 
+        if (!isJumpMove) {
+            return false;
+        }
+
         // Update the board cells
         endCell.setStatus(startCell.getStatus());
         endCell.setColor(startCell.getColor());
