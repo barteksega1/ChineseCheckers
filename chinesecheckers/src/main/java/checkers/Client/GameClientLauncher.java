@@ -1,14 +1,9 @@
 package checkers.Client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 
-import checkers.ClientGUI.WaitingStage;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.stage.Stage;
 
 public class GameClientLauncher extends Application{

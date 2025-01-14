@@ -1,10 +1,8 @@
 package checkers.Server;
 
 import java.io.BufferedReader;
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.concurrent.ExecutionException;
 
 public class GameServerLauncher {
         public static void main(String[] args) throws IOException {
@@ -59,7 +57,7 @@ public class GameServerLauncher {
                         server.start();
                         serverRunning = true;
                     }
-                } catch (Exception e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
         }

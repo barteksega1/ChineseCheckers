@@ -34,6 +34,32 @@ public class BoardField extends StackPane implements BoardElement {
         this.getChildren().addAll(circle, coordinates);
     }
 
+    public BoardField(BoardStage boardStage, Cell field, int row, int column, int gameSize) {
+        this.field = field;
+        double radius = 30 / (gameSize/3); // Adjust the radius based on game size
+        Circle circle = new Circle(radius);
+        circle.setStrokeWidth(3); // Set stroke width to make it thicker
+        setColor(circle);
+
+        Label coordinates = new Label(row + "," + column);
+        coordinates.setStyle("-fx-font-size: " + (8 + gameSize / 2) + "; -fx-text-fill: black;"); // Adjust font size based on game size
+
+        this.getChildren().addAll(circle, coordinates);
+    }
+
+    public BoardField(BoardStage boardStage, Cell field, int row, int column, double cellSize) {
+        this.field = field;
+        double radius = cellSize / 2; // Adjust the radius based on cell size
+        Circle circle = new Circle(radius);
+        circle.setStrokeWidth(3); // Set stroke width to make it thicker
+        setColor(circle);
+
+        Label coordinates = new Label(row + "," + column);
+        coordinates.setStyle("-fx-font-size: " + (cellSize / 4) + "; -fx-text-fill: black;"); // Adjust font size based on cell size
+
+        this.getChildren().addAll(circle, coordinates);
+    }
+
     @Override
     public boolean isField() {
         return true;

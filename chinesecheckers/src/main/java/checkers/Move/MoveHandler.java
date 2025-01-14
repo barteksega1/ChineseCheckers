@@ -24,7 +24,6 @@ public class MoveHandler {
         int endRow = moveCoordinates[2];
         int endColumn = moveCoordinates[3];
 
-        PlayerCells playerCells = player.getPlayerCells();
 
         // Sprawdzenie, czy ruch jest legalny zgodnie z podstawowymi zasadami
         if (!basicRules.isMoveLegal(board, startRow, startColumn, endRow, endColumn)) {
@@ -70,7 +69,11 @@ public class MoveHandler {
         // Check if the move is a jump move
         boolean isJumpMove = jumpRules.isJumpMovePossible(board, startRow, startColumn, endRow, endColumn);
 
-        // Aktualizacja komórek na planszy
+        if (!isJumpMove) {
+            return false;
+        }
+
+        // Update the board cells
         endCell.setStatus(startCell.getStatus());
         endCell.setColor(startCell.getColor());
         endCell.setPlayerNumber(startCell.getPlayerNumber());

@@ -9,29 +9,18 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-
-import checkers.Board.Board;
-import checkers.Client.GameClient;
 
 import checkers.Game.GameThread;
-import checkers.Message.MessageHandler;
-import checkers.Player.Player;
 
 public class GameServer {
     private final int port;
-    private final ArrayList<Player> players = new ArrayList<>();
     //private final Board board;
     //private ArrayList<GameClient> clients = new ArrayList<>();
     //private ArrayList<Socket> sockets = new ArrayList<>();
     private final int playerCount;
     private int numberOfJoinedPlayers = 0;
-    private final HashMap playersMap = new HashMap<>();
     private GameThread game;
     private boolean serverRunning = false;
-    private boolean gamePresent = false;
     private boolean gameRunning = false;
 
     public GameServer(int port, int playerCount) //throws IOException {
@@ -85,7 +74,6 @@ public class GameServer {
     public void processFirstPlayer(Socket socket, BufferedReader br, PrintWriter pw, int playerCount) throws IOException {
         this.game = new GameThread(socket, br, pw, playerCount);
         game.start();
-        this.gamePresent = true;
     }
 
     public void processJoiner(Socket socket, BufferedReader br, PrintWriter pw) throws IOException {

@@ -4,10 +4,8 @@ import java.util.Arrays;
 
 public class MoveMessageBuilder extends MessageBuilder {
     
-    private final String[] parts;
 
     public MoveMessageBuilder(String[] parts) {
-        this.parts = parts;
     }
 
     @Override

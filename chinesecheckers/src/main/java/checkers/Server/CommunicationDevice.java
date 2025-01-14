@@ -7,15 +7,14 @@ import java.util.ArrayList;
 
 public final class CommunicationDevice {
 
-    private int numberOfHumanPlayers;
     // private Socket[] playerSockets;
     // private BufferedReader[] playerReaders;
     // private PrintWriter[] playerWriters;
     // private boolean[] playerConnected;
-        private ArrayList<Socket> playerSockets = new ArrayList<>();
-        private ArrayList<BufferedReader> playerReaders = new ArrayList<>();
-        private ArrayList<PrintWriter> playerWriters = new ArrayList<>();
-        private ArrayList<Boolean> playerConnected = new ArrayList<>();
+        private final ArrayList<Socket> playerSockets = new ArrayList<>();
+        private final ArrayList<BufferedReader> playerReaders = new ArrayList<>();
+        private final ArrayList<PrintWriter> playerWriters = new ArrayList<>();
+        private final ArrayList<Boolean> playerConnected = new ArrayList<>();
     int currentNumberOfPlayers = 0;
 
     public void setUp(final int numberOfHumanPlayers) {
@@ -55,6 +54,14 @@ public final class CommunicationDevice {
     	for(PrintWriter pw : playerWriters) {
     		pw.println(message);
     	}
+    }
+
+    public ArrayList<Boolean> getPlayerConnected() {
+        return playerConnected;
+    }
+
+    public ArrayList<Socket> getPlayerSockets() {
+        return playerSockets;
     }
 
 }

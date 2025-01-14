@@ -16,7 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class BoardStage extends Stage {
+public final class BoardStage extends Stage {
     private final Player player;
     private TextField inputTextField;
     private final Label outputLabel;
@@ -26,12 +26,10 @@ public class BoardStage extends Stage {
     private GridPane mainPane;
     private final Button sendButton;
     private String input;
-    private ClientThread clientThread;
 
     
 
     public BoardStage(Game game, int numberOfPlayer, GameClient client, ClientThread clientThread) {
-        this.clientThread = clientThread;
         this.setResizable(false);
         this.player = game.getPlayerByNumber(numberOfPlayer);
         this.colorLabel = new Label("You are " + player.getColor().toString() + "." );
@@ -57,6 +55,11 @@ public class BoardStage extends Stage {
         int columns = gameSize * 3 + 4;
         int rows = gameSize * 2 + 3;
 
+        double stageWidth = 800 + (gameSize * 100);
+        double stageHeight = 600 + (gameSize * 70);
+        double margin = 50; // Add a margin for padding
+        double cellSize = Math.min((stageWidth - margin) / columns, (stageHeight - margin) / rows) - 5; // Calculate cell size
+
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(1);
@@ -66,7 +69,7 @@ public class BoardStage extends Stage {
             for (int column = 0; column < columns; column++) {
                 Cell cell = board.getCell(row, column);
                 if (cell.getStatus() != CellStatus.ILLEGAL) {
-                    BoardField boardField = new BoardField(this, cell, row, column);
+                    BoardField boardField = new BoardField(this, cell, row, column, cellSize);
                     gridPane.add(boardField, column, row);
                 }
             }
@@ -87,7 +90,7 @@ public class BoardStage extends Stage {
         mainPane.add(this.sendButton, 6, 0);
         mainPane.add(group, 0, 1, 2, 1);
 
-        Scene scene = new Scene(mainPane, 1000, 800); // Enlarge the scene size
+        Scene scene = new Scene(mainPane, stageWidth, stageHeight); // Adjust the scene size dynamically
         this.hideInputTools();
         this.setScene(scene);
     }
