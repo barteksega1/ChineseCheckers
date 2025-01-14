@@ -2,9 +2,8 @@ package checkers.Message;
 
 
 public class ErrorMessageBuilder extends MessageBuilder {
-    
-    @SuppressWarnings("unused")    // for now
-    private final String[] parts; // final for now
+
+    private final String[] parts; 
 
     public ErrorMessageBuilder(String[] parts)
     {
@@ -16,4 +15,3 @@ public class ErrorMessageBuilder extends MessageBuilder {
         return errorInput;
     };
 
-}

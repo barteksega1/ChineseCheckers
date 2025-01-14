@@ -3,9 +3,9 @@ package checkers.Message;
 import java.util.Arrays;
 
 public class MoveMessageBuilder extends MessageBuilder {
-    
 
     public MoveMessageBuilder(String[] parts) {
+        // Constructor implementation
     }
 
     @Override

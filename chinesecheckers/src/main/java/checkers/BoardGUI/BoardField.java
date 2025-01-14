@@ -10,7 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class BoardField extends StackPane implements BoardElement {
-    
     private final Cell field;
 
     public BoardField(BoardStage boardStage, Cell field) {
@@ -36,7 +35,7 @@ public class BoardField extends StackPane implements BoardElement {
 
     public BoardField(BoardStage boardStage, Cell field, int row, int column, int gameSize) {
         this.field = field;
-        double radius = 30 / (gameSize/3); // Adjust the radius based on game size
+        double radius = 30 / (gameSize / 3); // Adjust the radius based on game size
         Circle circle = new Circle(radius);
         circle.setStrokeWidth(3); // Set stroke width to make it thicker
         setColor(circle);
@@ -145,5 +144,4 @@ public class BoardField extends StackPane implements BoardElement {
     public Cell getField() {
         return field;
     }
-
 }

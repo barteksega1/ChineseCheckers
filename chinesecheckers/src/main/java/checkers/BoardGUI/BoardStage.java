@@ -27,23 +27,21 @@ public final class BoardStage extends Stage {
     private final Button sendButton;
     private String input;
 
-    
-
     public BoardStage(Game game, int numberOfPlayer, GameClient client, ClientThread clientThread) {
         this.setResizable(false);
         this.player = game.getPlayerByNumber(numberOfPlayer);
-        this.colorLabel = new Label("You are " + player.getColor().toString() + "." );
+        this.colorLabel = new Label("You are " + player.getColor().toString() + ".");
         this.turnLabel = new Label("Wait for your turn...");
         this.moveLabel = new Label("Write here: ");
         this.inputTextField = new TextField();
         this.outputLabel = new Label("");
         this.sendButton = new Button("Send");
         drawBoard(game.getBoard(), game.getBoard().getGameSize());
-        sendButton.setOnAction( e -> {
+        sendButton.setOnAction(e -> {
             input = inputTextField.getText();
             inputTextField.clear();
             System.out.println("button clicked: " + input);
-            if(input != null) {
+            if (input != null) {
                 clientThread.setPlayerInput(input);
                 clearLabel(outputLabel);
                 this.input = null;
@@ -95,8 +93,6 @@ public final class BoardStage extends Stage {
         this.setScene(scene);
     }
 
-
-
     public void setLabelForTurn(String turnString) {
         this.turnLabel.setText(turnString);
     }
@@ -126,25 +122,20 @@ public final class BoardStage extends Stage {
     }
 
     public void showInputTools() {
-       moveLabel.setVisible(true);
-       inputTextField.setVisible(true);
-       outputLabel.setVisible(true);
-       sendButton.setVisible(true);
+        moveLabel.setVisible(true);
+        inputTextField.setVisible(true);
+        outputLabel.setVisible(true);
+        sendButton.setVisible(true);
     }
 
     public void hideInputTools() {
-       moveLabel.setVisible(false);
-       inputTextField.setVisible(false);
-       outputLabel.setVisible(false);
-       sendButton.setVisible(false);
+        moveLabel.setVisible(false);
+        inputTextField.setVisible(false);
+        outputLabel.setVisible(false);
+        sendButton.setVisible(false);
     }
 
     public void clearLabel(Label label) {
         label.setText("");
     }
-
-  
-    
-
-
 }

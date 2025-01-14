@@ -8,18 +8,19 @@ import checkers.Cell.CellColor;
 import checkers.Player.Player;
 
 public class Game {
-    
     private int playerCount;
+    private final int gameSize;
     private Board board;
-    private BoardBuilder boardBuilder;
-    private ArrayList<Player> players = new ArrayList<>();
-    private ArrayList<Player> winners = new ArrayList<>(); 
+    private final BoardBuilder boardBuilder;
+    private final ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Player> winners = new ArrayList<>();
 
-    public Game(int playerCount) {
+    public Game(int playerCount, int gameSize) {
         this.playerCount = playerCount;
+        this.gameSize = gameSize;
         this.boardBuilder = new BoardBuilder();
         this.board = new Board();
-        boardBuilder.setupBoard(board, 5); // Use BoardBuilder to initialize the board
+        boardBuilder.setupBoard(board, gameSize); // Use BoardBuilder to initialize the board with game size
         this.buildPlayers(playerCount);
         for (Player player : players) {
             board.initializePlayerCells(player);
@@ -43,13 +44,17 @@ public class Game {
         return playerCount;
     }
 
+    public int getGameSize() {
+        return gameSize;
+    }
+
     public ArrayList<Player> getPlayers() {
-        for(Player player : players) {
+        for (Player player : players) {
             System.out.println(player.getNumber() + " " + player.getColor().toString());
         }
         return players;
     }
-    
+
     public void setBoard(Board board) {
         this.board = board;
     }

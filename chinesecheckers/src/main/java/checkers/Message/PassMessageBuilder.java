@@ -2,16 +2,14 @@ package checkers.Message;
 
 public class PassMessageBuilder extends MessageBuilder {
 
-    @SuppressWarnings("unused")  // for now
-    private final String[] parts;  // final for now
+    private final String[] parts;
 
-    public PassMessageBuilder(String[] parts)
-    {
-        this.parts = parts; //ignoring the parts but they are here for better times 😭
+    public PassMessageBuilder(String[] parts) {
+        this.parts = parts; // Ignoring the parts but they are here for better times
     }
 
-    @Override public String[] executeMessage(String[] parts) {
+    @Override
+    public String[] executeMessage(String[] parts) {
         return parts;
-    };
-    
+    }
 }

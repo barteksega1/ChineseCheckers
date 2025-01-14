@@ -1,8 +1,7 @@
 package checkers.ClientGUI;
 
 public class WinnerStage extends InfoStage {
-    
-    private int playerNumber;
+    private final int playerNumber;
 
     public WinnerStage(int playerNumber) {
         this.playerNumber = playerNumber;

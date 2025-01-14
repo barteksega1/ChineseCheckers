@@ -17,31 +17,16 @@ public class GameClient {
     private ClientThread clientThread;
     private Stage stage;
     private int playerNumber = -1;
-    //klient ktory bedzie gui
-    
+
     public GameClient(Socket socket) throws IOException {
         this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.pw = new PrintWriter(socket.getOutputStream(), true);
         this.clientThread = new ClientThread(this, br, pw);
-        clientThread.start();
     }
 
-    
-
-
-    //gui stuff
-    // public Stage getStage() {
-    //     return stage;
-    // }
-
-    // public void setStage(Stage stage) {
-    //     this.stage = stage;
-    // }
-
-    // public void closePreviousStage() {
-	// 	if(this.stage != null)
-	// 		stage.close();
-	// }
+    public void initialize() {
+        clientThread.start();
+    }
 
     public BufferedReader getInput() {
         return br;
@@ -67,30 +52,22 @@ public class GameClient {
         this.playerNumber = playerNumber;
     }
 
-    // public GameThread getGameThread() {
-    //     return gameThread;
-    // }
-
-    // public void setGameThread(GameThread gameThread) {
-    //         this.gameThread = gameThread; // Przypisanie GameThread
-    //         clientThread.setGame(gameThread);
-    //     }
-
     public void setStage(Stage stage) {
-		this.stage = stage;
-	}
-	
-	public void closePreviousStage() {
-		if(this.stage != null)
-			stage.close();
-	}
+        this.stage = stage;
+    }
+
+    public void closePreviousStage() {
+        if (this.stage != null) {
+            stage.close();
+        }
+    }
 
     public void showWaitingStage() {
         Platform.runLater(() -> {
-                    WaitingStage waitingStage = new WaitingStage(playerNumber);
-                    this.setStage(waitingStage);
-                    waitingStage.show();
-                });
+            WaitingStage waitingStage = new WaitingStage(playerNumber);
+            this.setStage(waitingStage);
+            waitingStage.show();
+        });
     }
 
     public void showWinnerStage(int playerNum) {
@@ -100,5 +77,4 @@ public class GameClient {
             winnerStage.show();
         });
     }
-
 }

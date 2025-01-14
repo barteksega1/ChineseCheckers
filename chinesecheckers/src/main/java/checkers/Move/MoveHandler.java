@@ -24,8 +24,7 @@ public class MoveHandler {
         int endRow = moveCoordinates[2];
         int endColumn = moveCoordinates[3];
 
-
-        // Sprawdzenie, czy ruch jest legalny zgodnie z podstawowymi zasadami
+        // Check if the move is legal according to basic rules
         if (!basicRules.isMoveLegal(board, startRow, startColumn, endRow, endColumn)) {
             return "Move is not legal according to basic rules";
         }
@@ -41,15 +40,15 @@ public class MoveHandler {
             return "End cell is illegal";
         }
 
-        // Sprawdzenie, czy ruch jest ruchem skokowym
+        // Check if the move is a jump move
         boolean isJumpMove = jumpRules.isJumpMovePossible(board, startRow, startColumn, endRow, endColumn);
-        
-        // Sprawdzenie, czy jest to ruch skokowy
+
+        // Check if it is a normal move or a jump move
         if (basicRules.isNormalMovePossible(startRow, startColumn, endRow, endColumn) || isJumpMove) {
             return "valid";
         }
 
-        // Ruch nie był możliwy
+        // Move was not possible
         return "Move is not possible";
     }
 

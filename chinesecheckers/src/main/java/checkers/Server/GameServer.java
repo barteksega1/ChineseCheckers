@@ -14,20 +14,17 @@ import checkers.Game.GameThread;
 
 public class GameServer {
     private final int port;
-    //private final Board board;
-    //private ArrayList<GameClient> clients = new ArrayList<>();
-    //private ArrayList<Socket> sockets = new ArrayList<>();
     private final int playerCount;
+    private final int gameSize;
     private int numberOfJoinedPlayers = 0;
     private GameThread game;
     private boolean serverRunning = false;
     private boolean gameRunning = false;
 
-    public GameServer(int port, int playerCount) //throws IOException {
-    {   
-    //super(port);
+    public GameServer(int port, int playerCount, int gameSize) {
         this.playerCount = playerCount;
         this.port = port;
+        this.gameSize = gameSize;
     }
 
     public void start() throws IOException {
@@ -46,13 +43,13 @@ public class GameServer {
                     numberOfJoinedPlayers++;
                     if(numberOfJoinedPlayers == playerCount) {
                         game.getCommunicationDevice().sendMessageToAllPlayers("Wszyscy gracze połączeni. Gra się rozpoczyna!");
-                        game.getCommunicationDevice().sendMessageToAllPlayers("Game Size is: " + playerCount);
+                        game.getCommunicationDevice().sendMessageToAllPlayers("Player Count is: " + playerCount + ", Game Size is: " + gameSize);
                         gameRunning = true;
                     }
                 }
 
                 else if(numberOfJoinedPlayers == 0) {
-                    processFirstPlayer(socket, reader, writer, playerCount);
+                    processFirstPlayer(socket, reader, writer, playerCount, gameSize);
                     System.out.println("processed first player");
                     numberOfJoinedPlayers++;
                 }
@@ -71,8 +68,8 @@ public class GameServer {
         return new ServerSocket(8080); //default port
     }
 
-    public void processFirstPlayer(Socket socket, BufferedReader br, PrintWriter pw, int playerCount) throws IOException {
-        this.game = new GameThread(socket, br, pw, playerCount);
+    public void processFirstPlayer(Socket socket, BufferedReader br, PrintWriter pw, int playerCount, int gameSize) throws IOException {
+        this.game = new GameThread(socket, br, pw, playerCount, gameSize);
         game.start();
     }
 

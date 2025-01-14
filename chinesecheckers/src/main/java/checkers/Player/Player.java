@@ -17,7 +17,11 @@ public class Player {
         this.number = number;
         this.color = color;
         this.enemyColor = CellColor.getEnemy(color);
-        players.put(number, this);
+    }
+
+    public static void addPlayer(int number, CellColor color) {
+        Player player = new Player(number, color);
+        players.put(number, player);
     }
 
     public int getNumber() {
