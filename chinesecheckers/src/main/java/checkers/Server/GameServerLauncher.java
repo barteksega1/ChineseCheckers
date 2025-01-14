@@ -9,11 +9,11 @@ import checkers.Game.CountGameSize;
 public class GameServerLauncher {
     public static void main(String[] args) throws IOException {
         BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
-        int playerCountCheck = 0;
-        int pinCountCheck = 0;
+        int playerCountCheck;
+        int pinCountCheck;
         boolean serverRunning = false;
-        String playerCountInput = "";
-        String pinCountInput = "";
+        String playerCountInput;
+        String pinCountInput;
         System.out.println("Jesteś hostem \n");
 
         while (!serverRunning) {
