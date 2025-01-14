@@ -12,6 +12,9 @@ import checkers.Message.MessageHandler;
 import checkers.Move.MoveParser;
 import javafx.application.Platform;
 
+/**
+ * Represents the client thread that handles communication with the server.
+ */
 public final class ClientThread extends Thread {
     private final GameClient client;
     private final BufferedReader br;
@@ -26,6 +29,13 @@ public final class ClientThread extends Thread {
     private String playerInput;
     private String currentLine;
 
+    /**
+     * Constructs a ClientThread with the specified client, input reader, and output writer.
+     *
+     * @param client the GameClient
+     * @param br the BufferedReader for input
+     * @param pw the PrintWriter for output
+     */
     public ClientThread(GameClient client, BufferedReader br, PrintWriter pw) {
         this.client = client;
         this.br = br;
@@ -33,10 +43,16 @@ public final class ClientThread extends Thread {
         this.hello();
     }
 
+    /**
+     * Prints a hello message indicating the game is waiting to start.
+     */
     public void hello() {
         System.out.println("Hello, waiting for the game to start");
     }
 
+    /**
+     * Runs the client thread, handling communication with the server.
+     */
     @Override
     public void run() {
         try {
@@ -150,6 +166,12 @@ public final class ClientThread extends Thread {
         }
     }
 
+    /**
+     * Checks if the given line is a number.
+     *
+     * @param line the line to check
+     * @return true if the line is a number, false otherwise
+     */
     private boolean isNumber(String line) {
         try {
             Integer.valueOf(line);
@@ -159,42 +181,92 @@ public final class ClientThread extends Thread {
         return true;
     }
 
+    /**
+     * Sets the player count.
+     *
+     * @param playerCount the number of players
+     */
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
     }
 
+    /**
+     * Sets the player number.
+     *
+     * @param playerNumber the player number to set
+     */
     public void setPlayerNumber(int playerNumber) {
         this.playerNumber = playerNumber;
     }
 
+    /**
+     * Sets the game size.
+     *
+     * @param gameSize the size of the game - how many cells are in the longest row in the arm of the star
+     */
     public void setGameSize(int gameSize) {
         this.gameSize = gameSize;
     }
 
+    /**
+     * Gets the output writer.
+     *
+     * @return the PrintWriter for output
+     */
     public PrintWriter getPrintWriter() {
         return pw;
     }
 
+    /**
+     * Gets whether input was sent.
+     *
+     * @return true if input was sent, false otherwise
+     */
     public Boolean getWasInputSent() {
         return wasInputSent;
     }
 
+    /**
+     * Sets whether input was sent.
+     *
+     * @param wasInputSent true if input was sent, false otherwise
+     */
     public void setWasInputSent(boolean wasInputSent) {
         this.wasInputSent = wasInputSent;
     }
 
+    /**
+     * Sets whether the turn has ended.
+     *
+     * @param turnEnded true if the turn has ended, false otherwise
+     */
     public void setTurnEnded(boolean turnEnded) {
         this.turnEnded = turnEnded;
     }
 
+    /**
+     * Gets whether the turn has ended.
+     *
+     * @return true if the turn has ended, false otherwise
+     */
     public boolean getTurnEnded() {
         return this.turnEnded;
     }
 
+    /**
+     * Sets the player input.
+     *
+     * @param playerInput the player input to set
+     */
     public void setPlayerInput(String playerInput) {
         this.playerInput = playerInput;
     }
 
+    /**
+     * Gets the player input.
+     *
+     * @return the player input
+     */
     public String getPlayerInput() {
         return playerInput;
     }

@@ -10,6 +10,15 @@ import checkers.Player.Player;
 import checkers.Player.PlayerCells;
 
 public class FillPlayers {
+
+    /**
+     * Fills the player's cells on the board.
+     * Identifies home cells and current cells occupied by the player.
+     *
+     * @param board the Board to fill
+     * @param player the Player whose cells are to be filled 
+     * @return a PlayerCells object containing lists of home cells and current cells occupied by the player
+     */
     public PlayerCells FillPlayerCells(Board board, Player player) {
         List<Cell> homeCells = new ArrayList<>();
         List<Cell> currentCells = new ArrayList<>();

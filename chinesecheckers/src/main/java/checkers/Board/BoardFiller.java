@@ -10,6 +10,13 @@ import checkers.Cell.HomeCell;
 
 public class BoardFiller {
 
+    /**
+     * Fills the board with illegal cells based on the game size.
+     * Alternates the pattern of illegal cells depending on the game size.
+     *
+     * @param board the Board to fill
+     * @param gameSize the size of the game - how many cells are in the longest row in arm of the star
+     */
     public void fillBoard(Board board, int gameSize) {
 
         if ((gameSize + 1)/2 % 2 == 0) {
@@ -35,6 +42,14 @@ public class BoardFiller {
         }
     }
 
+    /**
+     * Splits home cells into groups and assigns colors to each group.
+     * Groups are determined based on their positions on the board.
+     *
+     * @param board the Board containing the cells
+     * @param gameSize the size of the game - how many cells are in the longest arm of the star
+     * @return a list of lists, where each inner list contains HomeCells of the same group
+     */
     public List<List<HomeCell>> splitHomeCellsIntoGroups(Board board, int gameSize) {
         List<List<HomeCell>> groups = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
@@ -77,5 +92,5 @@ public class BoardFiller {
         return groups;
     }
     
-}    
+}
 

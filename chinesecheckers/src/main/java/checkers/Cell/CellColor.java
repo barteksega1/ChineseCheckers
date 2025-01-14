@@ -1,7 +1,9 @@
 package checkers.Cell;
 
+/**
+ * Represents the color of a cell in the game.
+ */
 public enum CellColor {
-
     RED,
     GREEN,
     BLUE,
@@ -10,6 +12,12 @@ public enum CellColor {
     ORANGE,
     NONE;
 
+    /**
+     * Gets the CellColor corresponding to the specified number.
+     *
+     * @param number the number representing the color
+     * @return the CellColor corresponding to the number
+     */
     public static CellColor fromNumber(int number) {
         switch (number) {
             case 0:
@@ -29,6 +37,12 @@ public enum CellColor {
         }
     }
 
+    /**
+     * Gets the enemy color of the specified color.
+     *
+     * @param color the color to get the enemy of
+     * @return the enemy color
+     */
     public static CellColor getEnemy(CellColor color) {
         switch (color) {
             case RED:

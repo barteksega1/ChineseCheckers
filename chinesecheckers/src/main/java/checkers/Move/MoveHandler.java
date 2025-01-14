@@ -8,6 +8,9 @@ import checkers.Cell.CellStatus;
 import checkers.Player.Player;
 import checkers.Player.PlayerCells;
 
+/**
+ * Handles the validation and execution of moves in the game.
+ */
 public class MoveHandler {
 
     private final BasicRules basicRules;
@@ -18,6 +21,14 @@ public class MoveHandler {
         this.jumpRules = new JumpRules();
     }
 
+    /**
+     * Validates a move based on the game rules.
+     *
+     * @param board the game board
+     * @param moveCoordinates the coordinates of the move
+     * @param player the player making the move
+     * @return a string indicating whether the move is valid or the reason it is not
+     */
     public String validateMove(Board board, int[] moveCoordinates, Player player) {
         int startRow = moveCoordinates[0];
         int startColumn = moveCoordinates[1];
@@ -52,6 +63,14 @@ public class MoveHandler {
         return "Move is not possible";
     }
 
+    /**
+     * Executes a move on the game board.
+     *
+     * @param board the game board
+     * @param moveCoordinates the coordinates of the move
+     * @param player the player making the move
+     * @return true if the move was a jump move, false otherwise
+     */
     public boolean makeMove(Board board, int[] moveCoordinates, Player player) {
         if (!validateMove(board, moveCoordinates, player).equals("valid")) {
             return false;
@@ -93,6 +112,13 @@ public class MoveHandler {
         return isJumpMove;
     }
 
+    /**
+     * Checks if there are additional jump moves available for the player.
+     *
+     * @param board the game board
+     * @param moveCoordinates the coordinates of the last move
+     * @return true if additional jump moves are available, false otherwise
+     */
     public boolean hasAdditionalJumpMoves(Board board, int[] moveCoordinates) {
         int endRow = moveCoordinates[2];
         int endColumn = moveCoordinates[3];

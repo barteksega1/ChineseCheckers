@@ -1,7 +1,16 @@
 package checkers.Message;
 
+/**
+ * Handles messages and delegates to appropriate message builders.
+ */
 public class MessageHandler {
 
+    /**
+     * Handles the given message string and returns the processed message parts.
+     *
+     * @param messageString the message string to handle
+     * @return the processed message parts
+     */
     public static String[] handle(String messageString) {
         MessageBuilder builder;
         String[] parts = messageString.split("\\s+");

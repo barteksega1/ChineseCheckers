@@ -13,6 +13,9 @@ import checkers.Move.MoveHandler;
 import checkers.Move.MoveParser;
 import checkers.Server.CommunicationDevice;
 
+/**
+ * Represents a thread that handles the game logic for a Chinese Checkers game.
+ */
 public final class GameThread extends Thread {
     private final boolean ended = false;
     private final Game game;
@@ -23,6 +26,16 @@ public final class GameThread extends Thread {
     private final CommunicationDevice communicationDevice = new CommunicationDevice();
     private final int gameSize;
 
+    /**
+     * Constructs a GameThread with the specified parameters.
+     *
+     * @param firstPlayer the socket of the first player
+     * @param firstBufferedReader the BufferedReader for the first player
+     * @param firstPrintWriter the PrintWriter for the first player
+     * @param numberOfPlayers the number of human players in the game
+     * @param gameSize the size of the game - how many cells are in the longest row in the arm of the star
+     * @throws IOException if an I/O error occurs
+     */
     public GameThread(Socket firstPlayer, BufferedReader firstBufferedReader, PrintWriter firstPrintWriter, int numberOfPlayers, int gameSize) throws IOException {
         this.numberOfHumanPlayers = numberOfPlayers;
         this.gameSize = gameSize;
@@ -31,6 +44,9 @@ public final class GameThread extends Thread {
         addPlayer(firstPlayer, firstBufferedReader, firstPrintWriter);
     }
 
+    /**
+     * Runs the game thread, handling the game logic and player interactions.
+     */
     @Override
     public void run() {
         while (numberOfJoinedPlayers < numberOfHumanPlayers) {
@@ -173,23 +189,51 @@ public final class GameThread extends Thread {
         }
     }
 
+    /**
+     * Adds a player to the game.
+     *
+     * @param player the socket of the player to add
+     * @param br the BufferedReader for the player
+     * @param pw the PrintWriter for the player
+     * @throws IOException if an I/O error occurs
+     */
     public void addPlayer(Socket player, BufferedReader br, PrintWriter pw) throws IOException {
         communicationDevice.addPlayer(player, br, pw);
         numberOfJoinedPlayers++;
     }
 
+    /**
+     * Returns the number of players who have joined the game.
+     *
+     * @return the number of players who have joined the game
+     */
     public int getNumberOfJoinedPlayers() {
         return numberOfJoinedPlayers;
     }
 
+    /**
+     * Returns the total number of players in the game.
+     *
+     * @return the total number of players in the game
+     */
     public int getNumberOfPlayers() {
         return numberOfPlayers;
     }
 
+    /**
+     * Returns the number of human players in the game.
+     *
+     * @return the number of human players in the game
+     */
     public int getNumberOfHumanPlayers() {
         return numberOfHumanPlayers;
     }
 
+    /**
+     * Returns the communication device used for player interactions.
+     *
+     * @return the communication device used for player interactions
+     */
     public CommunicationDevice getCommunicationDevice() {
         return communicationDevice;
     }

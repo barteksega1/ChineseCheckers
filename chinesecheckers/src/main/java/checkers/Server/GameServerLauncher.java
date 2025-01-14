@@ -6,7 +6,17 @@ import java.io.InputStreamReader;
 
 import checkers.Game.CountGameSize;
 
+/**
+ * Launches the game server application.
+ */
 public class GameServerLauncher {
+
+    /**
+     * The main method to launch the game server.
+     *
+     * @param args the command line arguments
+     * @throws IOException if an I/O error occurs
+     */
     public static void main(String[] args) throws IOException {
         BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
         int playerCountCheck;

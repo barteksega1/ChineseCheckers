@@ -16,6 +16,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+/**
+ * Represents the stage for the game board.
+ */
 public final class BoardStage extends Stage {
     private final Player player;
     private TextField inputTextField;
@@ -27,6 +30,14 @@ public final class BoardStage extends Stage {
     private final Button sendButton;
     private String input;
 
+    /**
+     * Constructs a BoardStage with the specified game, player number, client, and client thread.
+     *
+     * @param game the game instance
+     * @param numberOfPlayer the number of the player
+     * @param client the game client
+     * @param clientThread the client thread
+     */
     public BoardStage(Game game, int numberOfPlayer, GameClient client, ClientThread clientThread) {
         this.setResizable(false);
         this.player = game.getPlayerByNumber(numberOfPlayer);
@@ -49,6 +60,12 @@ public final class BoardStage extends Stage {
         });
     }
 
+    /**
+     * Draws the game board with the specified board and game size.
+     *
+     * @param board the board to draw
+     * @param gameSize the size of the game - how many cells are in the longest row in the arm of the star
+     */
     public void drawBoard(Board board, int gameSize) {
         int columns = gameSize * 3 + 4;
         int rows = gameSize * 2 + 3;
@@ -93,34 +110,70 @@ public final class BoardStage extends Stage {
         this.setScene(scene);
     }
 
+    /**
+     * Sets the label for the current turn.
+     *
+     * @param turnString the string to set for the turn label
+     */
     public void setLabelForTurn(String turnString) {
         this.turnLabel.setText(turnString);
     }
 
+    /**
+     * Sets the label to indicate waiting for the player's turn.
+     *
+     * @param message the message to display
+     */
     public void setLabelForWait(String message) {
         this.turnLabel.setText(message + " -- Wait for your turn...");
     }
 
+    /**
+     * Gets the output label.
+     *
+     * @return the output label
+     */
     public Label getOutputLabel() {
         return outputLabel;
     }
 
+    /**
+     * Sets the output label with the specified message.
+     *
+     * @param messageString the message to set
+     */
     public void setOutputLabel(String messageString) {
         this.outputLabel.setText(messageString);
     }
 
+    /**
+     * Clears the input text field.
+     */
     public void clearInput() {
         this.inputTextField.clear();
     }
 
+    /**
+     * Gets the input from the text field.
+     *
+     * @return the input string
+     */
     public String getInput() {
         return input;
     }
 
+    /**
+     * Gets the input text field.
+     *
+     * @return the input text field
+     */
     public TextField getInputTextField() {
         return inputTextField;
     }
 
+    /**
+     * Shows the input tools (move label, input text field, output label, and send button).
+     */
     public void showInputTools() {
         moveLabel.setVisible(true);
         inputTextField.setVisible(true);
@@ -128,6 +181,9 @@ public final class BoardStage extends Stage {
         sendButton.setVisible(true);
     }
 
+    /**
+     * Hides the input tools (move label, input text field, output label, and send button).
+     */
     public void hideInputTools() {
         moveLabel.setVisible(false);
         inputTextField.setVisible(false);
@@ -135,6 +191,11 @@ public final class BoardStage extends Stage {
         sendButton.setVisible(false);
     }
 
+    /**
+     * Clears the text of the specified label.
+     *
+     * @param label the label to clear
+     */
     public void clearLabel(Label label) {
         label.setText("");
     }
