@@ -3,11 +3,15 @@ package checkers.Client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import checkers.BoardGUI.BoardStage;
+import checkers.Cell.CellColor;
+import checkers.Cell.CellStatus;
+import checkers.ClientGUI.WinnerStage;
 import checkers.Game.Game;
 import checkers.Message.MessageHandler;
 import checkers.Move.MoveParser;
@@ -41,7 +45,6 @@ public class ClientThread extends Thread {
     
     @Override
     public void run() {
-        List<Integer> moveCoordinates = new ArrayList<>();
         try (Scanner scanner = new Scanner(System.in)) {
             //MessageHandler mh = new MessageHandler();
             System.out.println("Welcome to the game, wait for further instructions");
@@ -73,7 +76,7 @@ public class ClientThread extends Thread {
                             boardStage.show();
                         });
                         }
-                        else if(!(game == null) && boardStage != null && currentLine.contains("Your turn")) {
+                        else if(!(game == null) && boardStage != null && (currentLine.contains("Your turn")||currentLine.contains("You have an additional jump move"))) {
                             playerInput = null;
                             Platform.runLater(() -> {
                                 this.boardStage.setLabelForTurn(currentLine);
@@ -115,11 +118,19 @@ public class ClientThread extends Thread {
                             if(moveInput[0].equals("error")) {
                             System.out.println("messagehan error");
                             }
-                            List<Integer> moveCooridnates = new ArrayList<>();
-                            moveCooridnates = MoveParser.parseMove(moveInput, 3);
+                            int[] moveCoordinates = new int[moveInput.length - 1];
+                            moveCoordinates = MoveParser.parseMove(moveInput);
+                        
+                            game.getBoard().getCell(moveCoordinates[0], moveCoordinates[1]).setColor(CellColor.NONE);
+                            game.getBoard().getCell(moveCoordinates[0], moveCoordinates[1]).setStatus(CellStatus.FREE);
 
-                            //just move, validation was done by the server ->>>>> move(movingPlayer, moveCoordinates);
+                            game.getBoard().getCell(moveCoordinates[2], moveCoordinates[3]).setColor(game.getPlayerByNumber(movingPlayer).getColor());
+                            game.getBoard().getCell(moveCoordinates[2], moveCoordinates[3]).setStatus(CellStatus.OCCUPIED);
+                            Platform.runLater(() -> {
+                                this.boardStage.drawBoard(game.getBoard(), game.getBoard().getGameSize());
+                            });
                         }
+                        
                         else if(currentLine.contains("Thank you for your move")) {
                             System.out.println(currentLine);
                             Platform.runLater(() -> {
@@ -127,6 +138,7 @@ public class ClientThread extends Thread {
                                 this.boardStage.hideInputTools();
                                 this.boardStage.clearLabel(this.boardStage.getOutputLabel());
                             });
+
                         }
                         else if(currentLine.contains("Sorry")) {
                             System.out.println(currentLine);
@@ -144,9 +156,20 @@ public class ClientThread extends Thread {
                             // } 
                             // pw.println(playerInput);
                         }
-                            
-                    }
-                }   
+                        else if(currentLine.contains("won")) {
+                            String[] splitLine = currentLine.split("\\s+");
+                            int playerNum = -1;
+                            try {
+                                playerNum = Integer.parseInt(splitLine[1]);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            client.showWinnerStage(playerNum);
+                        }
+                    }  
+                    
+                }
+                  
                 
                  catch (IOException e) {
                     e.printStackTrace();
@@ -156,7 +179,52 @@ public class ClientThread extends Thread {
         }
     }
 
+    private void handlePlayerTurn() {
+        playerInput = null;
+        Platform.runLater(() -> {
+            this.boardStage.setLabelForTurn(currentLine);
+            this.boardStage.showInputTools();
+            this.boardStage.clearLabel(this.boardStage.getOutputLabel());
+        });
+        while (playerInput == null) {
+            try {
+                synchronized (this) {
+                    wait(1);
+                }
+            } catch (InterruptedException ex) {}
+        }
+        pw.println(playerInput);
 
+        // Handle additional jump moves
+        while (true) {
+            try {
+                currentLine = br.readLine();
+                if (currentLine.contains("You have an additional jump move")) {
+                    System.out.println(currentLine);
+                    Platform.runLater(() -> {
+                        this.boardStage.setLabelForTurn(currentLine);
+                        this.boardStage.showInputTools();
+                        this.boardStage.clearLabel(this.boardStage.getOutputLabel());
+                    });
+                    playerInput = null;
+                    while (playerInput == null) {
+                        try {
+                            synchronized (this) {
+                                wait(1);
+                            }
+                        } catch (InterruptedException ex) {}
+                    }
+                    pw.println(playerInput);
+                } else {
+                    break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                e.getMessage();
+                break;
+            }
+        }
+    }
 
     private boolean isNumber(String line) {
         try {

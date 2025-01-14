@@ -10,6 +10,7 @@
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Commands/CommandOutputWriter.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Commands/PassCommand.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Board/FillPlayers.java
+/home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/ClientGUI/WinnerStage.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Cell/CellColor.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/BoardGUI/BoardStage.java
 /home/bartek/cpp/3sem/TP/chinesecheckers/chinesecheckers/src/main/java/checkers/Board/BoardBuilder.java

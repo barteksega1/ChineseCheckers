@@ -35,6 +35,7 @@ checkers/Game/Game.class
 checkers/Board/Board$1.class
 checkers/Game/GameThread.class
 checkers/Cell/CellColor.class
+checkers/ClientGUI/WinnerStage.class
 checkers/Cell/Cell.class
 checkers/Board/Board.class
 checkers/Board/BoardFiller.class

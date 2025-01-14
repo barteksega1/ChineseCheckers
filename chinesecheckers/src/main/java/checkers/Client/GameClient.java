@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import checkers.ClientGUI.WaitingStage;
+import checkers.ClientGUI.WinnerStage;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
@@ -90,6 +91,14 @@ public class GameClient {
                     this.setStage(waitingStage);
                     waitingStage.show();
                 });
+    }
+
+    public void showWinnerStage(int playerNum) {
+        Platform.runLater(() -> {
+            WinnerStage winnerStage = new WinnerStage(playerNum);
+            this.setStage(winnerStage);
+            winnerStage.show();
+        });
     }
 
 }

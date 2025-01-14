@@ -53,7 +53,7 @@ public class BoardStage extends Stage {
         });
     }
 
-    private void drawBoard(Board board, int gameSize) {
+    public void drawBoard(Board board, int gameSize) {
         int columns = gameSize * 3 + 4;
         int rows = gameSize * 2 + 3;
 
@@ -66,8 +66,7 @@ public class BoardStage extends Stage {
             for (int column = 0; column < columns; column++) {
                 Cell cell = board.getCell(row, column);
                 if (cell.getStatus() != CellStatus.ILLEGAL) {
-                    BoardField boardField = new BoardField(this, cell);
-                    boardField.setRadius(10); // Ustawienie odpowiedniego rozmiaru pola
+                    BoardField boardField = new BoardField(this, cell, row, column);
                     gridPane.add(boardField, column, row);
                 }
             }

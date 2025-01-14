@@ -1,8 +1,5 @@
 package checkers.Message;
 
-import java.util.Arrays;
-
-import checkers.Commands.MoveCommand;
 
 public class ErrorMessageBuilder extends MessageBuilder {
     
@@ -15,8 +12,8 @@ public class ErrorMessageBuilder extends MessageBuilder {
     }
 
     @Override public String[] executeMessage(String[] parts) {
-        String[] error = {"error"};
-        return error;
+        String[] errorInput = {"error"}; 
+        return errorInput;
     };
 
 }

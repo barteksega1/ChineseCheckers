@@ -19,7 +19,7 @@ public class Game {
         this.playerCount = playerCount;
         this.boardBuilder = new BoardBuilder();
         this.board = new Board();
-        boardBuilder.setupBoard(board, 11); // Use BoardBuilder to initialize the board
+        boardBuilder.setupBoard(board, 7); // Use BoardBuilder to initialize the board
         this.buildPlayers(playerCount);
         for (Player player : players) {
             board.initializePlayerCells(player);
@@ -69,6 +69,4 @@ public class Game {
     public Player getPlayerByNumber(int number) {
         return players.get(number);
     }
-
-    //todo -- szukanie pól na boardzie po wspolrzednych
 }
