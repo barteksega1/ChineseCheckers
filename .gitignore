@@ -1,1 +1,17 @@
-./target/*
+# Ignore build output directories
+target/*
+chinesecheckers/target/*
+
+# mavens target directory
+target/
+chinesecheckers/target/
+
+# Ignore all log files
+*.log
+
+# Ignore all class files
+*.class
+
+# Ignore all jar files
+*.jar
+    
