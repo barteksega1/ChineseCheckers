@@ -14,4 +14,5 @@ public class ErrorMessageBuilder extends MessageBuilder {
         String[] errorInput = {"error"}; 
         return errorInput;
     };
+}
 
