@@ -2,6 +2,7 @@ package checkers.Message;
 
 public class PassMessageBuilder extends MessageBuilder {
 
+    //TODO: look if thats needed
     private final String[] parts;
 
     public PassMessageBuilder(String[] parts) {

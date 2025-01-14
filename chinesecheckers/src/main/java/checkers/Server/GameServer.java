@@ -37,24 +37,22 @@ public class GameServer {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
                 
-                if (numberOfJoinedPlayers > 0) {
-                    processJoiner(socket, reader, writer);
-                    System.out.println("processed more players");
+                if (numberOfJoinedPlayers < playerCount) {
+                    if (numberOfJoinedPlayers == 0) {
+                        processFirstPlayer(socket, reader, writer, playerCount, gameSize);
+                        System.out.println("processed first player");
+                    } else {
+                        processJoiner(socket, reader, writer);
+                        System.out.println("processed more players");
+                    }
                     numberOfJoinedPlayers++;
                     if(numberOfJoinedPlayers == playerCount) {
                         game.getCommunicationDevice().sendMessageToAllPlayers("Wszyscy gracze połączeni. Gra się rozpoczyna!");
-                        game.getCommunicationDevice().sendMessageToAllPlayers("Player Count is: " + playerCount + ", Game Size is: " + gameSize);
+                        game.getCommunicationDevice().sendMessageToAllPlayers("Player Count is: " + playerCount);
+                        game.getCommunicationDevice().sendMessageToAllPlayers("Game Size is: " + gameSize);
                         gameRunning = true;
                     }
-                }
-
-                else if(numberOfJoinedPlayers == 0) {
-                    processFirstPlayer(socket, reader, writer, playerCount, gameSize);
-                    System.out.println("processed first player");
-                    numberOfJoinedPlayers++;
-                }
-                
-                else if (gameRunning) {
+                } else if (gameRunning) {
                     writer.write("Sorry, the game is already running");
                 }
                 
