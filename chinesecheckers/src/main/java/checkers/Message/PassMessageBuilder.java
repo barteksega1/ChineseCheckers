@@ -1,5 +1,4 @@
 package checkers.Message;
-import checkers.Commands.PassCommand;;
 
 public class PassMessageBuilder extends MessageBuilder {
 

@@ -13,20 +13,16 @@ import checkers.Move.MoveHandler;
 import checkers.Move.MoveParser;
 import checkers.Server.CommunicationDevice;
 
-public class GameThread extends Thread {
+public final class GameThread extends Thread {
     
-    private boolean started = false;
-    private boolean ended = false;
-    private Game game;
-    private int numberOfPlayers = 0;
+    private final boolean ended = false;
+    private final Game game;
+    private final int numberOfPlayers = 0;
     private int numberOfHumanPlayers = 0;
     private int numberOfJoinedPlayers = 0;
     private int currentPlayer = 0;
-    private CommunicationDevice communicationDevice = new CommunicationDevice();
-    private MessageHandler messageHandler = new MessageHandler();
-    private boolean moved;
+    private final CommunicationDevice communicationDevice = new CommunicationDevice();
     
-
 
     public GameThread(Socket firstPlayer, BufferedReader firstBufferedReader, PrintWriter firstPrintWriter, int numberOfPlayers) throws IOException {
         this.numberOfHumanPlayers = numberOfPlayers;
@@ -56,7 +52,6 @@ public class GameThread extends Thread {
         while (!ended) {
             try {
                 System.out.println("current Player: " + currentPlayer);
-                moved = false;
                 int beginX = 0;
                 int beginY = 0;
                 int endX = 0;
@@ -161,9 +156,8 @@ public class GameThread extends Thread {
                     communicationDevice.getPrintWriterByNumber(currentPlayer).println("Sorry, your move was incorrect");
                     System.out.println("Sorry, your move was incorrect " + currentPlayer);
                 }
-            } catch (Exception e) {
+            } catch (IOException e) {
                 e.getMessage();
-                e.printStackTrace();
             }
         }
     }

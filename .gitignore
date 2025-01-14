@@ -6,12 +6,6 @@ chinesecheckers/target/*
 target/
 chinesecheckers/target/
 
-# Ignore all log files
-*.log
-
 # Ignore all class files
 *.class
 
-# Ignore all jar files
-*.jar
-    

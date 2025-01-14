@@ -3,24 +3,19 @@ package checkers.Client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 import checkers.BoardGUI.BoardStage;
 import checkers.Cell.CellColor;
 import checkers.Cell.CellStatus;
-import checkers.ClientGUI.WinnerStage;
 import checkers.Game.Game;
 import checkers.Message.MessageHandler;
 import checkers.Move.MoveParser;
 import javafx.application.Platform;
 
-public class ClientThread extends Thread {
-    private GameClient client;
-    private BufferedReader br;
-    private PrintWriter pw;
+public final class ClientThread extends Thread {
+    private final GameClient client;
+    private final BufferedReader br;
+    private final PrintWriter pw;
     private Game game;
     private int playerNumber;
     private BoardStage boardStage;
@@ -28,7 +23,6 @@ public class ClientThread extends Thread {
     private boolean wasInputSent;
     private boolean turnEnded = false;
     private String playerInput;
-    private boolean moved;
     private String currentLine;
 
 
@@ -45,7 +39,7 @@ public class ClientThread extends Thread {
     
     @Override
     public void run() {
-        try (Scanner scanner = new Scanner(System.in)) {
+        try {
             //MessageHandler mh = new MessageHandler();
             System.out.println("Welcome to the game, wait for further instructions");
             while(true) {
@@ -108,7 +102,7 @@ public class ClientThread extends Thread {
                         } 
                         else if(currentLine.contains("moved")) {
                             String[] splitLine = currentLine.split("\\s+");
-                            Integer movingPlayer = Integer.parseInt(splitLine[1]);
+                            Integer movingPlayer = Integer.valueOf(splitLine[1]);
                             String moveInputLine = "";
                             for(int i = 2; i < splitLine.length; i++) {
                                 moveInputLine += splitLine[i];
@@ -161,8 +155,8 @@ public class ClientThread extends Thread {
                             int playerNum = -1;
                             try {
                                 playerNum = Integer.parseInt(splitLine[1]);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            } catch (NumberFormatException e) {
+                                e.getMessage();
                             }
                             client.showWinnerStage(playerNum);
                         }
@@ -172,59 +166,14 @@ public class ClientThread extends Thread {
                   
                 
                  catch (IOException e) {
-                    e.printStackTrace();
                     e.getMessage();
                 }
             }
+        } catch (NumberFormatException e) {
+            e.getMessage();
         }
     }
 
-    private void handlePlayerTurn() {
-        playerInput = null;
-        Platform.runLater(() -> {
-            this.boardStage.setLabelForTurn(currentLine);
-            this.boardStage.showInputTools();
-            this.boardStage.clearLabel(this.boardStage.getOutputLabel());
-        });
-        while (playerInput == null) {
-            try {
-                synchronized (this) {
-                    wait(1);
-                }
-            } catch (InterruptedException ex) {}
-        }
-        pw.println(playerInput);
-
-        // Handle additional jump moves
-        while (true) {
-            try {
-                currentLine = br.readLine();
-                if (currentLine.contains("You have an additional jump move")) {
-                    System.out.println(currentLine);
-                    Platform.runLater(() -> {
-                        this.boardStage.setLabelForTurn(currentLine);
-                        this.boardStage.showInputTools();
-                        this.boardStage.clearLabel(this.boardStage.getOutputLabel());
-                    });
-                    playerInput = null;
-                    while (playerInput == null) {
-                        try {
-                            synchronized (this) {
-                                wait(1);
-                            }
-                        } catch (InterruptedException ex) {}
-                    }
-                    pw.println(playerInput);
-                } else {
-                    break;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                e.getMessage();
-                break;
-            }
-        }
-    }
 
     private boolean isNumber(String line) {
         try {

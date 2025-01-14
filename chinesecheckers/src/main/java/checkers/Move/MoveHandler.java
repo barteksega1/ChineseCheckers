@@ -24,7 +24,6 @@ public class MoveHandler {
         int endRow = moveCoordinates[2];
         int endColumn = moveCoordinates[3];
 
-        PlayerCells playerCells = player.getPlayerCells();
 
         // Sprawdzenie, czy ruch jest legalny zgodnie z podstawowymi zasadami
         if (!basicRules.isMoveLegal(board, startRow, startColumn, endRow, endColumn)) {

@@ -16,7 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class BoardStage extends Stage {
+public final class BoardStage extends Stage {
     private final Player player;
     private TextField inputTextField;
     private final Label outputLabel;
@@ -26,12 +26,10 @@ public class BoardStage extends Stage {
     private GridPane mainPane;
     private final Button sendButton;
     private String input;
-    private ClientThread clientThread;
 
     
 
     public BoardStage(Game game, int numberOfPlayer, GameClient client, ClientThread clientThread) {
-        this.clientThread = clientThread;
         this.setResizable(false);
         this.player = game.getPlayerByNumber(numberOfPlayer);
         this.colorLabel = new Label("You are " + player.getColor().toString() + "." );
