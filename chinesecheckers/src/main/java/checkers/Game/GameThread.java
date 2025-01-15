@@ -13,8 +13,10 @@ import checkers.Move.MoveHandler;
 import checkers.Move.MoveParser;
 import checkers.Server.CommunicationDevice;
 
+/**
+ * Represents a thread that handles the game logic for a Chinese Checkers game.
+ */
 public final class GameThread extends Thread {
-    
     private final boolean ended = false;
     private final Game game;
     private final int numberOfPlayers = 0;
@@ -22,28 +24,43 @@ public final class GameThread extends Thread {
     private int numberOfJoinedPlayers = 0;
     private int currentPlayer = 0;
     private final CommunicationDevice communicationDevice = new CommunicationDevice();
-    
+    private final int gameSize;
 
-    public GameThread(Socket firstPlayer, BufferedReader firstBufferedReader, PrintWriter firstPrintWriter, int numberOfPlayers) throws IOException {
+    /**
+     * Constructs a GameThread with the specified parameters.
+     *
+     * @param firstPlayer the socket of the first player
+     * @param firstBufferedReader the BufferedReader for the first player
+     * @param firstPrintWriter the PrintWriter for the first player
+     * @param numberOfPlayers the number of human players in the game
+     * @param gameSize the size of the game - how many cells are in the longest row in the arm of the star
+     * @throws IOException if an I/O error occurs
+     */
+    public GameThread(Socket firstPlayer, BufferedReader firstBufferedReader, PrintWriter firstPrintWriter, int numberOfPlayers, int gameSize) throws IOException {
         this.numberOfHumanPlayers = numberOfPlayers;
-        this.game = new Game(numberOfHumanPlayers);
+        this.gameSize = gameSize;
+        this.game = new Game(numberOfHumanPlayers, gameSize);
         this.communicationDevice.setUp(numberOfHumanPlayers);
         addPlayer(firstPlayer, firstBufferedReader, firstPrintWriter);
     }
 
+    /**
+     * Runs the game thread, handling the game logic and player interactions.
+     */
     @Override
     public void run() {
         while (numberOfJoinedPlayers < numberOfHumanPlayers) {
             System.out.println("Waiting for " + (numberOfHumanPlayers - numberOfJoinedPlayers) + " more player(s)");
             for (int i = 0; i < communicationDevice.getPlayerWriters().size(); i++) {
                 communicationDevice.getPrintWriterByNumber(i).println("waiting for more players, you are player " + i);
-                communicationDevice.getPrintWriterByNumber(i).println("Game Size is: " + numberOfHumanPlayers);
+                communicationDevice.getPrintWriterByNumber(i).println("Player Count is: " + numberOfHumanPlayers + ", Game Size is: " + gameSize);
             }
             try {
                 synchronized (this) {
                     wait(1000);
                 }
-            } catch (InterruptedException ex) {}
+            } catch (InterruptedException ex) {
+            }
         }
         System.out.println("\n Game is running \n");
         communicationDevice.sendMessageToAllPlayers("Game is running");
@@ -57,7 +74,7 @@ public final class GameThread extends Thread {
                 int endX = 0;
                 int endY = 0;
                 communicationDevice.getPrintWriterByNumber(currentPlayer).println("Your turn player " + currentPlayer);
-                String playerInput = "";
+                String playerInput;
                 playerInput = communicationDevice.getInputReaderByNumber(currentPlayer).readLine();
                 System.out.println(playerInput);
                 if (playerInput.contains("move")) {
@@ -85,7 +102,7 @@ public final class GameThread extends Thread {
                                 game.getBoard().getCell(endX, endY).setStatus(CellStatus.OCCUPIED);
 
                                 communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
-                                
+
                                 // Check for additional jump moves only if the move was a jump move
                                 while (isJumpMove && moveHandler.hasAdditionalJumpMoves(game.getBoard(), moveCoordinates)) {
                                     communicationDevice.getPrintWriterByNumber(currentPlayer).println("You have an additional jump move");
@@ -112,7 +129,7 @@ public final class GameThread extends Thread {
                                             endY = moveCoordinates[3];
                                             beginX = moveCoordinates[0];
                                             beginY = moveCoordinates[1];
-                                            
+
                                             game.getBoard().getCell(beginX, beginY).setColor(CellColor.NONE);
                                             game.getBoard().getCell(beginX, beginY).setStatus(CellStatus.FREE);
                                             game.getBoard().getCell(endX, endY).setColor(game.getPlayerByNumber(currentPlayer).getColor());
@@ -127,17 +144,13 @@ public final class GameThread extends Thread {
                                     }
                                 }
 
-
-                                if(GameWon.isGameWon(game.getPlayerByNumber(currentPlayer).getPlayerCells(), game.getPlayerByNumber(currentPlayer).getColor())) {
+                                if (GameWon.isGameWon(game.getPlayerByNumber(currentPlayer).getPlayerCells(), game.getPlayerByNumber(currentPlayer).getColor())) {
                                     communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
                                     communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " won the game!");
-
-                                }
-                                else {
+                                } else {
                                     communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
                                     currentPlayer = (currentPlayer + 1) % (numberOfJoinedPlayers);
                                 }
-                                
                             } else {
                                 communicationDevice.getPrintWriterByNumber(currentPlayer).println("Sorry, your move was incorrect: " + validationMessage);
                                 System.out.println("Sorry, your move was incorrect: " + validationMessage + " " + currentPlayer);
@@ -147,29 +160,26 @@ public final class GameThread extends Thread {
                             System.out.println("Sorry, your move was incorrect: " + e.getMessage() + " " + currentPlayer);
                         }
                     }
-                    
                 } else if (playerInput.contains("pass")) {
                     communicationDevice.getPrintWriterByNumber(currentPlayer).println("Thank you for your pass");
                     System.out.println("Thank you for your pass" + currentPlayer);
-                    if(beginX != 0 && beginY != 0 && endX != 0 && endY != 0) {
+                    if (beginX != 0 && beginY != 0 && endX != 0 && endY != 0) {
                         communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
-                        
+
                         game.getBoard().getCell(beginX, beginY).setColor(CellColor.NONE);
                         game.getBoard().getCell(beginX, beginY).setStatus(CellStatus.FREE);
 
                         game.getBoard().getCell(endX, endY).setColor(game.getPlayerByNumber(currentPlayer).getColor());
                         game.getBoard().getCell(endX, endY).setStatus(CellStatus.OCCUPIED);
-                        
                     }
                     currentPlayer = (currentPlayer + 1) % (numberOfJoinedPlayers);
                 } else {
                     try {
-                        synchronized(this) {
-                        wait(1000);
-                        //System.out.println("waittttt \n");
+                        synchronized (this) {
+                            wait(1000);
                         }
+                    } catch (InterruptedException ex) {
                     }
-                    catch (InterruptedException ex) {};
                     communicationDevice.getPrintWriterByNumber(currentPlayer).println("Sorry, your move was incorrect");
                     System.out.println("Sorry, your move was incorrect " + currentPlayer);
                 }
@@ -179,25 +189,52 @@ public final class GameThread extends Thread {
         }
     }
 
+    /**
+     * Adds a player to the game.
+     *
+     * @param player the socket of the player to add
+     * @param br the BufferedReader for the player
+     * @param pw the PrintWriter for the player
+     * @throws IOException if an I/O error occurs
+     */
     public void addPlayer(Socket player, BufferedReader br, PrintWriter pw) throws IOException {
         communicationDevice.addPlayer(player, br, pw);
         numberOfJoinedPlayers++;
     }
 
+    /**
+     * Returns the number of players who have joined the game.
+     *
+     * @return the number of players who have joined the game
+     */
     public int getNumberOfJoinedPlayers() {
         return numberOfJoinedPlayers;
     }
 
+    /**
+     * Returns the total number of players in the game.
+     *
+     * @return the total number of players in the game
+     */
     public int getNumberOfPlayers() {
         return numberOfPlayers;
     }
 
+    /**
+     * Returns the number of human players in the game.
+     *
+     * @return the number of human players in the game
+     */
     public int getNumberOfHumanPlayers() {
         return numberOfHumanPlayers;
     }
 
+    /**
+     * Returns the communication device used for player interactions.
+     *
+     * @return the communication device used for player interactions
+     */
     public CommunicationDevice getCommunicationDevice() {
         return communicationDevice;
     }
-
 }

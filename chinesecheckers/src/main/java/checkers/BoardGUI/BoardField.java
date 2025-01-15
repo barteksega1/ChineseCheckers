@@ -9,10 +9,18 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+/**
+ * Represents a field on the board.
+ */
 public class BoardField extends StackPane implements BoardElement {
-    
     private final Cell field;
 
+    /**
+     * Constructs a BoardField with the specified board stage and cell.
+     *
+     * @param boardStage the board stage
+     * @param field the cell representing the field
+     */
     public BoardField(BoardStage boardStage, Cell field) {
         this.field = field;
         Circle circle = new Circle(15); // Set the radius of the circle
@@ -22,6 +30,14 @@ public class BoardField extends StackPane implements BoardElement {
         this.getChildren().add(circle);
     }
 
+    /**
+     * Constructs a BoardField with the specified board stage, cell, row, and column.
+     *
+     * @param boardStage the board stage
+     * @param field the cell representing the field
+     * @param row the row of the field
+     * @param column the column of the field
+     */
     public BoardField(BoardStage boardStage, Cell field, int row, int column) {
         this.field = field;
         Circle circle = new Circle(12); // Set the radius of the circle
@@ -34,9 +50,18 @@ public class BoardField extends StackPane implements BoardElement {
         this.getChildren().addAll(circle, coordinates);
     }
 
+    /**
+     * Constructs a BoardField with the specified board stage, cell, row, column, and game size.
+     *
+     * @param boardStage the board stage
+     * @param field the cell representing the field
+     * @param row the row of the field
+     * @param column the column of the field
+     * @param gameSize the size of the game
+     */
     public BoardField(BoardStage boardStage, Cell field, int row, int column, int gameSize) {
         this.field = field;
-        double radius = 30 / (gameSize/3); // Adjust the radius based on game size
+        double radius = 30 / (gameSize / 3); // Adjust the radius based on game size
         Circle circle = new Circle(radius);
         circle.setStrokeWidth(3); // Set stroke width to make it thicker
         setColor(circle);
@@ -47,6 +72,15 @@ public class BoardField extends StackPane implements BoardElement {
         this.getChildren().addAll(circle, coordinates);
     }
 
+    /**
+     * Constructs a BoardField with the specified board stage, cell, row, column, and cell size.
+     *
+     * @param boardStage the board stage
+     * @param field the cell representing the field
+     * @param row the row of the field
+     * @param column the column of the field
+     * @param cellSize the size of the cell
+     */
     public BoardField(BoardStage boardStage, Cell field, int row, int column, double cellSize) {
         this.field = field;
         double radius = cellSize / 2; // Adjust the radius based on cell size
@@ -70,18 +104,38 @@ public class BoardField extends StackPane implements BoardElement {
         return field.getColor();
     }
 
+    /**
+     * Checks if the field is free.
+     *
+     * @return true if the field is free, false otherwise
+     */
     public boolean isFree() {
         return field.getStatus().equals(CellStatus.FREE);
     }
 
+    /**
+     * Checks if the field is a home cell.
+     *
+     * @return true if the field is a home cell, false otherwise
+     */
     public boolean isHomeCell() {
         return field.isHomeCell();
     }
 
+    /**
+     * Checks if the field is playable.
+     *
+     * @return true if the field is playable, false otherwise
+     */
     public boolean isPlayable() {
         return field.isPlayable();
     }
 
+    /**
+     * Sets the color of the circle based on the field's status and color.
+     *
+     * @param circle the circle to set the color for
+     */
     private void setColor(Circle circle) {
         if (field.isHomeCell()) {
             CellColor homeColor = ((HomeCell) field).getHomeColor();
@@ -142,8 +196,12 @@ public class BoardField extends StackPane implements BoardElement {
         }
     }
 
+    /**
+     * Gets the cell representing the field.
+     *
+     * @return the cell representing the field
+     */
     public Cell getField() {
         return field;
     }
-
 }

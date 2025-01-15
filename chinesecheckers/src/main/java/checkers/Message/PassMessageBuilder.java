@@ -1,17 +1,30 @@
 package checkers.Message;
 
+/**
+ * Builds a pass message.
+ */
 public class PassMessageBuilder extends MessageBuilder {
 
-    @SuppressWarnings("unused")  // for now
-    private final String[] parts;  // final for now
+    @ SuppressWarnings("unused")
+    private final String[] parts;
 
-    public PassMessageBuilder(String[] parts)
-    {
-        this.parts = parts; //ignoring the parts but they are here for better times 😭
+    /**
+     * Constructs a PassMessageBuilder with the specified parts.
+     *
+     * @param parts the parts of the message
+     */
+    public PassMessageBuilder(String[] parts) {
+        this.parts = parts; // Ignoring the parts but they are here for better times
     }
 
-    @Override public String[] executeMessage(String[] parts) {
+    /**
+     * Executes the pass message.
+     *
+     * @param parts the parts of the message
+     * @return the parts of the message
+     */
+    @Override
+    public String[] executeMessage(String[] parts) {
         return parts;
-    };
-    
+    }
 }

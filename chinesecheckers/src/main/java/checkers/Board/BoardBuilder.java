@@ -4,10 +4,22 @@ import checkers.Cell.Cell;
 import checkers.Cell.CellStatus;
 import checkers.Cell.HomeCell;
 
+/**
+ * Responsible for setting up the game board for Chinese Checkers.
+ * Uses shape checking and board filling to initialize the board.
+ */
 public class BoardBuilder {
     private final StarShapeChecker shapeChecker = new StarShapeChecker();
     private final BoardFiller boardFiller = new BoardFiller();
 
+    /**
+     * Sets up the board with the specified game size.
+     * Initializes the board, sets cell statuses, fills additional illegal cells,
+     * splits home cells into groups, and prints the board.
+     *
+     * @param board the Board to set up
+     * @param gameSize the size of the game - how many cells are in the longest row in arm of the star
+     */
     public void setupBoard(Board board, int gameSize) {
         board.initializeSquare(gameSize);
 
