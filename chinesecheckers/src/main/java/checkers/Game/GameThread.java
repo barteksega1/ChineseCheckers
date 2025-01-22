@@ -87,7 +87,7 @@ public final class GameThread extends Thread {
                         try {
                             MoveHandler moveHandler = new MoveHandler();
                             String validationMessage = moveHandler.validateMove(game.getBoard(), moveCoordinates, game.getPlayerByNumber(currentPlayer));
-                            if (validationMessage.equals("valid")) {
+                            if (validationMessage.equals("valid") && (game.getBoard().getCell(beginX, beginY).getColor() == game.getPlayerByNumber(currentPlayer).getColor())) {
                                 boolean isJumpMove = moveHandler.makeMove(game.getBoard(), moveCoordinates, game.getPlayerByNumber(currentPlayer));
                                 communicationDevice.getPrintWriterByNumber(currentPlayer).println("Thank you for your move");
                                 System.out.println("Thank you for your move player " + currentPlayer);
@@ -115,7 +115,7 @@ public final class GameThread extends Thread {
                                     } else {
                                         moveCoordinates = MoveParser.parseMove(moveInput);
                                         validationMessage = moveHandler.validateMove(game.getBoard(), moveCoordinates, game.getPlayerByNumber(currentPlayer));
-                                        if (validationMessage.equals("valid")) {
+                                        if (validationMessage.equals("valid") && (moveCoordinates[0] == endX && moveCoordinates[1] == endY)) {
                                             isJumpMove = moveHandler.makeMove(game.getBoard(), moveCoordinates, game.getPlayerByNumber(currentPlayer));
                                             if (!isJumpMove) {
                                                 communicationDevice.getPrintWriterByNumber(currentPlayer).println("You have to make another jump move");
