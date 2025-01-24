@@ -1,8 +1,8 @@
 package checkers.Cell;
 
 public abstract class Cell {
-    protected int row;
-    protected int column;
+    public int row;
+    public int column;
     protected CellStatus status;
     protected int playerNumber;
     protected CellColor color;
