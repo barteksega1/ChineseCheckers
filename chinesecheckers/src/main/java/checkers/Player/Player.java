@@ -8,7 +8,7 @@ import checkers.Cell.CellColor;
 /**
  * Represents a player in the checkers game.
  */
-public class Player {
+public abstract class Player {
     private final int number;
     private final CellColor color;
     private final CellColor enemyColor;
@@ -34,10 +34,7 @@ public class Player {
      * @param number the player's number
      * @param color the player's color
      */
-    public static void addPlayer(int number, CellColor color) {
-        Player player = new Player(number, color);
-        players.put(number, player);
-    }
+    public abstract void addPlayer(int number, CellColor color);
 
     /**
      * Gets the player's number.

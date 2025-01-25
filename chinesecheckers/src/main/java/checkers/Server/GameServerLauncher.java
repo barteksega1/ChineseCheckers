@@ -3,6 +3,8 @@ package checkers.Server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import checkers.Game.CountGameSize;
 
@@ -18,6 +20,7 @@ public class GameServerLauncher {
      * @throws IOException if an I/O error occurs
      */
     public static void main(String[] args) throws IOException {
+       // SpringApplication.run(GameServerLauncher.class, args);
         BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
         int playerCountCheck;
         int pinCountCheck;

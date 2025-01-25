@@ -15,7 +15,7 @@ class PlayableCellTest {
 
     @Test
     void testToString() {
-        String expected = "PlayableCell{row=0, column=0, status=ILLEGAL, playerNumber=-1, color=NONE}";
+        String expected = "PlayableCell{row=0, column=0, status=ILLEGAL, playerNumber=-1, color=null}";
         assertEquals(expected, playableCell.toString());
     }
 }

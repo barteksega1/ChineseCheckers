@@ -12,6 +12,7 @@ import checkers.Message.MessageHandler;
 import checkers.Move.MoveHandler;
 import checkers.Move.MoveParser;
 import checkers.Server.CommunicationDevice;
+import checkers.Spring.*;
 
 /**
  * Represents a thread that handles the game logic for a Chinese Checkers game.
@@ -87,7 +88,7 @@ public final class GameThread extends Thread {
                         try {
                             MoveHandler moveHandler = new MoveHandler();
                             String validationMessage = moveHandler.validateMove(game.getBoard(), moveCoordinates, game.getPlayerByNumber(currentPlayer));
-                            if (validationMessage.equals("valid") && (game.getBoard().getCell(beginX, beginY).getColor() == game.getPlayerByNumber(currentPlayer).getColor())) {
+                            if (validationMessage.equals("valid") && (game.getBoard().getCell(moveCoordinates[0], moveCoordinates[1]).getColor() == game.getPlayerByNumber(currentPlayer).getColor())) {
                                 boolean isJumpMove = moveHandler.makeMove(game.getBoard(), moveCoordinates, game.getPlayerByNumber(currentPlayer));
                                 communicationDevice.getPrintWriterByNumber(currentPlayer).println("Thank you for your move");
                                 System.out.println("Thank you for your move player " + currentPlayer);

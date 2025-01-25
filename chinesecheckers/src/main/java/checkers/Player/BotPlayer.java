@@ -1,7 +1,9 @@
-package checkers.Bot;
+package checkers.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import checkers.Board.Board;
@@ -9,9 +11,15 @@ import checkers.Cell.Cell;
 import checkers.Cell.CellColor;
 import checkers.Cell.HomeCell;
 import checkers.Move.MoveHandler;
-import checkers.Player.Player;
 
 public class BotPlayer extends Player {
+    private static final Map<Integer, Player> players = new HashMap<>();
+
+    @Override
+    public void addPlayer(int number, CellColor color) {
+        Player player = new BotPlayer(number, color);
+        players.put(number, player);  
+    }
 
     private final Random random;
 
