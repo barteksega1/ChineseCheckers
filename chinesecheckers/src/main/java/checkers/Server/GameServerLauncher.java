@@ -64,7 +64,7 @@ public class GameServerLauncher {
                 int gameSize = countGameSize.getGameSize(pinCountCheck);
 
                 System.out.println("Rozpoczynanie gry z " + playerCountCheck + " graczami i " + botCount + " botami oraz  " + pinCountCheck + " pionkami.");
-                GameServer server = new GameServer(8080, playerCountCheck, gameSize);
+                GameServer server = new GameServer(8080, playerCountCheck, botCount, gameSize);
                 server.start();
                 serverRunning = true;
 

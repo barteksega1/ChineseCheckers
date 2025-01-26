@@ -9,11 +9,11 @@ import checkers.Cell.CellColor;
  * Represents a player in the checkers game.
  */
 public abstract class Player {
-    private final int number;
-    private final CellColor color;
-    private final CellColor enemyColor;
-    private PlayerCells playerCells;
-    private boolean isBot;
+    protected final int number;
+    protected final CellColor color;
+    protected final CellColor enemyColor;
+    protected PlayerCells playerCells;
+    protected boolean isBot;
 
     private static final Map<Integer, Player> players = new HashMap<>();
 
@@ -62,6 +62,10 @@ public abstract class Player {
      */
     public CellColor getEnemyColor() {
         return enemyColor;
+    }
+
+    public boolean isBot() {
+        return isBot;
     }
 
     /**

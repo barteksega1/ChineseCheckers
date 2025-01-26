@@ -17,6 +17,8 @@ public class GameServer {
     private final int port;
     private final int playerCount;
     private final int gameSize;
+    private final int botCount;
+    private final int numberOfHumanPlayers;
     private int numberOfJoinedPlayers = 0;
     private GameThread game;
     private boolean serverRunning = false;
@@ -29,10 +31,12 @@ public class GameServer {
      * @param playerCount the number of players
      * @param gameSize the size of the game
      */
-    public GameServer(int port, int playerCount, int gameSize) {
+    public GameServer(int port, int playerCount, int botCount, int gameSize) {
         this.playerCount = playerCount;
+        this.numberOfHumanPlayers = playerCount - botCount;
         this.port = port;
         this.gameSize = gameSize;
+        this.botCount = botCount;
     }
 
     /**
@@ -50,7 +54,7 @@ public class GameServer {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
 
-                if (numberOfJoinedPlayers < playerCount) {
+                if (numberOfJoinedPlayers + botCount < playerCount) {
                     if (numberOfJoinedPlayers == 0) {
                         processFirstPlayer(socket, reader, writer, playerCount, gameSize);
                         System.out.println("processed first player");
@@ -59,10 +63,10 @@ public class GameServer {
                         System.out.println("processed more players");
                     }
                     numberOfJoinedPlayers++;
-                    if (numberOfJoinedPlayers == playerCount) {
+                    if (numberOfJoinedPlayers + botCount  == playerCount) {
                         game.getCommunicationDevice().sendMessageToAllPlayers("Wszyscy gracze połączeni. Gra się rozpoczyna!");
-                        game.getCommunicationDevice().sendMessageToAllPlayers("Player Count is: " + playerCount);
-                        game.getCommunicationDevice().sendMessageToAllPlayers("Game Size is: " + gameSize);
+                        game.getCommunicationDevice().sendMessageToAllPlayers("Player Count is: " + numberOfHumanPlayers);
+                        game.getCommunicationDevice().sendMessageToAllPlayers("Bot Count is: " + botCount);
                         game.getCommunicationDevice().sendMessageToAllPlayers("Game Size is: " + gameSize);
                         gameRunning = true;
                     }
@@ -94,7 +98,7 @@ public class GameServer {
      * @throws IOException if an I/O error occurs
      */
     public void processFirstPlayer(Socket socket, BufferedReader br, PrintWriter pw, int playerCount, int gameSize) throws IOException {
-        this.game = new GameThread(socket, br, pw, playerCount, gameSize);
+        this.game = new GameThread(socket, br, pw, playerCount, botCount, gameSize);
         game.start();
     }
 

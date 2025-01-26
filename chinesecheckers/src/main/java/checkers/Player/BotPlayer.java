@@ -35,7 +35,7 @@ public class BotPlayer extends Player {
      * @param board the game board
      * @param moveHandler the move handler to validate and execute moves
      */
-    public void makeMove(Board board, MoveHandler moveHandler) {
+    public int[] makeMove(Board board, MoveHandler moveHandler) {
         List<Cell> currentCells = getPlayerCells().getCurrentCells();
         boolean moveMade = false;
 
@@ -88,8 +88,10 @@ public class BotPlayer extends Player {
             if (bestMoveCoordinates != null) {
                 moveHandler.makeMove(board, bestMoveCoordinates, this);
                 moveMade = true;
+                return bestMoveCoordinates;
             }
         }
+        return null;
     }
 
     /**

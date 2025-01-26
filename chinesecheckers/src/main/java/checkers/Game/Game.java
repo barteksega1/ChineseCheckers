@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import checkers.Board.Board;
 import checkers.Board.BoardBuilder;
 import checkers.Cell.CellColor;
+import checkers.Player.BotPlayer;
 import checkers.Player.HumanPlayer;
 import checkers.Player.Player;
 
@@ -34,6 +35,7 @@ public class Game {
         this.board = new Board();
         boardBuilder.setupBoard(board, gameSize); // Use BoardBuilder to initialize the board with game size
         this.buildHumanPlayers(playerCount);
+        this.buildBotPlayers(botCount, playerCount);
         for (Player player : players) {
             board.initializePlayerCells(player);
         }
@@ -49,6 +51,14 @@ public class Game {
         for (int i = 0; i < playerCount; i++) {
             CellColor newPlayerColor = CellColor.fromNumber(i);
             Player newPlayer = new HumanPlayer(i, newPlayerColor);
+            players.add(newPlayer);
+        }
+    }
+
+    private void buildBotPlayers(final int botCount, final int playerCount) {
+        for (int i = playerCount; i < (playerCount + botCount); i++) {
+            CellColor newPlayerColor = CellColor.fromNumber(i);
+            Player newPlayer = new BotPlayer(i, newPlayerColor);
             players.add(newPlayer);
         }
     }

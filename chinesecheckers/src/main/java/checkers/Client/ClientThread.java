@@ -22,6 +22,7 @@ public final class ClientThread extends Thread {
     private final PrintWriter pw;
     private Game game;
     private int playerNumber;
+    private int botCount;
     private BoardStage boardStage;
     private int playerCount;
     private int gameSize;
@@ -74,12 +75,18 @@ public final class ClientThread extends Thread {
                             setPlayerCount(Integer.parseInt(splitLine[splitLine.length - 1]));
                             System.out.println("PLAYERCOUNT: " + playerCount);
                         }
+                        if (currentLine.contains("Bot Count")) {
+                            String[] splitLine = currentLine.split("\\s+");
+                            System.out.println("i got this botCount : " + splitLine[splitLine.length - 1]);
+                            setBotCount(Integer.parseInt(splitLine[splitLine.length - 1]));
+                            System.out.println("BOTCOUNT: " + botCount);
+                        }
                         if (currentLine.contains("Game Size")) {
                             String[] splitLine = currentLine.split("\\s+");
                             System.out.println("i got this gamesize : " + splitLine[splitLine.length - 1]);
                             setGameSize(Integer.parseInt(splitLine[splitLine.length - 1]));
                             System.out.println("GAMESIZE: " + gameSize);
-                            this.game = new Game(playerCount, gameSize);
+                            this.game = new Game(playerCount, botCount, gameSize);
                             Platform.runLater(() -> {
                                 this.boardStage = new BoardStage(this.game, this.playerNumber, this.client, this);
                             });
@@ -216,6 +223,10 @@ public final class ClientThread extends Thread {
      */
     public PrintWriter getPrintWriter() {
         return pw;
+    }
+
+    public void setBotCount(int botCount) {
+        this.botCount = botCount;
     }
 
     /**

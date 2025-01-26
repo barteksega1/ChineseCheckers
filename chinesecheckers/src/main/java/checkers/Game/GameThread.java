@@ -11,6 +11,7 @@ import checkers.Cell.CellStatus;
 import checkers.Message.MessageHandler;
 import checkers.Move.MoveHandler;
 import checkers.Move.MoveParser;
+import checkers.Player.BotPlayer;
 import checkers.Server.CommunicationDevice;
 import checkers.Spring.*;
 
@@ -20,10 +21,11 @@ import checkers.Spring.*;
 public final class GameThread extends Thread {
     private final boolean ended = false;
     private final Game game;
-    private final int numberOfPlayers = 0;
-    private int numberOfHumanPlayers = 0;
+    private final int numberOfPlayers;
+    private final int numberOfHumanPlayers;
     private int numberOfJoinedPlayers = 0;
     private int currentPlayer = 0;
+    private final int botCount;
     private final CommunicationDevice communicationDevice = new CommunicationDevice();
     private final int gameSize;
 
@@ -37,10 +39,12 @@ public final class GameThread extends Thread {
      * @param gameSize the size of the game - how many cells are in the longest row in the arm of the star
      * @throws IOException if an I/O error occurs
      */
-    public GameThread(Socket firstPlayer, BufferedReader firstBufferedReader, PrintWriter firstPrintWriter, int numberOfPlayers, int gameSize) throws IOException {
-        this.numberOfHumanPlayers = numberOfPlayers;
+    public GameThread(Socket firstPlayer, BufferedReader firstBufferedReader, PrintWriter firstPrintWriter, int numberOfPlayers, int botCount, int gameSize) throws IOException {
+        this.numberOfPlayers = numberOfPlayers;
         this.gameSize = gameSize;
-        this.game = new Game(numberOfHumanPlayers, gameSize);
+        this.botCount = botCount;
+        this.numberOfHumanPlayers = (this.numberOfPlayers - this.botCount);
+        this.game = new Game(numberOfHumanPlayers, botCount, gameSize);
         this.communicationDevice.setUp(numberOfHumanPlayers);
         addPlayer(firstPlayer, firstBufferedReader, firstPrintWriter);
     }
@@ -50,11 +54,13 @@ public final class GameThread extends Thread {
      */
     @Override
     public void run() {
-        while (numberOfJoinedPlayers < numberOfHumanPlayers) {
-            System.out.println("Waiting for " + (numberOfHumanPlayers - numberOfJoinedPlayers) + " more player(s)");
+        while (numberOfJoinedPlayers < numberOfPlayers - botCount) {
+            System.out.println("Waiting for " + (numberOfPlayers - numberOfJoinedPlayers - botCount) + " more player(s)");
             for (int i = 0; i < communicationDevice.getPlayerWriters().size(); i++) {
                 communicationDevice.getPrintWriterByNumber(i).println("waiting for more players, you are player " + i);
-                communicationDevice.getPrintWriterByNumber(i).println("Player Count is: " + numberOfHumanPlayers + ", Game Size is: " + gameSize);
+                communicationDevice.getPrintWriterByNumber(i).println("Human Player Count is: " + numberOfHumanPlayers);
+                communicationDevice.getPrintWriterByNumber(i).println("Bot Count is: " + botCount);
+                communicationDevice.getPrintWriterByNumber(i).println("Game Size is: " + gameSize);
             }
             try {
                 synchronized (this) {
@@ -74,6 +80,27 @@ public final class GameThread extends Thread {
                 int beginY = 0;
                 int endX = 0;
                 int endY = 0;
+                if(game.getPlayerByNumber(currentPlayer).isBot()) {
+                    BotPlayer botPlayer = (BotPlayer) game.getPlayerByNumber(currentPlayer);
+                    MoveHandler moveHandler = new MoveHandler();
+                    int[] botMove = botPlayer.makeMove(game.getBoard(), moveHandler);
+                    if(botMove == null) {
+                        communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " passed");
+                        currentPlayer = (currentPlayer + 1) % (numberOfPlayers);
+                        continue;
+                    }
+                    beginX = botMove[0];
+                    beginY = botMove[1];
+                    endX = botMove[2];
+                    endY = botMove[3];
+                    game.getBoard().getCell(beginX, beginY).setColor(CellColor.NONE);
+                    game.getBoard().getCell(beginX, beginY).setStatus(CellStatus.FREE);
+                    game.getBoard().getCell(endX, endY).setColor(game.getPlayerByNumber(currentPlayer).getColor());
+                    game.getBoard().getCell(endX, endY).setStatus(CellStatus.OCCUPIED);
+                    communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
+                    currentPlayer = (currentPlayer + 1) % (numberOfPlayers);
+                    continue;
+                }
                 communicationDevice.getPrintWriterByNumber(currentPlayer).println("Your turn player " + currentPlayer);
                 String playerInput;
                 playerInput = communicationDevice.getInputReaderByNumber(currentPlayer).readLine();
@@ -150,7 +177,7 @@ public final class GameThread extends Thread {
                                     communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " won the game!");
                                 } else {
                                     communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
-                                    currentPlayer = (currentPlayer + 1) % (numberOfJoinedPlayers);
+                                    currentPlayer = (currentPlayer + 1) % (numberOfPlayers);
                                 }
                             } else {
                                 communicationDevice.getPrintWriterByNumber(currentPlayer).println("Sorry, your move was incorrect: " + validationMessage);
@@ -173,7 +200,7 @@ public final class GameThread extends Thread {
                         game.getBoard().getCell(endX, endY).setColor(game.getPlayerByNumber(currentPlayer).getColor());
                         game.getBoard().getCell(endX, endY).setStatus(CellStatus.OCCUPIED);
                     }
-                    currentPlayer = (currentPlayer + 1) % (numberOfJoinedPlayers);
+                    currentPlayer = (currentPlayer + 1) % (numberOfPlayers);
                 } else {
                     try {
                         synchronized (this) {
