@@ -27,6 +27,8 @@ public class GameServerLauncher {
         boolean serverRunning = false;
         String playerCountInput;
         String pinCountInput;
+        int botCount;
+        int numberOfHumanPlayers;
         System.out.println("Jesteś hostem \n");
 
         while (!serverRunning) {
@@ -38,6 +40,16 @@ public class GameServerLauncher {
                 if (playerCountCheck > 6 || playerCountCheck < 2 || playerCountCheck == 5) {
                     throw new IllegalArgumentException("Niepoprawna liczba graczy");
                 }
+
+                System.out.println("Podaj liczbe botow >>> ");
+                String botCountInput = consoleInput.readLine();
+                botCount = Integer.parseInt(botCountInput);
+
+                if (botCount > (playerCountCheck - 1) || botCount < 0) {
+                    throw new IllegalArgumentException("Niepoprawna liczba botow");
+                }
+
+                numberOfHumanPlayers = playerCountCheck - botCount;
 
                 System.out.println("Podaj liczbe pionków: >>> ");
                 pinCountInput = consoleInput.readLine();
@@ -51,7 +63,7 @@ public class GameServerLauncher {
                 CountGameSize countGameSize = new CountGameSize();
                 int gameSize = countGameSize.getGameSize(pinCountCheck);
 
-                System.out.println("Rozpoczynanie gry z " + playerCountCheck + " graczami i " + pinCountCheck + " pionkami.");
+                System.out.println("Rozpoczynanie gry z " + playerCountCheck + " graczami i " + botCount + " botami oraz  " + pinCountCheck + " pionkami.");
                 GameServer server = new GameServer(8080, playerCountCheck, gameSize);
                 server.start();
                 serverRunning = true;

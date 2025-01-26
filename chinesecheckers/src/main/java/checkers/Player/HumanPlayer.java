@@ -26,6 +26,7 @@ public class HumanPlayer extends Player {
      */
     public HumanPlayer(int number, CellColor color) {
         super(number, color);
+        super.isBot = false;
         //this.number = number;
         //this.color = color;
         // this.enemyColor = CellColor.getEnemy(color);

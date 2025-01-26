@@ -25,6 +25,7 @@ public class BotPlayer extends Player {
 
     public BotPlayer(int number, CellColor color) {
         super(number, color);
+        super.isBot = true;
         this.random = new Random();
     }
 

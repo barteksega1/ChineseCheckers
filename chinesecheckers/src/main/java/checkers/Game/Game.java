@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import checkers.Board.Board;
 import checkers.Board.BoardBuilder;
 import checkers.Cell.CellColor;
+import checkers.Player.HumanPlayer;
 import checkers.Player.Player;
 
 /**
@@ -12,6 +13,7 @@ import checkers.Player.Player;
  */
 public class Game {
     private int playerCount;
+    private int botCount;
     private final int gameSize;
     private Board board;
     private final BoardBuilder boardBuilder;
@@ -24,13 +26,14 @@ public class Game {
      * @param playerCount the number of players in the game
      * @param gameSize the size of the game - how many cells are in the longest row in the arm of the star
      */
-    public Game(int playerCount, int gameSize) {
+    public Game(int playerCount, int botCount, int gameSize) {
         this.playerCount = playerCount;
         this.gameSize = gameSize;
+        this.botCount = botCount;   
         this.boardBuilder = new BoardBuilder();
         this.board = new Board();
         boardBuilder.setupBoard(board, gameSize); // Use BoardBuilder to initialize the board with game size
-        this.buildPlayers(playerCount);
+        this.buildHumanPlayers(playerCount);
         for (Player player : players) {
             board.initializePlayerCells(player);
         }
@@ -42,10 +45,10 @@ public class Game {
      *
      * @param playerCount the number of players to build
      */
-    private void buildPlayers(final int playerCount) {
+    private void buildHumanPlayers(final int playerCount) {
         for (int i = 0; i < playerCount; i++) {
             CellColor newPlayerColor = CellColor.fromNumber(i);
-            Player newPlayer = new Player(i, newPlayerColor);
+            Player newPlayer = new HumanPlayer(i, newPlayerColor);
             players.add(newPlayer);
         }
     }

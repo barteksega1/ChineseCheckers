@@ -13,6 +13,7 @@ public abstract class Player {
     private final CellColor color;
     private final CellColor enemyColor;
     private PlayerCells playerCells;
+    private boolean isBot;
 
     private static final Map<Integer, Player> players = new HashMap<>();
 

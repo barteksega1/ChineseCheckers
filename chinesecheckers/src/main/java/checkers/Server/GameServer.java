@@ -63,6 +63,7 @@ public class GameServer {
                         game.getCommunicationDevice().sendMessageToAllPlayers("Wszyscy gracze połączeni. Gra się rozpoczyna!");
                         game.getCommunicationDevice().sendMessageToAllPlayers("Player Count is: " + playerCount);
                         game.getCommunicationDevice().sendMessageToAllPlayers("Game Size is: " + gameSize);
+                        game.getCommunicationDevice().sendMessageToAllPlayers("Game Size is: " + gameSize);
                         gameRunning = true;
                     }
                 } else if (gameRunning) {
