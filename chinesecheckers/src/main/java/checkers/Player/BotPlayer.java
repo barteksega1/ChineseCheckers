@@ -40,55 +40,60 @@ public class BotPlayer extends Player {
         boolean moveMade = false;
 
         while (!moveMade) {
-            Cell startCell = currentCells.get(random.nextInt(currentCells.size()));
-            int startRow = startCell.row;
-            int startColumn = startCell.column;
+            try {
+                Cell startCell = currentCells.get(random.nextInt(currentCells.size()));
+                int startRow = startCell.row;
+                int startColumn = startCell.column;
 
-            // Get the enemy's home cells
-            CellColor enemyColor = CellColor.getEnemy(getColor());
-            List<HomeCell> enemyHomeCells = getEnemyHomeCells(board, enemyColor);
+                // Get the enemy's home cells
+                CellColor enemyColor = CellColor.getEnemy(getColor());
+                List<HomeCell> enemyHomeCells = getEnemyHomeCells(board, enemyColor);
 
-            // Try to find a valid move that minimizes the distance to the enemy's home cells
-            int[][] directions = {
-                {-1, -1}, // Top-left
-                {-1, 1},  // Top-right
-                {1, -1},  // Bottom-left
-                {1, 1},   // Bottom-right
-                {-2, -2}, // Top-left jump
-                {-2, 2},  // Top-right jump
-                {2, -2},  // Bottom-left jump
-                {2, 2}    // Bottom-right jump
-            };
+                // Try to find a valid move that minimizes the distance to the enemy's home cells
+                int[][] directions = {
+                    {-1, -1}, // Top-left
+                    {-1, 1},  // Top-right
+                    {1, -1},  // Bottom-left
+                    {1, 1},   // Bottom-right
+                    {-2, -2}, // Top-left jump
+                    {-2, 2},  // Top-right jump
+                    {2, -2},  // Bottom-left jump
+                    {2, 2}    // Bottom-right jump
+                };
 
-            int[] bestMoveCoordinates = null;
-            int minDistance = Integer.MAX_VALUE;
+                int[] bestMoveCoordinates = null;
+                int minDistance = Integer.MAX_VALUE;
 
-            for (int[] direction : directions) {
-                int endRow = startRow + direction[0];
-                int endColumn = startColumn + direction[1];
+                for (int[] direction : directions) {
+                    int endRow = startRow + direction[0];
+                    int endColumn = startColumn + direction[1];
 
-                int rowDiff = Math.abs(startRow - endRow);
-                int colDiff = Math.abs(startColumn - endColumn);
+                    int rowDiff = Math.abs(startRow - endRow);
+                    int colDiff = Math.abs(startColumn - endColumn);
 
-                if (rowDiff <= 2 && colDiff <= 2) {
-                    int[] moveCoordinates = {startRow, startColumn, endRow, endColumn};
+                    if (rowDiff <= 2 && colDiff <= 2) {
+                        int[] moveCoordinates = {startRow, startColumn, endRow, endColumn};
 
-                    if (moveHandler.validateMove(board, moveCoordinates, this).equals("valid")) {
-                        Cell endCell = board.getCell(endRow, endColumn);
-                        int distance = calculateMinDistance(endCell, enemyHomeCells);
+                        if (moveHandler.validateMove(board, moveCoordinates, this).equals("valid")) {
+                            Cell endCell = board.getCell(endRow, endColumn);
+                            int distance = calculateMinDistance(endCell, enemyHomeCells);
 
-                        if (distance < minDistance) {
-                            minDistance = distance;
-                            bestMoveCoordinates = moveCoordinates;
+                            if (distance < minDistance) {
+                                minDistance = distance;
+                                bestMoveCoordinates = moveCoordinates;
+                            }
                         }
                     }
                 }
-            }
 
-            if (bestMoveCoordinates != null) {
-                moveHandler.makeMove(board, bestMoveCoordinates, this);
-                moveMade = true;
-                return bestMoveCoordinates;
+                if (bestMoveCoordinates != null) {
+                    moveHandler.makeMove(board, bestMoveCoordinates, this);
+                    moveMade = true;
+                    return bestMoveCoordinates;
+                }
+            } catch (Exception e) {
+                // Log the exception and retry
+                System.err.println("Bot attempted an illegal move, retrying...");
             }
         }
         return null;
