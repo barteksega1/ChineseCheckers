@@ -3,8 +3,6 @@ package checkers.Player;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.checkerframework.checker.units.qual.s;
-
 import checkers.Cell.CellColor;
 
 /**

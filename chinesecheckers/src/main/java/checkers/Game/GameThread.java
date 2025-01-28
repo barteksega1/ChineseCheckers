@@ -1,12 +1,16 @@
 package checkers.Game;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import checkers.Cell.CellColor;
 import checkers.Cell.CellStatus;
@@ -16,12 +20,6 @@ import checkers.Move.MoveParser;
 import checkers.Move.SavedMove;
 import checkers.Player.BotPlayer;
 import checkers.Server.CommunicationDevice;
-import checkers.Spring.*;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.File;
 
 /**
  * Represents a thread that handles the game logic for a Chinese Checkers game.

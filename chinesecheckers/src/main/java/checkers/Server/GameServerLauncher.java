@@ -1,23 +1,17 @@
 package checkers.Server;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.File;
-
-import checkers.Cell.CellColor;
-import checkers.Cell.CellStatus;
 import checkers.Game.CountGameSize;
 import checkers.Game.GameCredentials;
-import checkers.Move.SavedMove;
 
 /**
  * Launches the game server application.

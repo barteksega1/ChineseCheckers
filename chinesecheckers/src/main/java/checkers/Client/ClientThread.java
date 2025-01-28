@@ -11,7 +11,6 @@ import checkers.Game.Game;
 import checkers.Message.MessageHandler;
 import checkers.Move.MoveParser;
 import javafx.application.Platform;
-import checkers.Spring.*;
 
 /**
  * Represents the client thread that handles communication with the server.
