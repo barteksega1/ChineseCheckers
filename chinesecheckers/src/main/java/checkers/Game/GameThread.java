@@ -39,8 +39,11 @@ public final class GameThread extends Thread {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final int gameSize;
     List<SavedMove> savedMoves = new ArrayList<>();
-    String fileName = "last_game.json";
-    File file = new File(fileName);
+    List<GameCredentials> credentials = new ArrayList<>();
+    String movesFileName = "last_game.json";
+    String credentialsFileName = "credentials.json";
+    File movesFile = new File(movesFileName);
+    File credentialsFile = new File(credentialsFileName);
 
     /**
      * Constructs a GameThread with the specified parameters.
@@ -87,9 +90,9 @@ public final class GameThread extends Thread {
         Random random = new Random();
         currentPlayer = random.nextInt(numberOfJoinedPlayers);
         if(restored) {
-            if (file.exists()) {
+            if (movesFile.exists()) {
                 try {
-                    savedMoves = objectMapper.readValue(file, new TypeReference<List<SavedMove>>() {});
+                    savedMoves = objectMapper.readValue(movesFile, new TypeReference<List<SavedMove>>() {});
                     System.out.println("Wczytano istniejące ruchy z pliku.");
                 } catch (IOException e) {
                     System.out.println("Błąd odczytu pliku JSON: " + e.getMessage());
@@ -139,8 +142,8 @@ public final class GameThread extends Thread {
                     savedMoves.add(new SavedMove(currentPlayer, beginX, beginY, endX, endY));
                     try {
                         // Zapisujemy listę do pliku JSON (nadpisanie)
-                        objectMapper.writeValue(file, savedMoves);
-                        System.out.println("Plik " + fileName + " został zapisany.");
+                        objectMapper.writeValue(movesFile, savedMoves);
+                        System.out.println("Plik " + movesFileName + " został zapisany.");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -180,8 +183,8 @@ public final class GameThread extends Thread {
                                 savedMoves.add(new SavedMove(currentPlayer, beginX, beginY, endX, endY));
                                     try {
                                         // Zapisujemy listę do pliku JSON (nadpisanie)
-                                        objectMapper.writeValue(file, savedMoves);
-                                        System.out.println("Plik " + fileName + " został zapisany.");
+                                        objectMapper.writeValue(movesFile, savedMoves);
+                                        System.out.println("Plik " + movesFileName + " został zapisany.");
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
@@ -222,8 +225,8 @@ public final class GameThread extends Thread {
                                             savedMoves.add(new SavedMove(currentPlayer, beginX, beginY, endX, endY));
                                                 try {
                                                     // Zapisujemy listę do pliku JSON (nadpisanie)
-                                                    objectMapper.writeValue(file, savedMoves);
-                                                    System.out.println("Plik " + fileName + " został zapisany.");
+                                                    objectMapper.writeValue(movesFile, savedMoves);
+                                                    System.out.println("Plik " + movesFileName + " został zapisany.");
                                                 } catch (IOException e) {
                                                     e.printStackTrace();
                                                 }
@@ -240,8 +243,8 @@ public final class GameThread extends Thread {
                                     savedMoves.add(new SavedMove(currentPlayer, beginX, beginY, endX, endY));
                                     try {
                                         // Zapisujemy listę do pliku JSON (nadpisanie)
-                                        objectMapper.writeValue(file, savedMoves);
-                                        System.out.println("Plik " + fileName + " został zapisany.");
+                                        objectMapper.writeValue(movesFile, savedMoves);
+                                        System.out.println("Plik " + movesFileName + " został zapisany.");
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
@@ -251,8 +254,8 @@ public final class GameThread extends Thread {
                                     savedMoves.add(new SavedMove(currentPlayer, beginX, beginY, endX, endY));
                                     try {
                                         // Zapisujemy listę do pliku JSON (nadpisanie)
-                                        objectMapper.writeValue(file, savedMoves);
-                                        System.out.println("Plik " + fileName + " został zapisany.");
+                                        objectMapper.writeValue(movesFile, savedMoves);
+                                        System.out.println("Plik " + movesFileName + " został zapisany.");
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
@@ -275,8 +278,8 @@ public final class GameThread extends Thread {
                         savedMoves.add(new SavedMove(currentPlayer, beginX, beginY, endX, endY));
                         try {
                             // Zapisujemy listę do pliku JSON (nadpisanie)
-                            objectMapper.writeValue(file, savedMoves);
-                            System.out.println("Plik " + fileName + " został zapisany.");
+                            objectMapper.writeValue(movesFile, savedMoves);
+                            System.out.println("Plik " + movesFileName + " został zapisany.");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

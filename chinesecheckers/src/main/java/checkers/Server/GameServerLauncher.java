@@ -3,10 +3,21 @@ package checkers.Server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
+
+import checkers.Cell.CellColor;
+import checkers.Cell.CellStatus;
 import checkers.Game.CountGameSize;
+import checkers.Game.GameCredentials;
+import checkers.Move.SavedMove;
 
 /**
  * Launches the game server application.
@@ -22,15 +33,19 @@ public class GameServerLauncher {
     public static void main(String[] args) throws IOException {
        // SpringApplication.run(GameServerLauncher.class, args);
         BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
-        int playerCountCheck;
-        int pinCountCheck;
+        int playerCountCheck = 0;
+        int pinCountCheck = 0;
         boolean serverRunning = false;
         String playerCountInput;
         String pinCountInput;
-        int botCount;
+        int botCount = 0;
         int numberOfHumanPlayers;
         String gameType = "";
         boolean restored = false;
+        List<GameCredentials> credentials = new ArrayList<>();
+        String credentialsFileName = "credentials.json";
+        File credentialsFile = new File(credentialsFileName);
+        final ObjectMapper objectMapper = new ObjectMapper();
         System.out.println("Jesteś hostem \n");
 
         while (!serverRunning) {
@@ -40,8 +55,28 @@ public class GameServerLauncher {
                 if(gameType.equals("last")) {
                     restored = true;
                 }
+                if(restored) {
+                    if(credentialsFile.exists()) {
+                        credentials = objectMapper.readValue(credentialsFile, new TypeReference<List<GameCredentials>>(){});
+                        if(credentials.size() > 0) {
+                            System.out.println("Ostatnia gra: ");
+                            for(GameCredentials cred : credentials) {
+                                playerCountCheck = cred.getPlayerCount();
+                                botCount = cred.getBotCount();
+                                pinCountCheck = cred.getPinCount();
+                            }
+                        } else {
+                            System.out.println("Brak zapisanej gry");
+                            continue;
+                        }
+                    } else {
+                        System.out.println("Brak zapisanej gry");
+                        continue;
+                    }
+                }
 
-                System.out.println("Podaj liczbe graczy: >>> ");
+                else if(!restored) {
+                    System.out.println("Podaj liczbe graczy: >>> ");
                 playerCountInput = consoleInput.readLine();
                 playerCountCheck = Integer.parseInt(playerCountInput);
 
@@ -68,9 +103,19 @@ public class GameServerLauncher {
                     throw new IllegalArgumentException("Niepoprawna liczba pionków");
                 }
 
+                try {
+                    // Zapisujemy listę do pliku JSON (nadpisanie)
+                    credentials.add(new GameCredentials(playerCountCheck, botCount, pinCountCheck));
+                    objectMapper.writeValue(credentialsFile, credentials);
+                    System.out.println("Plik " + credentialsFileName + " został zapisany.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                
+                }
+                
                 CountGameSize countGameSize = new CountGameSize();
                 int gameSize = countGameSize.getGameSize(pinCountCheck);
-
                 System.out.println("Rozpoczynanie gry z " + playerCountCheck + " graczami i " + botCount + " botami oraz  " + pinCountCheck + " pionkami.");
                 GameServer server = new GameServer(8080, playerCountCheck, botCount, gameSize);
                 if(restored){
