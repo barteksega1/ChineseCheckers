@@ -23,6 +23,7 @@ public class GameServer {
     private GameThread game;
     private boolean serverRunning = false;
     private boolean gameRunning = false;
+    private boolean restored = false;
 
     /**
      * Constructs a GameServer with the specified port, player count, and game size.
@@ -99,6 +100,7 @@ public class GameServer {
      */
     public void processFirstPlayer(Socket socket, BufferedReader br, PrintWriter pw, int playerCount, int gameSize) throws IOException {
         this.game = new GameThread(socket, br, pw, playerCount, botCount, gameSize);
+        this.game.setRestored(this.restored);
         game.start();
     }
 
@@ -112,5 +114,13 @@ public class GameServer {
      */
     public void processJoiner(Socket socket, BufferedReader br, PrintWriter pw) throws IOException {
         game.addPlayer(socket, br, pw);
+    }
+
+    public void setRestored(boolean restored) {
+        this.restored = restored;
+    }
+
+    public boolean getRestored() {
+        return restored;
     }
 }

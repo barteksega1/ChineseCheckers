@@ -29,10 +29,18 @@ public class GameServerLauncher {
         String pinCountInput;
         int botCount;
         int numberOfHumanPlayers;
+        String gameType = "";
+        boolean restored = false;
         System.out.println("Jesteś hostem \n");
 
         while (!serverRunning) {
             try {
+                System.out.println("Podaj rodzaj gry: 'last'/'new' >>> ");
+                gameType = consoleInput.readLine();
+                if(gameType.equals("last")) {
+                    restored = true;
+                }
+
                 System.out.println("Podaj liczbe graczy: >>> ");
                 playerCountInput = consoleInput.readLine();
                 playerCountCheck = Integer.parseInt(playerCountInput);
@@ -65,6 +73,9 @@ public class GameServerLauncher {
 
                 System.out.println("Rozpoczynanie gry z " + playerCountCheck + " graczami i " + botCount + " botami oraz  " + pinCountCheck + " pionkami.");
                 GameServer server = new GameServer(8080, playerCountCheck, botCount, gameSize);
+                if(restored){
+                    server.setRestored(restored);
+                }
                 server.start();
                 serverRunning = true;
 

@@ -59,6 +59,11 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
     <dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.15.2</version> <!-- Wersja może być nowsza -->
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>

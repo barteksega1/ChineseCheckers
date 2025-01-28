@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import checkers.Cell.CellColor;
@@ -11,15 +13,22 @@ import checkers.Cell.CellStatus;
 import checkers.Message.MessageHandler;
 import checkers.Move.MoveHandler;
 import checkers.Move.MoveParser;
+import checkers.Move.SavedMove;
 import checkers.Player.BotPlayer;
 import checkers.Server.CommunicationDevice;
 import checkers.Spring.*;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
 
 /**
  * Represents a thread that handles the game logic for a Chinese Checkers game.
  */
 public final class GameThread extends Thread {
     private final boolean ended = false;
+    private boolean restored = false;
     private final Game game;
     private final int numberOfPlayers;
     private final int numberOfHumanPlayers;
@@ -27,7 +36,11 @@ public final class GameThread extends Thread {
     private int currentPlayer = 0;
     private final int botCount;
     private final CommunicationDevice communicationDevice = new CommunicationDevice();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final int gameSize;
+    List<SavedMove> savedMoves = new ArrayList<>();
+    String fileName = "last_game.json";
+    File file = new File(fileName);
 
     /**
      * Constructs a GameThread with the specified parameters.
@@ -73,6 +86,31 @@ public final class GameThread extends Thread {
         communicationDevice.sendMessageToAllPlayers("Game is running");
         Random random = new Random();
         currentPlayer = random.nextInt(numberOfJoinedPlayers);
+        if(restored) {
+            if (file.exists()) {
+                try {
+                    savedMoves = objectMapper.readValue(file, new TypeReference<List<SavedMove>>() {});
+                    System.out.println("Wczytano istniejące ruchy z pliku.");
+                } catch (IOException e) {
+                    System.out.println("Błąd odczytu pliku JSON: " + e.getMessage());
+                }
+            } else {
+                System.out.println("Plik nie istnieje. Zostanie utworzony nowy.");
+            }
+            for(SavedMove move : savedMoves) {
+                currentPlayer = move.getPlayerNumber();
+                int beginX = move.getStartX();
+                int beginY = move.getStartY();
+                int endX = move.getEndX();
+                int endY = move.getEndY();
+                game.getBoard().getCell(beginX, beginY).setColor(CellColor.NONE);
+                game.getBoard().getCell(beginX, beginY).setStatus(CellStatus.FREE);
+                game.getBoard().getCell(endX, endY).setColor(game.getPlayerByNumber(currentPlayer).getColor());
+                game.getBoard().getCell(endX, endY).setStatus(CellStatus.OCCUPIED);
+                communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
+                currentPlayer = (currentPlayer + 1) % (numberOfPlayers);
+            }
+        }
         while (!ended) {
             try {
                 System.out.println("current Player: " + currentPlayer);
@@ -98,6 +136,14 @@ public final class GameThread extends Thread {
                     game.getBoard().getCell(endX, endY).setColor(game.getPlayerByNumber(currentPlayer).getColor());
                     game.getBoard().getCell(endX, endY).setStatus(CellStatus.OCCUPIED);
                     communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
+                    savedMoves.add(new SavedMove(currentPlayer, beginX, beginY, endX, endY));
+                    try {
+                        // Zapisujemy listę do pliku JSON (nadpisanie)
+                        objectMapper.writeValue(file, savedMoves);
+                        System.out.println("Plik " + fileName + " został zapisany.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     currentPlayer = (currentPlayer + 1) % (numberOfPlayers);
                     continue;
                 }
@@ -130,6 +176,15 @@ public final class GameThread extends Thread {
                                 game.getBoard().getCell(endX, endY).setStatus(CellStatus.OCCUPIED);
 
                                 communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
+                                
+                                savedMoves.add(new SavedMove(currentPlayer, beginX, beginY, endX, endY));
+                                    try {
+                                        // Zapisujemy listę do pliku JSON (nadpisanie)
+                                        objectMapper.writeValue(file, savedMoves);
+                                        System.out.println("Plik " + fileName + " został zapisany.");
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
 
                                 // Check for additional jump moves only if the move was a jump move
                                 while (isJumpMove && moveHandler.hasAdditionalJumpMoves(game.getBoard(), moveCoordinates)) {
@@ -164,6 +219,14 @@ public final class GameThread extends Thread {
                                             game.getBoard().getCell(endX, endY).setStatus(CellStatus.OCCUPIED);
 
                                             communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
+                                            savedMoves.add(new SavedMove(currentPlayer, beginX, beginY, endX, endY));
+                                                try {
+                                                    // Zapisujemy listę do pliku JSON (nadpisanie)
+                                                    objectMapper.writeValue(file, savedMoves);
+                                                    System.out.println("Plik " + fileName + " został zapisany.");
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
                                         } else {
                                             communicationDevice.getPrintWriterByNumber(currentPlayer).println("Sorry, your move was incorrect: " + validationMessage);
                                             System.out.println("Sorry, your move was incorrect: " + validationMessage + " " + currentPlayer);
@@ -174,9 +237,25 @@ public final class GameThread extends Thread {
 
                                 if (GameWon.isGameWon(game.getPlayerByNumber(currentPlayer).getPlayerCells(), game.getPlayerByNumber(currentPlayer).getColor())) {
                                     communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
+                                    savedMoves.add(new SavedMove(currentPlayer, beginX, beginY, endX, endY));
+                                    try {
+                                        // Zapisujemy listę do pliku JSON (nadpisanie)
+                                        objectMapper.writeValue(file, savedMoves);
+                                        System.out.println("Plik " + fileName + " został zapisany.");
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                     communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " won the game!");
                                 } else {
                                     communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
+                                    savedMoves.add(new SavedMove(currentPlayer, beginX, beginY, endX, endY));
+                                    try {
+                                        // Zapisujemy listę do pliku JSON (nadpisanie)
+                                        objectMapper.writeValue(file, savedMoves);
+                                        System.out.println("Plik " + fileName + " został zapisany.");
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                     currentPlayer = (currentPlayer + 1) % (numberOfPlayers);
                                 }
                             } else {
@@ -193,6 +272,14 @@ public final class GameThread extends Thread {
                     System.out.println("Thank you for your pass" + currentPlayer);
                     if (beginX != 0 && beginY != 0 && endX != 0 && endY != 0) {
                         communicationDevice.sendMessageToAllPlayers("Player " + currentPlayer + " moved " + beginX + " " + beginY + " " + endX + " " + endY);
+                        savedMoves.add(new SavedMove(currentPlayer, beginX, beginY, endX, endY));
+                        try {
+                            // Zapisujemy listę do pliku JSON (nadpisanie)
+                            objectMapper.writeValue(file, savedMoves);
+                            System.out.println("Plik " + fileName + " został zapisany.");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
                         game.getBoard().getCell(beginX, beginY).setColor(CellColor.NONE);
                         game.getBoard().getCell(beginX, beginY).setStatus(CellStatus.FREE);
@@ -264,5 +351,13 @@ public final class GameThread extends Thread {
      */
     public CommunicationDevice getCommunicationDevice() {
         return communicationDevice;
+    }
+
+    public boolean getRestored() {
+        return restored;
+    }
+
+    public void setRestored(boolean restored) {
+        this.restored = restored;
     }
 }
