@@ -88,7 +88,8 @@ public class GameServerLauncher {
 
                 numberOfHumanPlayers = playerCountCheck - botCount;
 
-                System.out.println("Podaj liczbe pionków: >>> ");
+                System.out.println("Podaj liczbe pionków: " +
+                                        "(1, 3, 6, 10, 15, 21) >>> ");
                 pinCountInput = consoleInput.readLine();
                 pinCountCheck = Integer.parseInt(pinCountInput);
 
